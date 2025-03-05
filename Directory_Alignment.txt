@@ -1,0 +1,23 @@
+Directory Arrangement for Assignments
+
+*Overall Directory Arrangement*
+////////////////////////////////////////
+Drive(C/D/E) -> ARTR  -> 01-Vulkan , 02-WebGPU,  03-D3D12
+////////////////////////////////////////
+
+*Overall Directory Arrangement for Vulkan (All Operating System)*
+////////////////////////////////////////
+01-Vulkan-> 01-Windows ,
+02-Linux(ReadMe.txt: All Vulkan assignments are done in Ubuntu 24.04 in home directory), 
+03-Android
+////////////////////////////////////////
+
+*Overall Directory Arrangement for Vulkan (Specific to Windows)*
+////////////////////////////////////////
+ARTR  -> 01-Vulkan-> 01-Windows-> 01-WindowStub, 02-BlueScreen , 03-Triangle
+////////////////////////////////////////
+
+*Overall Directory Arrangement for Vulkan (Specific to Windows Blue Screen)*
+////////////////////////////////////////
+02-BlueScreen -> 02-InstanceExtensions, 03-Instance
+////////////////////////////////////////
