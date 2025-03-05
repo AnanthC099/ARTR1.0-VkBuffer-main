@@ -1,0 +1,115 @@
+01:53 start
+5:09 start with numbering
+06:04 finalized number
+06:32 ready for actual start
+07:05: don't share links
+10:29 group meeting
+16:09: what to study till then and spirv assignment
+23:02: completed above discussion and queries start
+42:11: start with new concept
+43:41: Surface discussion
+44:44:  discussion on View
+48:05: Presentation surface (depth denari client area) discussion  concluded
+49:09: Creation of presentation surface discussion ends(to be done in code) 
+49:10:  New concept
+53:11 : Vkinstance chai kaam instance create karna ani pass kelele extensions enable karna
+
+58:55: dusra mudda , Vulkan api are explicit (main point). Phyical device discussion start
+01:03:09: just cikanda tithe copuy karayla hi Vulkan ok aahe
+01:05:18: end of old disucssion
+01:05:59: Physical device milala theorywise , 
+Compared with OpenGL to get device context , In Vulkan device context is logical device
+01:07:24: Physical device to logical device means what , je pan karaycha aahe grahics work , ciompute work , transfer work , accelarator work , make commands for it. 
+
+Please these commands in a buffer
+Message loop athva ithe
+COM madhe automation madhe client ano server madhe proxy stub madhla PDU
+
+Mag ha buffer queque madhe pathvaycha device la .
+He kaam purvi driver karaycha  bar ka
+Jyani Linux cha driver cha code vachla aahe , tithe list of queque aahe
+OpenGL and DirectX11 madhe queque shabd pan nahi aahe
+Pan Vulkan ani Directx12 madhe queque lay velela aahe , bcoz driver cha kaam aata developer karnaar aahe (so called)
+Commands , queque madhunach aala  pahije
+
+Physical device bhetla , tya madhe khup asel vegle kaam karnaare queque's
+vegla kaam karnare queque's cha family milnaar
+he queque cha family aahe , 10 aahet queque
+
+He queque cha family aahe , 5 aahet queque
+ekda ka kuti queue family pahije pakka zala, Eg Rendering sathi queque family pahije
+ tar renderig karnerya queque cha family ghe ani tya madhe tula pahije tasa queque tayaar kar
+
+Mag milalela physical device plus tyacha barobar tumlaha hava asel queque cha family plus tya family madhna choose kelela queque , ha combo la ekatra logical device
+Logical device is a generic software concept
+Mala pahije tasa mold kelela physical device mhanje lgical device
+Logical device mhanje physical device with requiredqueque family and from that required queque from that family
+
+aajcha kaam  physical device tayaar karun
+queque family selection ani tya queque family cha index nivdun thevaycha
+te zal pudcha lecture la logical device tayaar karuya
+
+aaj 2 kaam
+Presentation Surface
+
+Physical device , pan nasta physical device nahi 
+with its required queque family and its required queque family index
+
+Pudcvhya veli lagech logical device cook karu shakto
+
+01:11:39: End of main theory
+
+01:12:12: Start of analogy
+ Ek motha ghar aahe, tya madhe naukar bharti karaycha  aahe
+10 naukar aale interview sathi, tyatla jevha ek naukar nivadnaar na mhanje physical device
+tya naukar la kaam vicharna mhanje queque family ani tumhi jya sathi tyala vaprnaar te queque cha index
+He example lakshat theva
+
+01:13:17 : End of analogy
+
+01:13:20: Same analogy repeated
+Ek motha ghar aahe, tya madhe naukar bharti karaycha  aahe
+
+naukrala ainterview sathi bolavla eka ghara madhe, naukar tya sathi enumerate kelet
+tya peki ek la nivadla , to tumcha selected physical device zala
+to selected naukar(physical device) la vicharla ki tula kay kay kaam karnyacha capability aahe
+
+Mag to bolla ki mi ya category madhe evdha kaam karu shakto , dusra category madhe yevdi kaam karuy shakto
+Mag tya madhe category nivadnaar apan (mhanjech queque family nivadna)
+category madhna ek kaam nivadna mhanje queque cha index nivadna
+
+aata ti vyakti ji yenar queuque family ani index gheun tyala to naav dya ""Cooked" bola
+aala hota sadha naukart , pan aata to vishsishta kaam gheun elaborate zala
+Lets say ki tyacha kade cooking cha capability aahe
+aata cooking madhe bar categoryaahe
+tya mmadhe ek cook karayla sangne, bakicha amhi baghu
+he aahe logical device
+
+01:15:00: Aata proper code
+Directories are steps, Once done sir will be giving writing steps in detail
+
+01:45:21: Steps for presentation surface and code for it completed
+
+02:00: 06: uninitialize()  for above  presentation surface
+02:01:07:  05-PhysicalDevice start
+02:02:55 :  Brief Steps
+02:07:20:  Brief steps completed, proper Steps written start
+
+02:47:40: End of detailed step
+Why such huge steps dont cause performance issues ?
+
+02:49:28:  end of theory and start of code for 05_PhysicalDevice
+
+03:58:35: End of 05_PhysicalDevice code
+
+03:58:45: In steps theorotically sarv steps sangitli , pan 2 goshta ajun aahe
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPhysicalDeviceMemoryProperties.html : VkPhysicalDeviceMemoryProperties
+This has 4 members:
+  memoryTypeCount,memoryTypes,memoryHeapCount and memoryHeaps array
+He sarv nantar staging buffer ani non staging buffermadhe lagtil , aata nahi
+
+Dusra mhanje VkPhysicalDeviceFeatures structure
+Prachand motha strucrture aahe. Al members of VkBool32 Type
+Support aahe ka nahi asech features aahet
+
+04:00:27 End of code and run bat file

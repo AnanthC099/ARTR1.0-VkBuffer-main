@@ -1,0 +1,30 @@
+WinMain()-> Program started successfully
+FillInstanceExtensionNames(): First call to vkEnumerateInstanceExtensionProperties() succedded
+FillInstanceExtensionNames(): Second call to vkEnumerateInstanceExtensionProperties() succedded
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_device_group_creation
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_external_fence_capabilities
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_external_memory_capabilities
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_external_semaphore_capabilities
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_get_physical_device_properties2
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_get_surface_capabilities2
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_surface
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_surface_protected_capabilities
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_win32_surface
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_EXT_debug_report
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_EXT_debug_utils
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_EXT_surface_maintenance1
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_EXT_swapchain_colorspace
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_NV_display_stereo
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_NV_external_memory_capabilities
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_KHR_portability_enumeration
+FillInstanceExtensionNames(): Vulkan Extension Name = VK_LUNARG_direct_driver_loading
+FillInstanceExtensionNames(): VK_KHR_SURFACE_EXTENSION_NAME is found
+FillInstanceExtensionNames(): VK_KHR_WIN32_SURFACE_EXTENSION_NAME is found
+FillInstanceExtensionNames(): Enabled Vulkan Instance Extension Name = VK_KHR_surface
+FillInstanceExtensionNames(): Enabled Vulkan Instance Extension Name = VK_KHR_win32_surface
+CreateVulkanInstance(): FillInstanceExtensionNames() succedded
+CreateVulkanInstance(): vkCreateInstance() succedded
+initialize(): CreateVulkanInstance() succedded
+WinMain(): initialize() succedded
+uninitialize(): vkDestroyInstance() sucedded
+uninitialize()-> Program ended successfully.
