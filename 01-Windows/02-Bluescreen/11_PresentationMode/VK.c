@@ -86,6 +86,13 @@ Color Format and Color Space
 VkFormat vkFormat_color = VK_FORMAT_UNDEFINED; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html {Will be also needed for depth later}
 VkColorSpaceKHR vkColorSpaceKHR = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkColorSpaceKHR.html
 
+/*
+Presentation Mode
+https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceSurfacePresentModesKHR.html
+https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentModeKHR.html
+*/
+VkPresentModeKHR vkPresentModeKHR = VK_PRESENT_MODE_FIFO_KHR; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentModeKHR.html
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -337,6 +344,7 @@ VkResult initialize(void)
 	VkResult CreateVulKanDevice(void);
 	void GetDeviceQueque(void);
 	VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void);
+	VkResult getPhysicalDevicePresentMode(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -414,6 +422,20 @@ VkResult initialize(void)
 	else
 	{
 		fprintf(gFILE, "initialize(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded\n");
+	}
+	
+	/*
+	Presentation Mode
+	*/
+	vkResult = getPhysicalDevicePresentMode();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): getPhysicalDevicePresentMode() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): getPhysicalDevicePresentMode() succedded\n");
 	}
 	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
@@ -1450,6 +1472,78 @@ VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void)
 	
 	return vkResult;
 }
+
+VkResult getPhysicalDevicePresentMode(void)
+{
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
+	//Code
+	//mailbox bhetel aata , fifo milel android la kadachit
+	uint32_t presentModeCount = 0;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceSurfacePresentModesKHR.html
+	vkResult = vkGetPhysicalDeviceSurfacePresentModesKHR(vkPhysicalDevice_selected, vkSurfaceKHR, &presentModeCount, NULL);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() failed\n");
+		return vkResult;
+	}
+	else if(presentModeCount == 0)
+	{
+		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
+		fprintf(gFILE, "getPhysicalDevicePresentMode():: First call to vkGetPhysicalDeviceSurfaceFormatsKHR() returned presentModeCount as 0\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded\n");
+	}
+	
+	//Declare and allocate VkPresentModeKHR array
+	VkPresentModeKHR  *vkPresentModeKHR_array = (VkPresentModeKHR*)malloc(presentModeCount * sizeof(VkPresentModeKHR)); //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentModeKHR.html
+	//For sake of brevity  no error checking
+	
+	//Filling the array
+	vkResult = vkGetPhysicalDeviceSurfacePresentModesKHR(vkPhysicalDevice_selected, vkSurfaceKHR, &presentModeCount, vkPresentModeKHR_array); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceSurfaceFormatsKHR.html
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "getPhysicalDevicePresentMode(): Second call to vkGetPhysicalDeviceSurfacePresentModesKHR()  function failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded\n");
+	}
+	
+	//According to contents of array , we have to decide presentation mode
+	for(uint32_t i=0; i < presentModeCount; i++)
+	{
+		if(vkPresentModeKHR_array[i] == VK_PRESENT_MODE_MAILBOX_KHR)
+		{
+			vkPresentModeKHR = VK_PRESENT_MODE_MAILBOX_KHR; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentModeKHR.html
+			break;
+		}
+	}
+	
+	if(vkPresentModeKHR != VK_PRESENT_MODE_MAILBOX_KHR)
+	{
+		vkPresentModeKHR = VK_PRESENT_MODE_FIFO_KHR; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentModeKHR.html
+	}
+	
+	fprintf(gFILE, "getPhysicalDevicePresentMode(): vkPresentModeKHR is %d\n", vkPresentModeKHR);
+	
+	//free the array
+	if(vkPresentModeKHR_array)
+	{
+		fprintf(gFILE, "getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed\n");
+		free(vkPresentModeKHR_array);
+		vkPresentModeKHR_array = NULL;
+	}
+	
+	return vkResult;
+}
+
 
 
 

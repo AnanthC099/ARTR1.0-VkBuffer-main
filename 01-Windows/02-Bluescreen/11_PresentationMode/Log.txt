@@ -292,10 +292,13 @@ getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDevice
 getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 initialize(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+initialize(): getPhysicalDevicePresentMode() succedded
 ************************* End of initialize ******************************
 WinMain(): initialize() succedded
-WndProc() WM_CHAR(F key)-> Program entered Fullscreen.
-WndProc() WM_CHAR(F key)-> Program ended Fullscreen.
 uninitialize(): vkDeviceWaitIdle() is done
 uninitialize(): vkDestroyDevice() is done
 uninitialize(): vkDestroySurfaceKHR() sucedded
