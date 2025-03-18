@@ -80,6 +80,12 @@ Device Queque
 */
 VkQueue vkQueue =  VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkQueue.html
 
+/*
+Color Format and Color Space
+*/
+VkFormat vkFormat_color = VK_FORMAT_UNDEFINED; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html {Will be also needed for depth later}
+VkColorSpaceKHR vkColorSpaceKHR = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkColorSpaceKHR.html
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -330,6 +336,7 @@ VkResult initialize(void)
 	VkResult PrintVulkanInfo(void);
 	VkResult CreateVulKanDevice(void);
 	void GetDeviceQueque(void);
+	VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -396,6 +403,18 @@ VkResult initialize(void)
 	
 	//get Device Queque
 	GetDeviceQueque();
+	
+	//Color Format and Color Space
+	vkResult = getPhysicalDeviceSurfaceFormatAndColorSpace();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): getPhysicalDeviceSurfaceFormatAndColorSpace() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded\n");
+	}
 	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
 	
@@ -1362,6 +1381,74 @@ void GetDeviceQueque(void)
 	{
 		fprintf(gFILE, "GetDeviceQueque(): vkGetDeviceQueue() succedded\n");
 	}
+}
+
+VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void)
+{
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
+	//Code
+	//Get count of supported surface color formats
+	uint32_t FormatCount = 0;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceSurfaceFormatsKHR.html
+	vkResult = vkGetPhysicalDeviceSurfaceFormatsKHR(vkPhysicalDevice_selected, vkSurfaceKHR, &FormatCount, NULL);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() failed\n");
+		return vkResult;
+	}
+	else if(FormatCount == 0)
+	{
+		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
+		fprintf(gFILE, "vkGetPhysicalDeviceSurfaceFormatsKHR():: First call to vkGetPhysicalDeviceSurfaceFormatsKHR() returned FormatCount as 0\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded\n");
+	}
+	
+	//Declare and allocate VkSurfaceKHR array
+	VkSurfaceFormatKHR *vkSurfaceFormatKHR_array = (VkSurfaceFormatKHR*)malloc(FormatCount * sizeof(VkSurfaceFormatKHR)); //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSurfaceFormatKHR.html
+	//For sake of brevity  no error checking
+	
+	//Filling the array
+	vkResult = vkGetPhysicalDeviceSurfaceFormatsKHR(vkPhysicalDevice_selected, vkSurfaceKHR, &FormatCount, vkSurfaceFormatKHR_array); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceSurfaceFormatsKHR.html
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): Second call to vkGetPhysicalDeviceSurfaceFormatsKHR()  function failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded\n");
+	}
+	
+	//According to contents of array , we have to decide surface format and color space
+	//Decide surface format first
+	if( (1 == FormatCount) && (vkSurfaceFormatKHR_array[0].format == VK_FORMAT_UNDEFINED) )
+	{
+		vkFormat_color = VK_FORMAT_B8G8R8A8_UNORM; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+	}
+	else 
+	{
+		vkFormat_color = vkSurfaceFormatKHR_array[0].format; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+	}
+	
+	//Decide color space second
+	vkColorSpaceKHR = vkSurfaceFormatKHR_array[0].colorSpace;
+	
+	//free the array
+	if(vkSurfaceFormatKHR_array)
+	{
+		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed\n");
+		free(vkSurfaceFormatKHR_array);
+		vkSurfaceFormatKHR_array = NULL;
+	}
+	
+	return vkResult;
 }
 
 
