@@ -291,14 +291,21 @@ GetDeviceQueque(): vkGetDeviceQueue() succedded
 getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-initialize(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 784 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
 getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-initialize(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+initialize(): CreateSwapChain() succedded
 ************************* End of initialize ******************************
 WinMain(): initialize() succedded
+WndProc() WM_CHAR(F key)-> Program entered Fullscreen.
+WndProc() WM_CHAR(F key)-> Program ended Fullscreen.
+uninitialize(): vkDestroySwapchainKHR() is done
 uninitialize(): vkDeviceWaitIdle() is done
 uninitialize(): vkDestroyDevice() is done
 uninitialize(): vkDestroySurfaceKHR() sucedded

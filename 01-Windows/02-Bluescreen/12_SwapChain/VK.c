@@ -93,6 +93,18 @@ https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentModeKHR.html
 */
 VkPresentModeKHR vkPresentModeKHR = VK_PRESENT_MODE_FIFO_KHR; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentModeKHR.html
 
+/*
+SwapChain Related Global variables
+*/
+int winWidth = WIN_WIDTH;
+int winHeight = WIN_HEIGHT;
+
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSwapchainKHR.html
+VkSwapchainKHR vkSwapchainKHR =  VK_NULL_HANDLE;
+
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent2D.html
+VkExtent2D vkExtent2D_SwapChain;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -343,8 +355,7 @@ VkResult initialize(void)
 	VkResult PrintVulkanInfo(void);
 	VkResult CreateVulKanDevice(void);
 	void GetDeviceQueque(void);
-	VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void);
-	VkResult getPhysicalDevicePresentMode(void);
+	VkResult CreateSwapChain(VkBool32);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -412,30 +423,20 @@ VkResult initialize(void)
 	//get Device Queque
 	GetDeviceQueque();
 	
-	//Color Format and Color Space
-	vkResult = getPhysicalDeviceSurfaceFormatAndColorSpace();
+	vkResult = CreateSwapChain(VK_FALSE); //https://registry.khronos.org/vulkan/specs/latest/man/html/VK_FALSE.html
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "initialize(): getPhysicalDeviceSurfaceFormatAndColorSpace() function failed with error code %d\n", vkResult);
+		/*
+		Why are we giving hardcoded error when returbn value is vkResult?
+		Answer sir will give in swapchain
+		*/
+		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
+		fprintf(gFILE, "initialize(): CreateSwapChain() function failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "initialize(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded\n");
-	}
-	
-	/*
-	Presentation Mode
-	*/
-	vkResult = getPhysicalDevicePresentMode();
-	if (vkResult != VK_SUCCESS)
-	{
-		fprintf(gFILE, "initialize(): getPhysicalDevicePresentMode() function failed with error code %d\n", vkResult);
-		return vkResult;
-	}
-	else
-	{
-		fprintf(gFILE, "initialize(): getPhysicalDevicePresentMode() succedded\n");
+		fprintf(gFILE, "initialize(): CreateSwapChain() succedded\n");
 	}
 	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
@@ -478,6 +479,14 @@ void uninitialize(void)
 			DestroyWindow(ghwnd);
 			ghwnd = NULL;
 		}
+		
+		/*
+		10. When done destroy it uninitilialize() by using vkDestroySwapchainKHR() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroySwapchainKHR.html) Vulkan API.
+		Destroy swapchain
+		*/
+		vkDestroySwapchainKHR(vkDevice, vkSwapchainKHR, NULL);
+		vkSwapchainKHR = VK_NULL_HANDLE;
+		fprintf(gFILE, "uninitialize(): vkDestroySwapchainKHR() is done\n");
 		
 		//Destroy Vulkan device
 		
@@ -1539,6 +1548,184 @@ VkResult getPhysicalDevicePresentMode(void)
 		fprintf(gFILE, "getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed\n");
 		free(vkPresentModeKHR_array);
 		vkPresentModeKHR_array = NULL;
+	}
+	
+	return vkResult;
+}
+
+VkResult CreateSwapChain(VkBool32 vsync)
+{
+	/*
+	Function Declaration
+	*/
+	VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void);
+	VkResult getPhysicalDevicePresentMode(void);
+	
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	Surface Format and Color Space
+	1. Get Physical Device Surface supported color format and physical device surface supported color space , using Step 10.
+	*/
+	vkResult = getPhysicalDeviceSurfaceFormatAndColorSpace();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded\n");
+	}
+	
+	/*
+	2. Get Physical Device Surface capabilities by using Vulkan API vkGetPhysicalDeviceSurfaceCapabilitiesKHR (https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceSurfaceCapabilitiesKHR.html)
+    and accordingly initialize VkSurfaceCapabilitiesKHR structure (https://registry.khronos.org/vulkan/specs/latest/man/html/VkSurfaceCapabilitiesKHR.html).
+	*/
+	VkSurfaceCapabilitiesKHR vkSurfaceCapabilitiesKHR;
+	memset((void*)&vkSurfaceCapabilitiesKHR, 0, sizeof(VkSurfaceCapabilitiesKHR));
+	vkResult = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkPhysicalDevice_selected, vkSurfaceKHR, &vkSurfaceCapabilitiesKHR);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded\n");
+	}
+	
+	/*
+	3. By using minImageCount and maxImageCount members of above structure , decide desired ImageCount for swapchain.
+	*/
+	uint32_t testingNumerOfSwapChainImages = vkSurfaceCapabilitiesKHR.minImageCount + 1;
+	uint32_t desiredNumerOfSwapChainImages = 0; //To find this
+	if( (vkSurfaceCapabilitiesKHR.maxImageCount > 0) && (vkSurfaceCapabilitiesKHR.maxImageCount < testingNumerOfSwapChainImages) )
+	{
+		desiredNumerOfSwapChainImages = vkSurfaceCapabilitiesKHR.maxImageCount;
+	}
+	else
+	{
+		desiredNumerOfSwapChainImages = vkSurfaceCapabilitiesKHR.minImageCount;
+	}
+		
+	/*
+	4. By using currentExtent.width and currentExtent.height members of above structure and comparing them with current width and height of window, decide image width and image height of swapchain.
+	Choose size of swapchain image
+	*/
+	memset((void*)&vkExtent2D_SwapChain, 0 , sizeof(VkExtent2D));
+	if(vkSurfaceCapabilitiesKHR.currentExtent.width != UINT32_MAX)
+	{
+		vkExtent2D_SwapChain.width = vkSurfaceCapabilitiesKHR.currentExtent.width;
+		vkExtent2D_SwapChain.height = vkSurfaceCapabilitiesKHR.currentExtent.height;
+		fprintf(gFILE, "CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = %d X %d\n", vkExtent2D_SwapChain.width, vkExtent2D_SwapChain.height);
+	}
+	else
+	{
+		vkExtent2D_SwapChain.width = vkSurfaceCapabilitiesKHR.currentExtent.width;
+		vkExtent2D_SwapChain.height = vkSurfaceCapabilitiesKHR.currentExtent.height;
+		fprintf(gFILE, "CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = %d X %d\n", vkExtent2D_SwapChain.width, vkExtent2D_SwapChain.height);
+	
+		/*
+		If surface size is already defined, then swapchain image size must match with it.
+		*/
+		VkExtent2D vkExtent2D;
+		memset((void*)&vkExtent2D, 0, sizeof(VkExtent2D));
+		vkExtent2D.width = (uint32_t)winWidth;
+		vkExtent2D.height = (uint32_t)winHeight;
+		
+		vkExtent2D_SwapChain.width = max(vkSurfaceCapabilitiesKHR.minImageExtent.width, min(vkSurfaceCapabilitiesKHR.maxImageExtent.width, vkExtent2D.width));
+		vkExtent2D_SwapChain.height = max(vkSurfaceCapabilitiesKHR.minImageExtent.height, min(vkSurfaceCapabilitiesKHR.maxImageExtent.height, vkExtent2D.height));
+		fprintf(gFILE, "CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = %d X %d\n", vkExtent2D_SwapChain.width, vkExtent2D_SwapChain.height);
+	}
+	
+	/*
+	5. Decide how we are going to use swapchain images, means whether we we are going to store image data and use it later (Deferred Rendering) or we are going to use it immediatly as color attachment.
+	Set Swapchain image usage flag
+	Image usage flag hi concept aahe
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageUsageFlagBits.html
+	VkImageUsageFlagBits vkImageUsageFlagBits = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT|VK_IMAGE_USAGE_TRANSFER_SRC_BIT; // VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT -> Imp, VK_IMAGE_USAGE_TRANSFER_SRC_BIT->Optional
+	/*
+	Although VK_IMAGE_USAGE_TRANSFER_SRC_BIT is not usefule here for triangle application.
+	It is useful for texture, fbo, compute shader
+	*/
+	
+	
+	/*
+	6. Swapchain  is capable of storing transformed image before presentation, which is called as PreTransform. 
+    While creating swapchain , we can decide whether to pretransform or not the swapchain images. (Pre transform also includes flipping of image)
+   
+    Whether to consider pretransform/flipping or not?
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSurfaceTransformFlagBitsKHR.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSurfaceCapabilitiesKHR.html
+	VkSurfaceTransformFlagBitsKHR vkSurfaceTransformFlagBitsKHR;
+	if(vkSurfaceCapabilitiesKHR.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)
+	{
+		vkSurfaceTransformFlagBitsKHR = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+	}
+	else
+	{
+		vkSurfaceTransformFlagBitsKHR = vkSurfaceCapabilitiesKHR.currentTransform;
+	}
+	
+	/*
+	Presentation Mode
+	7. Get Presentation mode for swapchain images using Step 11.
+	*/
+	vkResult = getPhysicalDevicePresentMode();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateSwapChain(): getPhysicalDevicePresentMode() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateSwapChain(): getPhysicalDevicePresentMode() succedded\n");
+	}
+	
+	/*
+	8. According to above data, declare ,memset and initialize VkSwapchainCreateInfoKHR  structure (https://registry.khronos.org/vulkan/specs/latest/man/html/VkSwapchainCreateInfoKHR.html)
+	bas aata structure bharaycha aahe
+	*/
+	struct VkSwapchainCreateInfoKHR vkSwapchainCreateInfoKHR;
+	memset((void*)&vkSwapchainCreateInfoKHR, 0, sizeof(struct VkSwapchainCreateInfoKHR));
+	vkSwapchainCreateInfoKHR.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+	vkSwapchainCreateInfoKHR.pNext = NULL;
+	vkSwapchainCreateInfoKHR.flags = 0;
+	vkSwapchainCreateInfoKHR.surface = vkSurfaceKHR;
+	vkSwapchainCreateInfoKHR.minImageCount = desiredNumerOfSwapChainImages;
+	vkSwapchainCreateInfoKHR.imageFormat = vkFormat_color;
+	vkSwapchainCreateInfoKHR.imageColorSpace = vkColorSpaceKHR;
+	vkSwapchainCreateInfoKHR.imageExtent.width = vkExtent2D_SwapChain.width;
+	vkSwapchainCreateInfoKHR.imageExtent.height = vkExtent2D_SwapChain.height;
+	vkSwapchainCreateInfoKHR.imageUsage = vkImageUsageFlagBits;
+	vkSwapchainCreateInfoKHR.preTransform = vkSurfaceTransformFlagBitsKHR;
+	vkSwapchainCreateInfoKHR.imageArrayLayers = 1; //concept
+	vkSwapchainCreateInfoKHR.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSharingMode.html
+	vkSwapchainCreateInfoKHR.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompositeAlphaFlagBitsKHR.html
+	vkSwapchainCreateInfoKHR.presentMode = vkPresentModeKHR;
+	vkSwapchainCreateInfoKHR.clipped = VK_TRUE;
+	//vkSwapchainCreateInfoKHR.oldSwapchain is of no use in this application. Will be used in resize.
+	
+	/*
+	9. At the end , call vkCreateSwapchainKHR() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateSwapchainKHR.html) Vulkan API to create the swapchain
+	*/
+	vkResult = vkCreateSwapchainKHR(vkDevice, &vkSwapchainCreateInfoKHR, NULL, &vkSwapchainKHR);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateSwapChain(): vkCreateSwapchainKHR() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateSwapChain(): vkCreateSwapchainKHR() succedded\n");
 	}
 	
 	return vkResult;
