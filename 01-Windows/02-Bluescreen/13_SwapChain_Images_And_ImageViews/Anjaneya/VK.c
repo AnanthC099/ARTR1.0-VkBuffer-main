@@ -1911,9 +1911,6 @@ VkResult CreateImagesAndImageViews(void)
 	vkImageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_B;
 	vkImageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_A;
 	
-	https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewType.html
-	vkImageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageSubresourceRange.html
 	/*
 	typedef struct VkImageSubresourceRange {
@@ -1924,13 +1921,39 @@ VkResult CreateImagesAndImageViews(void)
     uint32_t              layerCount;
 	} VkImageSubresourceRange;
 	*/
-	vkImageViewCreateInfo.subresourceRange.aspectMask
-	vkImageViewCreateInfo.subresourceRange.baseMipLevel
-	vkImageViewCreateInfo.subresourceRange.levelCount
-	vkImageViewCreateInfo.subresourceRange.baseArrayLayer
-	vkImageViewCreateInfo.subresourceRange.layerCount
-	vkImageViewCreateInfo.subresourceRange.layerCount
 	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
+	vkImageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	vkImageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+	vkImageViewCreateInfo.subresourceRange.levelCount = 0;
+	vkImageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+	vkImageViewCreateInfo.subresourceRange.layerCount = 1;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewType.html
+	vkImageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	
+	
+	//6. Now start a loop for swapchain image count and inside this loop, initialize above ".image" member to swapchain image array index we obtained above and then call vkCreateImage() to fill  above ImageView array.
+	//Fill image view array using above struct
+	for(uint32_t i = 0; i < swapchainImageCount; i++)
+	{
+		vkImageViewCreateInfo.image = swapChainImageView_array[i];
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateImageView.html
+		vkResult = vkCreateImageView(vkDevice, &vkImageViewCreateInfo, NULL, &swapChainImageView_array[i]);
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() function failed with error code %d at iteration %d\n", vkResult, i);
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration %d\n", i);
+		}
+	}
+	
+	return vkResult;
 }
 
 
