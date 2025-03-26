@@ -120,9 +120,14 @@ VkImageView *swapChainImageView_array = NULL;
 /*
 Command Pool
 */
-
 //https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandPool.html
 VkCommandPool vkCommandPool = VK_NULL_HANDLE; 
+
+/*
+Command Buffer
+*/
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBuffer.html
+VkCommandBuffer *vkCommandBuffer_array = NULL;
 
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -377,6 +382,7 @@ VkResult initialize(void)
 	VkResult CreateSwapChain(VkBool32);
 	VkResult CreateImagesAndImageViews(void);
 	VkResult CreateCommandPool(void);
+	VkResult CreateCommandBuffers(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -481,7 +487,18 @@ VkResult initialize(void)
 	}
 	else
 	{
-		fprintf(gFILE, "initialize(): CreateCommandPool() succedded with SwapChain Image count as %d\n", swapchainImageCount);
+		fprintf(gFILE, "initialize(): CreateCommandPool() succedded\n");
+	}
+	
+	vkResult  = CreateCommandBuffers();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreateCommandBuffers() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreateCommandBuffers() succedded\n");
 	}
 	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
@@ -599,10 +616,23 @@ void uninitialize(void)
 			vkDeviceWaitIdle(vkDevice); //First synchronization function
 			fprintf(gFILE, "uninitialize(): vkDeviceWaitIdle() is done\n");
 			
-			/*
-			Step_14_3 In uninitialize(), destroy commandpool using VkDestroyCommandPool.
+			//Step_15_4. In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
+			for(uint32_t i =0; i < swapchainImageCount; i++)
+			{
+				vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_array[i]);
+				fprintf(gFILE, "uninitialize(): vkFreeCommandBuffers() is done\n");
+			}
+			
+				//Step_15_5. Free actual command buffer array.
+			if(vkCommandBuffer_array)
+			{
+				free(vkCommandBuffer_array);
+				vkCommandBuffer_array = NULL;
+				fprintf(gFILE, "uninitialize(): vkCommandBuffer_array is freed\n");
+			}	
+
+			//Step_14_3 In uninitialize(), destroy commandpool using VkDestroyCommandPool.
 			// https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyCommandPool.html
-			*/
 			if(vkCommandPool)
 			{
 				vkDestroyCommandPool(vkDevice, vkCommandPool, NULL);
@@ -2073,6 +2103,64 @@ VkResult CreateCommandPool()
 	else
 	{
 		fprintf(gFILE, "CreateCommandPool(): vkCreateCommandPool() succedded\n");
+	}
+	
+	return vkResult;
+}
+
+VkResult CreateCommandBuffers(void)
+{
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	1. Declare and initialize struct VkCommandBufferAllocateInfo (https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferAllocateInfo.html)
+	The number of command buffers are coventionally equal to number of swapchain images.
+	
+	typedef struct VkCommandBufferAllocateInfo {
+    VkStructureType         sType;
+    const void*             pNext;
+    VkCommandPool           commandPool;
+    VkCommandBufferLevel    level;
+    uint32_t                commandBufferCount;
+	} VkCommandBufferAllocateInfo;
+	*/
+	VkCommandBufferAllocateInfo vkCommandBufferAllocateInfo;
+	memset((void*)&vkCommandBufferAllocateInfo, 0, sizeof(VkCommandBufferAllocateInfo));
+	vkCommandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	vkCommandBufferAllocateInfo.pNext = NULL;
+	//vkCommandBufferAllocateInfo.flags = 0;
+	vkCommandBufferAllocateInfo.commandPool = vkCommandPool;
+	vkCommandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; //https://docs.vulkan.org/spec/latest/chapters/cmdbuffers.html#VkCommandBufferAllocateInfo
+	vkCommandBufferAllocateInfo.commandBufferCount = 1;
+	
+	/*
+	2. Declare command buffer array globally and allocate it to swapchain image count.
+	*/
+	vkCommandBuffer_array = (VkCommandBuffer*)malloc(sizeof(VkCommandBuffer) * swapchainImageCount);
+	//skipping error check for brevity
+	
+	/*
+	3. In a loop , which is equal to swapchainImageCount, allocate each command buffer in above array by using vkAllocateCommandBuffers(). //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateCommandBuffers.html
+   Remember at time of allocation all commandbuffers will be empty.
+   Later we will record graphic/compute commands into them.
+	*/
+	for(uint32_t i = 0; i < swapchainImageCount; i++)
+	{
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateCommandBuffers.html
+		vkResult = vkAllocateCommandBuffers(vkDevice, &vkCommandBufferAllocateInfo, &vkCommandBuffer_array[i]);
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "CreateCommandBuffers(): vkAllocateCommandBuffers() function failed with error code %d at iteration %d\n", vkResult, i);
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration %d\n", i);
+		}
 	}
 	
 	return vkResult;

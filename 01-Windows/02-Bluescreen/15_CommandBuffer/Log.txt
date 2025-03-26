@@ -302,10 +302,16 @@ CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
 CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
 initialize(): CreateImagesAndImageViews() succedded with SwapChain Image count as 2
 CreateCommandPool(): vkCreateCommandPool() succedded
-initialize(): CreateCommandPool() succedded with SwapChain Image count as 2
+initialize(): CreateCommandPool() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+initialize(): CreateCommandBuffers() succedded
 ************************* End of initialize ******************************
 WinMain(): initialize() succedded
 uninitialize(): vkDeviceWaitIdle() is done
+uninitialize(): vkFreeCommandBuffers() is done
+uninitialize(): vkFreeCommandBuffers() is done
+uninitialize(): vkCommandBuffer_array is freed
 uninitialize(): vkDestroyCommandPool() is done
 uninitialize(): vkDestroyImageView() is done
 uninitialize(): vkDestroyImageView() is done
