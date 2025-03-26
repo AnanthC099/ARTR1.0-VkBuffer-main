@@ -117,6 +117,13 @@ VkImage *swapChainImage_array = NULL;
 //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageView.html
 VkImageView *swapChainImageView_array = NULL;
 
+/*
+Command Pool
+*/
+
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandPool.html
+VkCommandPool vkCommandPool = VK_NULL_HANDLE; 
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -369,6 +376,7 @@ VkResult initialize(void)
 	void GetDeviceQueque(void);
 	VkResult CreateSwapChain(VkBool32);
 	VkResult CreateImagesAndImageViews(void);
+	VkResult CreateCommandPool(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -463,6 +471,17 @@ VkResult initialize(void)
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateImagesAndImageViews() succedded with SwapChain Image count as %d\n", swapchainImageCount);
+	}
+	
+	vkResult = CreateCommandPool();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreateCommandPool() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreateCommandPool() succedded with SwapChain Image count as %d\n", swapchainImageCount);
 	}
 	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
@@ -579,6 +598,17 @@ void uninitialize(void)
 		{
 			vkDeviceWaitIdle(vkDevice); //First synchronization function
 			fprintf(gFILE, "uninitialize(): vkDeviceWaitIdle() is done\n");
+			
+			/*
+			Step_14_3 In uninitialize(), destroy commandpool using VkDestroyCommandPool.
+			// https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyCommandPool.html
+			*/
+			if(vkCommandPool)
+			{
+				vkDestroyCommandPool(vkDevice, vkCommandPool, NULL);
+				vkCommandPool = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkDestroyCommandPool() is done\n");
+			}
 			
 			/*
 			9. In unitialize(), keeping the "destructor logic aside" for a while , first destroy image views from imagesViews array in a loop using vkDestroyImageViews() api.
@@ -1996,6 +2026,53 @@ VkResult CreateImagesAndImageViews(void)
 		{
 			fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration %d\n", i);
 		}
+	}
+	
+	return vkResult;
+}
+
+VkResult CreateCommandPool()
+{
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	1. Declare and initialize VkCreateCommandPoolCreateInfo structure.
+	https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandPoolCreateInfo.html
+	
+	typedef struct VkCommandPoolCreateInfo {
+    VkStructureType             sType;
+    const void*                 pNext;
+    VkCommandPoolCreateFlags    flags;
+    uint32_t                    queueFamilyIndex;
+	} VkCommandPoolCreateInfo;
+	
+	*/
+	VkCommandPoolCreateInfo vkCommandPoolCreateInfo;
+	memset((void*)&vkCommandPoolCreateInfo, 0, sizeof(VkCommandPoolCreateInfo));
+	
+	vkCommandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+	vkCommandPoolCreateInfo.pNext = NULL;
+	/*
+	This flag states that Vulkan should create such command pools which will contain such command buffers capable of reset and restart.
+	These command buffers are long lived.
+	Other transient one{transfer one} is short lived.
+	*/
+	vkCommandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandPoolCreateFlagBits.html
+	vkCommandPoolCreateInfo.queueFamilyIndex = graphicsQuequeFamilyIndex_selected;
+	
+	/*
+	2. Call VkCreateCommandPool to create command pool.
+	https://registry.khronos.org/VulkanSC/specs/1.0-extensions/man/html/vkCreateCommandPool.html
+	*/
+	vkResult = vkCreateCommandPool(vkDevice, &vkCommandPoolCreateInfo, NULL, &vkCommandPool);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateCommandPool(): vkCreateCommandPool() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateCommandPool(): vkCreateCommandPool() succedded\n");
 	}
 	
 	return vkResult;

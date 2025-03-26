@@ -301,9 +301,12 @@ CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded 
 CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
 CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
 initialize(): CreateImagesAndImageViews() succedded with SwapChain Image count as 2
+CreateCommandPool(): vkCreateCommandPool() succedded
+initialize(): CreateCommandPool() succedded with SwapChain Image count as 2
 ************************* End of initialize ******************************
 WinMain(): initialize() succedded
 uninitialize(): vkDeviceWaitIdle() is done
+uninitialize(): vkDestroyCommandPool() is done
 uninitialize(): vkDestroyImageView() is done
 uninitialize(): vkDestroyImageView() is done
 uninitialize():swapChainImageView_array is freed
