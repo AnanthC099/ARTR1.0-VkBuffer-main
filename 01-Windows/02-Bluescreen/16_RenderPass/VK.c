@@ -129,6 +129,12 @@ Command Buffer
 //https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBuffer.html
 VkCommandBuffer *vkCommandBuffer_array = NULL;
 
+/*
+RenderPass
+*/
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkRenderPass.html
+VkRenderPass vkRenderPass = VK_NULL_HANDLE;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -383,6 +389,7 @@ VkResult initialize(void)
 	VkResult CreateImagesAndImageViews(void);
 	VkResult CreateCommandPool(void);
 	VkResult CreateCommandBuffers(void);
+	VkResult CreateRenderPass(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -501,6 +508,17 @@ VkResult initialize(void)
 		fprintf(gFILE, "initialize(): CreateCommandBuffers() succedded\n");
 	}
 	
+	vkResult =  CreateRenderPass();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreateRenderPass() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreateRenderPass() succedded\n");
+	}
+	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
 	
 	return vkResult;
@@ -615,6 +633,14 @@ void uninitialize(void)
 		{
 			vkDeviceWaitIdle(vkDevice); //First synchronization function
 			fprintf(gFILE, "uninitialize(): vkDeviceWaitIdle() is done\n");
+			
+			//Step_16_6. In uninitialize , destroy the renderpass by using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
+			if(vkRenderPass)
+			{
+				vkDestroyRenderPass(vkDevice, vkRenderPass, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html
+				vkRenderPass = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkDestroyRenderPass() is done\n");
+			}
 			
 			//Step_15_4. In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
 			for(uint32_t i =0; i < swapchainImageCount; i++)
@@ -2063,6 +2089,7 @@ VkResult CreateImagesAndImageViews(void)
 
 VkResult CreateCommandPool()
 {
+	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
 	
 	/*
@@ -2110,6 +2137,7 @@ VkResult CreateCommandPool()
 
 VkResult CreateCommandBuffers(void)
 {
+	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
 	
 	/*
@@ -2164,6 +2192,189 @@ VkResult CreateCommandBuffers(void)
 	}
 	
 	return vkResult;
+}
+
+VkResult CreateRenderPass(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	1. Declare and initialize VkAttachmentDescription Struct array. (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentDescription.html)
+   Number of elements in Array depends on number of attachments.
+   (Although we have only 1 attachment i.e color attachment in this example, we will consider it as array)
+   
+   typedef struct VkAttachmentDescription {
+    VkAttachmentDescriptionFlags    flags;
+    VkFormat                        format;
+    VkSampleCountFlagBits           samples;
+    VkAttachmentLoadOp              loadOp;
+    VkAttachmentStoreOp             storeOp;
+    VkAttachmentLoadOp              stencilLoadOp;
+    VkAttachmentStoreOp             stencilStoreOp;
+    VkImageLayout                   initialLayout;
+    VkImageLayout                   finalLayout;
+	} VkAttachmentDescription;
+	*/
+	VkAttachmentDescription  vkAttachmentDescription_array[1]; //color and depth when added array will be of 2
+	memset((void*)vkAttachmentDescription_array, 0, sizeof(VkAttachmentDescription) * _ARRAYSIZE(vkAttachmentDescription_array));
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentDescriptionFlagBits.html
+	
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentDescriptionFlagBits {
+		VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT = 0x00000001,
+	} VkAttachmentDescriptionFlagBits;
+	
+	Info on Sony japan company documentation of paper presentation.
+	Mostly 0 , only for manging memory in embedded devices
+	Multiple attachments jar astil , tar eka mekanchi memory vapru shaktat.
+	*/
+	vkAttachmentDescription_array[0].flags = 0; 
+	
+	vkAttachmentDescription_array[0].format = vkFormat_color;
+
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSampleCountFlagBits.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkSampleCountFlagBits {
+    VK_SAMPLE_COUNT_1_BIT = 0x00000001,
+    VK_SAMPLE_COUNT_2_BIT = 0x00000002,
+    VK_SAMPLE_COUNT_4_BIT = 0x00000004,
+    VK_SAMPLE_COUNT_8_BIT = 0x00000008,
+    VK_SAMPLE_COUNT_16_BIT = 0x00000010,
+    VK_SAMPLE_COUNT_32_BIT = 0x00000020,
+    VK_SAMPLE_COUNT_64_BIT = 0x00000040,
+	} VkSampleCountFlagBits;
+	
+	https://www.google.com/search?q=sampling+meaning+in+texturw&oq=sampling+meaning+in+texturw&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTYzMjlqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8
+	*/
+	vkAttachmentDescription_array[0].samples = VK_SAMPLE_COUNT_1_BIT; // No MSAA
+	
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentLoadOp.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentLoadOp {
+		VK_ATTACHMENT_LOAD_OP_LOAD = 0,
+		VK_ATTACHMENT_LOAD_OP_CLEAR = 1,
+		VK_ATTACHMENT_LOAD_OP_DONT_CARE = 2,
+	  // Provided by VK_VERSION_1_4
+		VK_ATTACHMENT_LOAD_OP_NONE = 1000400000,
+	  // Provided by VK_EXT_load_store_op_none
+		VK_ATTACHMENT_LOAD_OP_NONE_EXT = VK_ATTACHMENT_LOAD_OP_NONE,
+	  // Provided by VK_KHR_load_store_op_none
+		VK_ATTACHMENT_LOAD_OP_NONE_KHR = VK_ATTACHMENT_LOAD_OP_NONE,
+	} VkAttachmentLoadOp;
+	
+	ya structure chi mahiti direct renderpass la jata.
+	*/
+	vkAttachmentDescription_array[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; //Render pass madhe aat aalyavar kay karu attachment cha image data sobat
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentStoreOp.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentStoreOp {
+    VK_ATTACHMENT_STORE_OP_STORE = 0,
+    VK_ATTACHMENT_STORE_OP_DONT_CARE = 1,
+  // Provided by VK_VERSION_1_3
+    VK_ATTACHMENT_STORE_OP_NONE = 1000301000,
+  // Provided by VK_KHR_dynamic_rendering, VK_KHR_load_store_op_none
+    VK_ATTACHMENT_STORE_OP_NONE_KHR = VK_ATTACHMENT_STORE_OP_NONE,
+  // Provided by VK_QCOM_render_pass_store_ops
+    VK_ATTACHMENT_STORE_OP_NONE_QCOM = VK_ATTACHMENT_STORE_OP_NONE,
+  // Provided by VK_EXT_load_store_op_none
+    VK_ATTACHMENT_STORE_OP_NONE_EXT = VK_ATTACHMENT_STORE_OP_NONE,
+	} VkAttachmentStoreOp;
+	*/
+	vkAttachmentDescription_array[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE; //Render pass madhun baher gelyavar kay karu attachment image data sobat
+	
+	vkAttachmentDescription_array[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // For both depth and stencil, dont go on name
+	vkAttachmentDescription_array[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE; // For both depth and stencil, dont go on name
+	
+	/*
+	https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	he sarv attachment madhla data cha arrangement cha aahe
+	Unpacking athva RTR cha , karan color attachment mhnaje mostly texture
+	*/
+	vkAttachmentDescription_array[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; //Renderpass cha aat aalyavar , attachment cha data arrangemnent cha kay karu
+	vkAttachmentDescription_array[0].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; //Renderpass cha baher gelyavar , attachment cha data arrangemnent cha kay karu
+	/*
+	jya praname soure image aage , taasach layout thevun present kar.
+	Madhe kahi changes zale, source praname thev
+	*/
+	
+	/*
+	/////////////////////////////////
+	2. Declare and initialize VkAttachmentReference struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentReference.html) , which will have information about the attachment we described above.
+	(jevha depth baghu , tevha proper ek extra element add hoil array madhe)
+	*/
+	VkAttachmentReference vkAttachmentReference;
+	memset((void*)&vkAttachmentReference, 0, sizeof(VkAttachmentReference));
+	vkAttachmentReference.attachment = 0; //It is index. 0th is color attchment , 1st will be depth attachment
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	//he image ksa vapraycha aahe , sang mala
+	vkAttachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
+	
+	/*
+	/////////////////////////////////
+	3. Declare and initialize VkSubpassDescription struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkSubpassDescription.html) and keep reference about above VkAttachmentReference structe in it.
+	*/
+	VkSubpassDescription vkSubpassDescription; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSubpassDescription.html
+	memset((void*)&vkSubpassDescription, 0, sizeof(VkSubpassDescription));
+	
+	vkSubpassDescription.flags = 0;
+	vkSubpassDescription.pipelineBindPoint =  VK_PIPELINE_BIND_POINT_GRAPHICS; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineBindPoint.html
+	vkSubpassDescription.inputAttachmentCount = 0;
+	vkSubpassDescription.pInputAttachments = NULL;
+	vkSubpassDescription.colorAttachmentCount = _ARRAYSIZE(vkAttachmentDescription_array);
+	vkSubpassDescription.pColorAttachments = (const VkAttachmentReference*)&vkAttachmentReference;
+	vkSubpassDescription.pResolveAttachments = NULL;
+	vkSubpassDescription.pDepthStencilAttachment = NULL;
+	vkSubpassDescription.preserveAttachmentCount = 0;
+	vkSubpassDescription.pPreserveAttachments = NULL;
+	
+	/*
+	/////////////////////////////////
+	4. Declare and initialize VkRenderPassCreatefo struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkRenderPassCreateInfo.html)  and referabove VkAttachmentDescription struct and VkSubpassDescription struct into it.
+    Remember here also we need attachment information in form of Image Views, which will be used by framebuffer later.
+    We also need to specify interdependancy between subpasses if needed.
+	*/
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkRenderPassCreateInfo.html
+	VkRenderPassCreateInfo vkRenderPassCreateInfo;
+	memset((void*)&vkRenderPassCreateInfo, 0, sizeof(VkRenderPassCreateInfo));
+	vkRenderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	vkRenderPassCreateInfo.pNext = NULL;
+	vkRenderPassCreateInfo.flags = 0;
+	vkRenderPassCreateInfo.attachmentCount = _ARRAYSIZE(vkAttachmentDescription_array);
+	vkRenderPassCreateInfo.pAttachments = vkAttachmentDescription_array;
+	vkRenderPassCreateInfo.subpassCount = 1;
+	vkRenderPassCreateInfo.pSubpasses = &vkSubpassDescription;
+	vkRenderPassCreateInfo.dependencyCount = 0;
+	vkRenderPassCreateInfo.pDependencies = NULL;
+	
+	/*
+	/////////////////////////////////
+	5. Now call vkCreateRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateRenderPass.html) to create actual RenderPass.
+	*/
+	vkResult = vkCreateRenderPass(vkDevice, &vkRenderPassCreateInfo, NULL, &vkRenderPass);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateRenderPass(): vkCreateRenderPass() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateRenderPass(): vkCreateRenderPass() succedded\n");
+	}
+	
+	return vkResult;
+	
 }
 
 

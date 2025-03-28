@@ -306,9 +306,12 @@ initialize(): CreateCommandPool() succedded
 CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
 CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
 initialize(): CreateCommandBuffers() succedded
+CreateRenderPass(): vkCreateRenderPass() succedded
+initialize(): CreateRenderPass() succedded
 ************************* End of initialize ******************************
 WinMain(): initialize() succedded
 uninitialize(): vkDeviceWaitIdle() is done
+uninitialize(): vkDestroyRenderPass() is done
 uninitialize(): vkFreeCommandBuffers() is done
 uninitialize(): vkFreeCommandBuffers() is done
 uninitialize(): vkCommandBuffer_array is freed
