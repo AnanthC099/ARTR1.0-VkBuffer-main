@@ -308,9 +308,15 @@ CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
 initialize(): CreateCommandBuffers() succedded
 CreateRenderPass(): vkCreateRenderPass() succedded
 initialize(): CreateRenderPass() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+initialize(): CreateFramebuffers() succedded
 ************************* End of initialize ******************************
 WinMain(): initialize() succedded
 uninitialize(): vkDeviceWaitIdle() is done
+uninitialize(): vkDestroyFramebuffer() is done
+uninitialize(): vkDestroyFramebuffer() is done
+uninitialize(): vkFramebuffer_array is freed
 uninitialize(): vkDestroyRenderPass() is done
 uninitialize(): vkFreeCommandBuffers() is done
 uninitialize(): vkFreeCommandBuffers() is done
