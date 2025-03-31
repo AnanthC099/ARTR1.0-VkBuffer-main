@@ -142,6 +142,19 @@ The number framebuffers should be equal to number of swapchain images
 //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFramebuffer.html
 VkFramebuffer *vkFramebuffer_array = NULL;
 
+/*
+Fences and Semaphores
+18_1. Globally declare an array of fences of pointer type VkFence (https://registry.khronos.org/vulkan/specs/latest/man/html/VkFence.html).
+	Additionally declare 2 semaphore objects of type VkSemaphore (https://registry.khronos.org/vulkan/specs/latest/man/html/VkSemaphore.html)
+*/
+
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSemaphore.html
+VkSemaphore vkSemaphore_BackBuffer = VK_NULL_HANDLE;
+VkSemaphore vkSemaphore_RenderComplete = VK_NULL_HANDLE;
+
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFence.html
+VkFence *vkFence_array = NULL;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -398,6 +411,8 @@ VkResult initialize(void)
 	VkResult CreateCommandBuffers(void);
 	VkResult CreateRenderPass(void);
 	VkResult CreateFramebuffers(void);
+	VkResult CreateSemaphores(void);
+	VkResult CreateFences(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -538,6 +553,28 @@ VkResult initialize(void)
 		fprintf(gFILE, "initialize(): CreateFramebuffers() succedded\n");
 	}
 	
+	vkResult = CreateSemaphores();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreateSemaphores() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreateSemaphores() succedded\n");
+	}
+	
+	vkResult = CreateFences();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreateFences() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreateFences() succedded\n");
+	}
+	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
 	
 	return vkResult;
@@ -652,6 +689,42 @@ void uninitialize(void)
 		{
 			vkDeviceWaitIdle(vkDevice); //First synchronization function
 			fprintf(gFILE, "uninitialize(): vkDeviceWaitIdle() is done\n");
+			
+			/*
+			18_7. In uninitialize(), first in a loop with swapchain image count as counter, destroy frnce array objects using vkDestroyFence() {https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyFence.html} and then
+				actually free allocated fences array by using free().
+			*/
+			//Destroying fences
+			for(uint32_t i = 0; i< swapchainImageCount; i++)
+			{
+				vkDestroyFence(vkDevice, vkFence_array[i], NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyFence.html
+				fprintf(gFILE, "uninitialize(): vkFence_array[%d] is freed\n", i);
+			}
+			
+			if(vkFence_array)
+			{
+				free(vkFence_array);
+				vkFence_array = NULL;
+				fprintf(gFILE, "uninitialize(): vkFence_array is freed\n");
+			}
+			
+			/*
+			18_8. Destroy both global semaphore objects  with two separate calls to vkDestroySemaphore() {https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroySemaphore.html}.
+			*/
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroySemaphore.html
+			if(vkSemaphore_RenderComplete)
+			{
+				vkDestroySemaphore(vkDevice, vkSemaphore_RenderComplete, NULL);
+				vkSemaphore_RenderComplete = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkSemaphore_RenderComplete is freed\n");
+			}
+			
+			if(vkSemaphore_BackBuffer)
+			{
+				vkDestroySemaphore(vkDevice, vkSemaphore_BackBuffer, NULL);
+				vkSemaphore_RenderComplete = VK_NULL_HANDLE;
+					fprintf(gFILE, "uninitialize(): vkSemaphore_BackBuffer is freed\n");
+			}
 			
 			/*
 			Step_17_3. In unitialize destroy framebuffers in a loop for swapchainImageCount.
@@ -2467,6 +2540,103 @@ VkResult CreateFramebuffers(void)
 	
 	return vkResult;
 }
+
+VkResult CreateSemaphores(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	18_2. In CreateSemaphore() UDF(User defined function) , declare, memset and initialize VkSemaphoreCreateInfo  struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkSemaphoreCreateInfo.html)
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSemaphoreCreateInfo.html
+	VkSemaphoreCreateInfo vkSemaphoreCreateInfo;
+	memset((void*)&vkSemaphoreCreateInfo, 0, sizeof(VkSemaphoreCreateInfo));
+	vkSemaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+	vkSemaphoreCreateInfo.pNext = NULL; //If no type is specified , the type of semaphore created is binary semaphore
+	vkSemaphoreCreateInfo.flags = 0; //must be 0 as reserved
+	
+	/*
+	18_3. Now call vkCreateSemaphore() {https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateSemaphore.html} 2 times to create our 2 semaphore objects.
+    Remember both will use same  VkSemaphoreCreateInfo struct as defined in 2nd step.
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateSemaphore.html
+	vkResult = vkCreateSemaphore(vkDevice, &vkSemaphoreCreateInfo, NULL, &vkSemaphore_BackBuffer);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() function failed with error code %d for vkSemaphore_BackBuffer\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() succedded for vkSemaphore_BackBuffer\n");
+	}
+
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateSemaphore.html
+	vkResult = vkCreateSemaphore(vkDevice, &vkSemaphoreCreateInfo, NULL, &vkSemaphore_RenderComplete);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() function failed with error code %d for vkSemaphore_RenderComplete\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() succedded for vkSemaphore_RenderComplete\n");
+	}	
+	
+	return vkResult;
+}
+
+VkResult CreateFences(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	18_4. In CreateFences() UDF(User defined function) declare, memset and initialize VkFenceCreateInfo struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkFenceCreateInfo.html).
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFenceCreateInfo.html
+	VkFenceCreateInfo  vkFenceCreateInfo;
+	memset((void*)&vkFenceCreateInfo, 0, sizeof(VkFenceCreateInfo));
+	vkFenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+	vkFenceCreateInfo.pNext = NULL;
+	vkFenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFenceCreateFlagBits.html
+	
+	/*
+	18_5. In this function, CreateFences() allocate our global fence array to size of swapchain image count using malloc.
+	*/
+	vkFence_array = (VkFence*)malloc(sizeof(VkFence) * swapchainImageCount);
+	//error checking skipped due to brevity
+	
+	/*
+	18_6. Now in a loop, call vkCreateFence() {https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateFence.html} to initialize our global fences array.
+	*/
+	for(uint32_t i =0; i < swapchainImageCount; i++)
+	{
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateFence.html
+		vkResult = vkCreateFence(vkDevice, &vkFenceCreateInfo, NULL, &vkFence_array[i]);
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "CreateFences(): vkCreateFence() function failed with error code %d at %d iteration\n", vkResult, i);
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "CreateFences(): vkCreateFence() succedded at %d iteration\n", i);
+		}	
+	}
+	
+	return vkResult;
+}
+
 
 
 
