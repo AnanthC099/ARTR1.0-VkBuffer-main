@@ -33,9 +33,6 @@
 9. End the recording of commandbuffer by calling vkEndCommandBuffer() API.
 10. Close the loop.
 
-
-
-
 Note
 vkResetCommandBuffer -> https://registry.khronos.org/vulkan/specs/latest/man/html/vkResetCommandBuffer.html
 VkCommandBufferBeginInfo  -> https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferBeginInfo.html

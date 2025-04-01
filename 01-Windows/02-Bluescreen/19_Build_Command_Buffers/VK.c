@@ -155,6 +155,20 @@ VkSemaphore vkSemaphore_RenderComplete = VK_NULL_HANDLE;
 //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFence.html
 VkFence *vkFence_array = NULL;
 
+/*
+19_Build_Command_Buffers: Clear Colors
+*/
+
+/*
+// Provided by VK_VERSION_1_0
+typedef union VkClearColorValue {
+    float       float32[4]; //RGBA member to be used if vkFormat is float //In our case vkFormat it is unmorm, so we will use float one
+    int32_t     int32[4]; //RGBA member to be used if vkFormat is int
+    uint32_t    uint32[4]; //RGBA member to be used if vkFormat is uint32_t
+} VkClearColorValue;
+*/
+VkClearColorValue vkClearColorValue;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -413,6 +427,7 @@ VkResult initialize(void)
 	VkResult CreateFramebuffers(void);
 	VkResult CreateSemaphores(void);
 	VkResult CreateFences(void);
+	VkResult buildCommandBuffers(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -573,6 +588,27 @@ VkResult initialize(void)
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateFences() succedded\n");
+	}
+	
+	/*
+	Initialize Clear Color values
+	*/
+	memset((void*)&vkClearColorValue, 0, sizeof(VkClearColorValue));
+	//Following step is analogus to glClearColor. This is more analogus to DirectX 11.
+	vkClearColorValue.float32[0] = 0.0f;
+	vkClearColorValue.float32[1] = 0.0f;
+	vkClearColorValue.float32[2] = 1.0f;
+	vkClearColorValue.float32[3] = 1.0f;
+	
+	vkResult = buildCommandBuffers();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): buildCommandBuffers() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): buildCommandBuffers() succedded\n");
 	}
 	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
@@ -2632,6 +2668,137 @@ VkResult CreateFences(void)
 		{
 			fprintf(gFILE, "CreateFences(): vkCreateFence() succedded at %d iteration\n", i);
 		}	
+	}
+	
+	return vkResult;
+}
+
+VkResult buildCommandBuffers(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	1. Start a loop with swapchainImageCount as counter.
+	   loop per swapchainImage
+	*/
+	for(uint32_t i =0; i< swapchainImageCount; i++)
+	{
+		/*
+		2. Inside loop, call vkResetCommandBuffer to reset contents of command buffers.
+		0 says dont release resource created by command pool for these command buffers, because we may reuse
+		*/
+		vkResult = vkResetCommandBuffer(vkCommandBuffer_array[i], 0);
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "buildCommandBuffers(): vkResetCommandBuffer() function failed with error code %d at %d iteration\n", vkResult, i);
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "buildCommandBuffers(): vkResetCommandBuffer() succedded at %d iteration\n", i);
+		}	
+		
+		/*
+		3. Then declare, memset and initialize VkCommandBufferBeginInfo struct.
+		*/
+		VkCommandBufferBeginInfo vkCommandBufferBeginInfo;
+		memset((void*)&vkCommandBufferBeginInfo, 0, sizeof(VkCommandBufferBeginInfo));
+		vkCommandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		vkCommandBufferBeginInfo.pNext = NULL;
+		vkCommandBufferBeginInfo.flags = 0; 
+		
+		/*
+		pInheritanceInfo is a pointer to a VkCommandBufferInheritanceInfo structure, used if commandBuffer is a secondary command buffer. If this is a primary command buffer, then this value is ignored.
+		We are not going to use this command buffer simultaneouly between multiple threads.
+		*/
+		vkCommandBufferBeginInfo.pInheritanceInfo = NULL;
+		
+		/*
+		4. Call vkBeginCommandBuffer() to record different Vulkan drawing related commands.
+		Do Error Checking.
+		*/
+		vkResult = vkBeginCommandBuffer(vkCommandBuffer_array[i], &vkCommandBufferBeginInfo);
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "buildCommandBuffers(): vkBeginCommandBuffer() function failed with error code %d at %d iteration\n", vkResult, i);
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "buildCommandBuffers(): vkBeginCommandBuffer() succedded at %d iteration\n", i);
+		}
+		
+		/*
+		5. Declare, memset and initialize struct array of VkClearValue type
+		*/
+		VkClearValue vkClearValue_array[1];
+		memset((void*)vkClearValue_array, 0, sizeof(VkClearValue) * _ARRAYSIZE(vkClearValue_array));
+		vkClearValue_array[0].color = vkClearColorValue;
+		
+		/*
+		6. Then declare , memset and initialize VkRenderPassBeginInfo struct.
+		*/
+		VkRenderPassBeginInfo vkRenderPassBeginInfo;
+		memset((void*)&vkRenderPassBeginInfo, 0, sizeof(VkRenderPassBeginInfo));
+		vkRenderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		vkRenderPassBeginInfo.pNext = NULL;
+		vkRenderPassBeginInfo.renderPass = vkRenderPass;
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkRect2D.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkOffset2D.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent2D.html
+		//THis is like D3DViewport/glViewPort
+		vkRenderPassBeginInfo.renderArea.offset.x = 0;
+		vkRenderPassBeginInfo.renderArea.offset.y = 0;
+		vkRenderPassBeginInfo.renderArea.extent.width = vkExtent2D_SwapChain.width;	
+		vkRenderPassBeginInfo.renderArea.extent.height = vkExtent2D_SwapChain.height;	
+		
+		vkRenderPassBeginInfo.clearValueCount = _ARRAYSIZE(vkClearValue_array);
+		vkRenderPassBeginInfo.pClearValues = vkClearValue_array;
+		
+		vkRenderPassBeginInfo.framebuffer = vkFramebuffer_array[i];
+		
+		/*
+		7. Begin RenderPass by vkCmdBeginRenderPass() API.
+		Remember, the code writtrn inside "BeginRenderPass" and "EndRenderPass" itself is code for subpass , if no subpass is explicitly created.
+		In other words even if no subpass is declared explicitly , there is one subpass for renderpass.
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSubpassContents.html
+		//VK_SUBPASS_CONTENTS_INLINE specifies that the contents of the subpass will be recorded inline in the primary command buffer, and secondary command buffers must not be executed within the subpass.
+		*/
+		vkCmdBeginRenderPass(vkCommandBuffer_array[i], &vkRenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE); 
+		
+		/*
+		Here we should call Vulkan drawing functions.
+		*/
+		
+		/*
+		8. End the renderpass by calling vkCmdEndRenderpass.
+		*/
+		vkCmdEndRenderPass(vkCommandBuffer_array[i]);
+		
+		/*
+		9. End the recording of commandbuffer by calling vkEndCommandBuffer() API.
+		*/
+		vkResult = vkEndCommandBuffer(vkCommandBuffer_array[i]);
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "buildCommandBuffers(): vkEndCommandBuffer() function failed with error code %d at %d iteration\n", vkResult, i);
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "buildCommandBuffers(): vkEndCommandBuffer() succedded at %d iteration\n", i);
+		}
+		
+		/*
+		10. Close the loop.
+		*/
 	}
 	
 	return vkResult;
