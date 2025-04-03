@@ -2334,7 +2334,7 @@ VkResult CreateImagesAndImageViews(void)
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
 	vkImageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	vkImageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-	vkImageViewCreateInfo.subresourceRange.levelCount = 0; 
+	vkImageViewCreateInfo.subresourceRange.levelCount = 1;  //Changed from 0 to 1
 	vkImageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
 	vkImageViewCreateInfo.subresourceRange.layerCount = 1;
 	
