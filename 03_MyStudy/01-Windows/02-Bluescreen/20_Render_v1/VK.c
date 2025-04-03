@@ -664,7 +664,7 @@ VkResult display(void)
 	vkResult = vkAcquireNextImageKHR(vkDevice, vkSwapchainKHR, UINT64_MAX, vkSemaphore_BackBuffer, VK_NULL_HANDLE, &currentImageIndex);
 	if(vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "display(): vkAcquireNextImageKHR() failed\n");
+		fprintf(gFILE, "display(): vkAcquireNextImageKHR() failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
@@ -701,7 +701,7 @@ VkResult display(void)
 	vkResult = vkResetFences(vkDevice, 1, &vkFence_array[currentImageIndex]);
 	if(vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "display(): vkResetFences() failed\n");
+		fprintf(gFILE, "display(): vkResetFences() failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
@@ -730,7 +730,7 @@ VkResult display(void)
 	vkResult = vkQueueSubmit(vkQueue, 1, &vkSubmitInfo, vkFence_array[currentImageIndex]); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueSubmit.html
 	if(vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "display(): vkQueueSubmit() failed\n");
+		fprintf(gFILE, "display(): vkQueueSubmit() failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
@@ -752,7 +752,7 @@ VkResult display(void)
 	vkResult =  vkQueuePresentKHR(vkQueue, &vkPresentInfoKHR);
 	if(vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "display(): vkQueuePresentKHR() failed\n");
+		fprintf(gFILE, "display(): vkQueuePresentKHR() failed with error code %d\n",vkResult);
 		return vkResult;
 	}
 	
@@ -2334,7 +2334,7 @@ VkResult CreateImagesAndImageViews(void)
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
 	vkImageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	vkImageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-	vkImageViewCreateInfo.subresourceRange.levelCount = 0;
+	vkImageViewCreateInfo.subresourceRange.levelCount = 0; 
 	vkImageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
 	vkImageViewCreateInfo.subresourceRange.layerCount = 1;
 	
