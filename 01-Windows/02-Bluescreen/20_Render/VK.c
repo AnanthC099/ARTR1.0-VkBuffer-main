@@ -169,13 +169,19 @@ typedef union VkClearColorValue {
 */
 VkClearColorValue vkClearColorValue;
 
+/*
+20_Render
+*/
+BOOL bInitialized = FALSE;
+uint32_t currentImageIndex = UINT32_MAX; //UINT_MAX is also ok
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
 	// Function Declarations
 	VkResult initialize(void);
 	void uninitialize(void);
-	void display(void);
+	VkResult display(void);
 	void update(void);
 
 	// Local Variable Declarations
@@ -611,6 +617,11 @@ VkResult initialize(void)
 		fprintf(gFILE, "initialize(): buildCommandBuffers() succedded\n");
 	}
 	
+	/*
+	Initialization is completed here..........................
+	*/
+	bInitialized = TRUE;
+	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
 	
 	return vkResult;
@@ -621,12 +632,132 @@ void resize(int width, int height)
 	// Code
 }
 
-
-void display(void)
+VkResult display(void)
 {
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
 	// Code
+	
+	// If control comes here , before initialization is completed , return false
+	if(bInitialized == FALSE)
+	{
+		fprintf(gFILE, "display(): initialization not completed yet\n");
+		return (VkResult)VK_FALSE;
+	}
+	
+	// Acquire index of next swapChainImage
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAcquireNextImageKHR.html
+	/*
+	// Provided by VK_KHR_swapchain
+	VkResult vkAcquireNextImageKHR(
+    VkDevice                                    device,
+    VkSwapchainKHR                              swapchain,
+    uint64_t                                    timeout, // Waiting time from our side for swapchain to give the image for device. (Time in nanoseconds)
+    VkSemaphore                                 semaphore, // Waiting for another queque to release the image held by another queque demanded by swapchain
+    VkFence                                     fence, // ask host to wait image to be given by swapchain
+    uint32_t*                                   pImageIndex);
+	
+	If this function  will not get image index from swapchain within gven time or timeout, then vkAcquireNextImageKHR() will return VK_NOT_READY
+	4th paramater is waiting for another queque to release the image held by another queque demanded by swapchain
+	*/
+	vkResult = vkAcquireNextImageKHR(vkDevice, vkSwapchainKHR, UINT64_MAX, vkSemaphore_BackBuffer, VK_NULL_HANDLE, &currentImageIndex);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "display(): vkAcquireNextImageKHR() failed\n");
+		return vkResult;
+	}
+	
+	/*
+	Use fence to allow host to wait for completion of execution of previous commandbuffer.
+	Magacha command buffer cha operation complete vhava mhanun vaprat aahe he fence
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkWaitForFences.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkWaitForFences(
+    VkDevice                                    device,
+    uint32_t                                    fenceCount,
+    const VkFence*                              pFences,
+    VkBool32                                    waitAll,
+    uint64_t                                    timeout);
+	*/
+	vkResult = vkWaitForFences(vkDevice, 1, &vkFence_array[currentImageIndex], VK_TRUE, UINT64_MAX);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "display(): vkWaitForFences() failed\n");
+		return vkResult;
+	}
+	
+	//Now ready the fences for next commandbuffer.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkResetFences.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkResetFences(
+    VkDevice                                    device,
+    uint32_t                                    fenceCount,
+    const VkFence*                              pFences);
+	*/
+	vkResult = vkResetFences(vkDevice, 1, &vkFence_array[currentImageIndex]);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "display(): vkResetFences() failed\n");
+		return vkResult;
+	}
+	
+	//One of the memebers of VkSubmitInfo structure requires array of pipeline stages. We have only one of completion of color attachment output.
+	//Still we need 1 member array.
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlagBits.html
+	const VkPipelineStageFlags waitDstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+		
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSubmitInfo.html
+	// Declare, memset and initialize VkSubmitInfo structure
+	VkSubmitInfo vkSubmitInfo;
+	memset((void*)&vkSubmitInfo, 0, sizeof(VkSubmitInfo));
+	vkSubmitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	vkSubmitInfo.pNext = NULL;
+	vkSubmitInfo.pWaitDstStageMask = &waitDstStageMask;
+	vkSubmitInfo.waitSemaphoreCount = 1;
+	vkSubmitInfo.pWaitSemaphores = &vkSemaphore_BackBuffer;
+	vkSubmitInfo.commandBufferCount = 1;
+	vkSubmitInfo.pCommandBuffers = &vkCommandBuffer_array[currentImageIndex];
+	vkSubmitInfo.signalSemaphoreCount = 1;
+	vkSubmitInfo.pSignalSemaphores = &vkSemaphore_RenderComplete;
+	
+	//Now submit above work to the queque
+	vkResult = vkQueueSubmit(vkQueue, 1, &vkSubmitInfo, vkFence_array[currentImageIndex]); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueSubmit.html
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "display(): vkQueueSubmit() failed\n");
+		return vkResult;
+	}
+	
+	//We are going to present the rendered image after declaring  and initializing VkPresentInfoKHR struct
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPresentInfoKHR.html
+	VkPresentInfoKHR  vkPresentInfoKHR;
+	memset((void*)&vkPresentInfoKHR, 0, sizeof(VkPresentInfoKHR));
+	vkPresentInfoKHR.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	vkPresentInfoKHR.pNext = NULL;
+	vkPresentInfoKHR.swapchainCount = 1;
+	vkPresentInfoKHR.pSwapchains = &vkSwapchainKHR;
+	vkPresentInfoKHR.pImageIndices = &currentImageIndex;
+	vkPresentInfoKHR.waitSemaphoreCount = 1;
+    vkPresentInfoKHR.pWaitSemaphores = &vkSemaphore_RenderComplete;
+	vkPresentInfoKHR.pResults = NULL;
+	
+	//Present the queque
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueuePresentKHR.html
+	vkResult =  vkQueuePresentKHR(vkQueue, &vkPresentInfoKHR);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "display(): vkQueuePresentKHR() failed\n");
+		return vkResult;
+	}
+	
+	return vkResult;
 }
-
 
 void update(void)
 {
