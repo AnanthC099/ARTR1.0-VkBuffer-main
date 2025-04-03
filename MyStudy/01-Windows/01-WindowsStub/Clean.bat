@@ -1,0 +1,1 @@
+del VK.exe Log.txt
