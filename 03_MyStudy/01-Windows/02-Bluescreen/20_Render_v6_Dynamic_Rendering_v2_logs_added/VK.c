@@ -136,17 +136,17 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT iMsg,WPARAM wParam,LPARAM lParam)
             break;
         case WM_SETFOCUS: 
             gbActive=TRUE; 
-            fprintf(gFILE, "LOG: Window gained focus.\n"); // ADDED LOG
+            fprintf(gFILE, "LOG: Window gained focus.\n");
             break;
         case WM_KILLFOCUS: 
             gbActive=FALSE; 
-            fprintf(gFILE, "LOG: Window lost focus.\n"); // ADDED LOG
+            fprintf(gFILE, "LOG: Window lost focus.\n");
             break;
         case WM_SIZE:
             if(bInitialized){
                 winWidth=LOWORD(lParam); 
                 winHeight=HIWORD(lParam);
-                fprintf(gFILE,"LOG: WM_SIZE -> resize(%d, %d)\n", winWidth, winHeight); // ADDED LOG
+                fprintf(gFILE,"LOG: WM_SIZE -> resize(%d, %d)\n", winWidth, winHeight);
                 if(winWidth && winHeight){
                     extern void resize(int,int);
                     resize(winWidth,winHeight);
@@ -155,24 +155,24 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT iMsg,WPARAM wParam,LPARAM lParam)
             break;
         case WM_KEYDOWN:
             if(wParam==VK_ESCAPE){
-                fprintf(gFILE,"LOG: ESC key pressed, destroying window.\n"); // ADDED LOG
+                fprintf(gFILE,"LOG: ESC key pressed, destroying window.\n");
                 fclose(gFILE);gFILE=NULL; 
                 DestroyWindow(hwnd);
             }
             break;
         case WM_CHAR:
             if(wParam=='f' || wParam=='F'){
-                fprintf(gFILE,"LOG: Toggle fullscreen.\n"); // ADDED LOG
+                fprintf(gFILE,"LOG: Toggle fullscreen.\n");
                 ToggleFullscreen(); 
                 gbFullscreen=!gbFullscreen;
             }
             break;
         case WM_CLOSE:
-            fprintf(gFILE,"LOG: WM_CLOSE received, destroying window.\n"); // ADDED LOG
+            fprintf(gFILE,"LOG: WM_CLOSE received, destroying window.\n");
             DestroyWindow(hwnd);
             break;
         case WM_DESTROY:
-            fprintf(gFILE,"LOG: WM_DESTROY received, PostQuitMessage.\n"); // ADDED LOG
+            fprintf(gFILE,"LOG: WM_DESTROY received, PostQuitMessage.\n");
             PostQuitMessage(0);
             break;
     }
@@ -198,16 +198,21 @@ static VkResult FillInstanceExtensions(void)
     VkExtensionProperties* arr=(VkExtensionProperties*)malloc(sizeof(VkExtensionProperties)*count);
     vkEnumerateInstanceExtensionProperties(NULL,&count,arr);
 
+    // ADDED LOG (Detailed)
+    fprintf(gFILE,"LOG: Instance Extensions Supported by the system:\n");
+    for(uint32_t i=0;i<count;i++){
+        fprintf(gFILE,"    %s\n", arr[i].extensionName);
+    }
+
     VkBool32 foundSurface=VK_FALSE,foundWin32=VK_FALSE;
     for(uint32_t i=0;i<count;i++){
-        //fprintf(gFILE,"LOG: Available Inst Ext: %s\n", arr[i].extensionName); // optional to log all
         if(!strcmp(arr[i].extensionName,VK_KHR_SURFACE_EXTENSION_NAME)) foundSurface=VK_TRUE;
         if(!strcmp(arr[i].extensionName,VK_KHR_WIN32_SURFACE_EXTENSION_NAME)) foundWin32=VK_TRUE;
     }
     free(arr);
 
     if(!foundSurface||!foundWin32) {
-        fprintf(gFILE,"ERROR: Required instance extensions not found!\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: Required instance extensions (VK_KHR_surface/Win32) not found!\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
 
@@ -215,21 +220,22 @@ static VkResult FillInstanceExtensions(void)
     instExts[instExtCount++]=VK_KHR_SURFACE_EXTENSION_NAME;
     instExts[instExtCount++]=VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
 
-    fprintf(gFILE,"LOG: FillInstanceExtensions() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: FillInstanceExtensions() Successful\n");
     return VK_SUCCESS;
 }
 
 static void TryAddDebugExt(void)
 {
-    fprintf(gFILE,"LOG: TryAddDebugExt()\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: TryAddDebugExt() Start\n");
     uint32_t c=0; 
     vkEnumerateInstanceExtensionProperties(NULL,&c,NULL);
     if(!c) return;
     VkExtensionProperties* arr=(VkExtensionProperties*)malloc(sizeof(VkExtensionProperties)*c);
     vkEnumerateInstanceExtensionProperties(NULL,&c,arr);
+
     for(uint32_t i=0;i<c;i++){
         if(!strcmp(arr[i].extensionName,VK_EXT_DEBUG_UTILS_EXTENSION_NAME)){
-            fprintf(gFILE,"LOG: Found VK_EXT_DEBUG_UTILS_EXTENSION_NAME\n"); // ADDED LOG
+            fprintf(gFILE,"LOG: Found VK_EXT_debug_utils, enabling debug extension.\n");
             instExts[instExtCount++]=VK_EXT_DEBUG_UTILS_EXTENSION_NAME; 
             break;
         }
@@ -239,17 +245,28 @@ static void TryAddDebugExt(void)
 
 static void TryAddValidationLayer(void)
 {
-    fprintf(gFILE,"LOG: TryAddValidationLayer()\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: TryAddValidationLayer() Start\n"); 
     uint32_t c=0; 
     vkEnumerateInstanceLayerProperties(&c,NULL);
-    if(!c) return;
+    if(!c) {
+        fprintf(gFILE,"LOG: No instance layers found, skipping.\n");
+        return;
+    }
     VkLayerProperties* arr=(VkLayerProperties*)malloc(sizeof(VkLayerProperties)*c);
     vkEnumerateInstanceLayerProperties(&c,arr);
+
+    // ADDED LOG (Detailed)
+    fprintf(gFILE,"LOG: Available Instance Layers:\n");
+    for(uint32_t i=0;i<c;i++){
+        fprintf(gFILE,"    %s (SpecVer %u, ImplVer %u)\n",
+            arr[i].layerName, arr[i].specVersion, arr[i].implementationVersion);
+    }
+
     for(uint32_t i=0;i<c;i++){
         if(!strcmp(arr[i].layerName,"VK_LAYER_KHRONOS_validation")){
             instLayers[0]="VK_LAYER_KHRONOS_validation"; 
             instLayerCount=1;
-            fprintf(gFILE,"LOG: Found VK_LAYER_KHRONOS_validation\n"); // ADDED LOG
+            fprintf(gFILE,"LOG: Found VK_LAYER_KHRONOS_validation -> enabling validation layer.\n");
             break;
         }
     }
@@ -258,7 +275,7 @@ static void TryAddValidationLayer(void)
 
 static VkResult CreateVulkanInstance(void)
 {
-    fprintf(gFILE,"LOG: CreateVulkanInstance() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateVulkanInstance() Start\n");
     VkResult r=FillInstanceExtensions(); 
     if(r!=VK_SUCCESS) return r;
 
@@ -281,7 +298,7 @@ static VkResult CreateVulkanInstance(void)
 
     r=vkCreateInstance(&ici,NULL,&vkInstance); 
     if(r!=VK_SUCCESS){
-        fprintf(gFILE,"ERROR: vkCreateInstance() Failed!\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: vkCreateInstance() Failed!\n");
         return r;
     }
 
@@ -296,10 +313,10 @@ static VkResult CreateVulkanInstance(void)
                         VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
         dbg.pfnUserCallback=DebugCallback;
         CreateDebugUtilsMessengerEXT(vkInstance,&dbg,NULL,&gDebugUtilsMessenger);
-        fprintf(gFILE,"LOG: Debug Messenger Created.\n"); // ADDED LOG
+        fprintf(gFILE,"LOG: Debug Messenger Created.\n");
     }
 
-    fprintf(gFILE,"LOG: CreateVulkanInstance() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateVulkanInstance() Successful\n");
     return VK_SUCCESS;
 }
 
@@ -308,7 +325,7 @@ static VkResult CreateVulkanInstance(void)
 // ------------------------------------------------------------------------
 static VkResult CreateSurface(void)
 {
-    fprintf(gFILE,"LOG: CreateSurface() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateSurface() Start\n");
 
     VkWin32SurfaceCreateInfoKHR ci={VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR};
     ci.hinstance=(HINSTANCE)GetWindowLongPtr(ghwnd,GWLP_HINSTANCE);
@@ -316,9 +333,9 @@ static VkResult CreateSurface(void)
     VkResult result = vkCreateWin32SurfaceKHR(vkInstance,&ci,NULL,&vkSurfaceKHR);
 
     if (result == VK_SUCCESS)
-        fprintf(gFILE,"LOG: Surface creation successful.\n"); // ADDED LOG
+        fprintf(gFILE,"LOG: Surface creation successful.\n");
     else
-        fprintf(gFILE,"ERROR: Surface creation failed.\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: Surface creation failed.\n");
 
     return result;
 }
@@ -328,7 +345,7 @@ static VkResult CreateSurface(void)
 // ------------------------------------------------------------------------
 static VkResult PickPhysicalDevice(void)
 {
-    fprintf(gFILE,"LOG: PickPhysicalDevice() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: PickPhysicalDevice() Start\n"); 
     uint32_t c=0; 
     vkEnumeratePhysicalDevices(vkInstance,&c,NULL);
     if(!c) return VK_ERROR_INITIALIZATION_FAILED;
@@ -336,40 +353,57 @@ static VkResult PickPhysicalDevice(void)
     VkPhysicalDevice* devs=(VkPhysicalDevice*)malloc(sizeof(VkPhysicalDevice)*c);
     vkEnumeratePhysicalDevices(vkInstance,&c,devs);
 
+    // ADDED LOG (Detailed)
+    fprintf(gFILE,"LOG: There are %u physical device(s) found.\n", c);
+
     int chosen=-1;
     for(uint32_t i=0;i<c;i++){
+        // For logging, let's query device properties
+        VkPhysicalDeviceProperties props;
+        vkGetPhysicalDeviceProperties(devs[i], &props);
+        fprintf(gFILE,"    PhysicalDevice[%u]: %s (API %u.%u.%u)\n", 
+            i,
+            props.deviceName, 
+            VK_VERSION_MAJOR(props.apiVersion),
+            VK_VERSION_MINOR(props.apiVersion),
+            VK_VERSION_PATCH(props.apiVersion));
+
         uint32_t qc=0; 
         vkGetPhysicalDeviceQueueFamilyProperties(devs[i],&qc,NULL);
         if(!qc) continue;
 
-        VkQueueFamilyProperties* props=(VkQueueFamilyProperties*)malloc(sizeof(VkQueueFamilyProperties)*qc);
-        vkGetPhysicalDeviceQueueFamilyProperties(devs[i],&qc,props);
+        VkQueueFamilyProperties* qprops=(VkQueueFamilyProperties*)malloc(sizeof(VkQueueFamilyProperties)*qc);
+        vkGetPhysicalDeviceQueueFamilyProperties(devs[i],&qc,qprops);
 
-        VkBool32 found=VK_FALSE;
-        for(uint32_t f=0;f<qc;f++){
+        for(uint32_t f=0; f<qc; f++){
             VkBool32 sup=VK_FALSE;
             vkGetPhysicalDeviceSurfaceSupportKHR(devs[i],f,vkSurfaceKHR,&sup);
 
-            if((props[f].queueFlags & VK_QUEUE_GRAPHICS_BIT) && sup){
+            fprintf(gFILE,"        QueueFamily[%u]: queueFlags=0x%x, PresentSupport=%d\n", 
+                f, qprops[f].queueFlags, sup);
+
+            // We need graphics + present
+            if((qprops[f].queueFlags & VK_QUEUE_GRAPHICS_BIT) && sup){
                 vkPhysicalDevice_selected=devs[i];
                 graphicsQuequeFamilyIndex_selected=f; 
-                found=VK_TRUE;
-                fprintf(gFILE,"LOG: Physical Device chosen at index %u, queue family %u\n", i, f); // ADDED LOG
+                chosen=i;
+                fprintf(gFILE,"LOG: -> Chosen Physical Device = %s, QueueFamily=%u\n", props.deviceName, f);
                 break;
             }
         }
-        free(props);
-        if(found){ chosen=i; break; }
+        free(qprops);
+        if(chosen >= 0) break;  // break outer loop once chosen
     }
+    // done
     free(devs);
 
     if(chosen<0) {
-        fprintf(gFILE,"ERROR: No suitable physical device found.\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: No suitable physical device found (no gfx + present queue).\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
 
     vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice_selected,&vkPhysicalDeviceMemoryProperties);
-    fprintf(gFILE,"LOG: PickPhysicalDevice() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: PickPhysicalDevice() Successful\n");
     return VK_SUCCESS;
 }
 
@@ -381,7 +415,7 @@ static uint32_t devExtCount=0;
 
 static VkResult CheckDevExtensions(void)
 {
-    fprintf(gFILE,"LOG: CheckDevExtensions() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CheckDevExtensions() Start\n"); 
     uint32_t c=0;
     vkEnumerateDeviceExtensionProperties(vkPhysicalDevice_selected,NULL,&c,NULL);
     if(!c) return VK_ERROR_INITIALIZATION_FAILED;
@@ -389,9 +423,14 @@ static VkResult CheckDevExtensions(void)
     VkExtensionProperties* arr=(VkExtensionProperties*)malloc(sizeof(VkExtensionProperties)*c);
     vkEnumerateDeviceExtensionProperties(vkPhysicalDevice_selected,NULL,&c,arr);
 
+    // ADDED LOG (Detailed)
+    fprintf(gFILE,"LOG: Device Extensions found:\n");
+    for(uint32_t i=0;i<c;i++){
+        fprintf(gFILE,"    %s\n", arr[i].extensionName);
+    }
+
     VkBool32 haveSwap=VK_FALSE,haveDyn=VK_FALSE;
     for(uint32_t i=0;i<c;i++){
-        //fprintf(gFILE,"LOG: Device Ext: %s\n", arr[i].extensionName); // optional to log all
         if(!strcmp(arr[i].extensionName,VK_KHR_SWAPCHAIN_EXTENSION_NAME)) haveSwap=VK_TRUE;
         if(!strcmp(arr[i].extensionName,"VK_KHR_dynamic_rendering")) haveDyn=VK_TRUE;
     }
@@ -399,17 +438,19 @@ static VkResult CheckDevExtensions(void)
     devExtCount=0;
 
     if(!haveSwap) {
-        fprintf(gFILE,"ERROR: VK_KHR_swapchain extension not found.\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: VK_KHR_swapchain extension not found.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
     devExts[devExtCount++]=VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 
     if(haveDyn) {
-        fprintf(gFILE,"LOG: Found VK_KHR_dynamic_rendering extension.\n"); // ADDED LOG
+        fprintf(gFILE,"LOG: Found VK_KHR_dynamic_rendering extension; enabling.\n");
         devExts[devExtCount++]="VK_KHR_dynamic_rendering";
+    } else {
+        fprintf(gFILE,"LOG: VK_KHR_dynamic_rendering not found, skipping.\n");
     }
 
-    fprintf(gFILE,"LOG: CheckDevExtensions() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CheckDevExtensions() Successful\n");
     return VK_SUCCESS;
 }
 
@@ -418,9 +459,11 @@ static VkResult CheckDevExtensions(void)
 // ------------------------------------------------------------------------
 static void LoadDynamicRenderingFunctions(void)
 {
-    fprintf(gFILE,"LOG: LoadDynamicRenderingFunctions()\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: LoadDynamicRenderingFunctions()\n");
     pfnCmdBeginRenderingKHR=(PFN_vkCmdBeginRenderingKHR)vkGetDeviceProcAddr(vkDevice,"vkCmdBeginRenderingKHR");
     pfnCmdEndRenderingKHR  =(PFN_vkCmdEndRenderingKHR)  vkGetDeviceProcAddr(vkDevice,"vkCmdEndRenderingKHR");
+    fprintf(gFILE,"LOG: pfnCmdBeginRenderingKHR=%p, pfnCmdEndRenderingKHR=%p\n",
+        pfnCmdBeginRenderingKHR, pfnCmdEndRenderingKHR);
 }
 
 // ------------------------------------------------------------------------
@@ -428,7 +471,7 @@ static void LoadDynamicRenderingFunctions(void)
 // ------------------------------------------------------------------------
 static VkResult CreateDeviceQueue(void)
 {
-    fprintf(gFILE,"LOG: CreateDeviceQueue() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateDeviceQueue() Start\n"); 
     VkResult r=CheckDevExtensions(); 
     if(r!=VK_SUCCESS) return r;
 
@@ -451,13 +494,13 @@ static VkResult CreateDeviceQueue(void)
 
     r=vkCreateDevice(vkPhysicalDevice_selected,&dci,NULL,&vkDevice);
     if(r!=VK_SUCCESS){
-        fprintf(gFILE,"ERROR: vkCreateDevice() Failed!\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: vkCreateDevice() Failed!\n");
         return r;
     }
     vkGetDeviceQueue(vkDevice,graphicsQuequeFamilyIndex_selected,0,&vkQueue);
     LoadDynamicRenderingFunctions();
 
-    fprintf(gFILE,"LOG: CreateDeviceQueue() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateDeviceQueue() Successful. Queue handle: %p\n", (void*)vkQueue);
     return VK_SUCCESS;
 }
 
@@ -466,7 +509,7 @@ static VkResult CreateDeviceQueue(void)
 // ------------------------------------------------------------------------
 static VkResult ChooseSwapFormat(void)
 {
-    fprintf(gFILE,"LOG: ChooseSwapFormat() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: ChooseSwapFormat() Start\n");
     uint32_t c=0; 
     vkGetPhysicalDeviceSurfaceFormatsKHR(vkPhysicalDevice_selected,vkSurfaceKHR,&c,NULL);
     if(!c) return VK_ERROR_INITIALIZATION_FAILED;
@@ -474,14 +517,25 @@ static VkResult ChooseSwapFormat(void)
     VkSurfaceFormatKHR* arr=(VkSurfaceFormatKHR*)malloc(sizeof(VkSurfaceFormatKHR)*c);
     vkGetPhysicalDeviceSurfaceFormatsKHR(vkPhysicalDevice_selected,vkSurfaceKHR,&c,arr);
 
-    if(c==1 && arr[0].format==VK_FORMAT_UNDEFINED)
+    fprintf(gFILE,"LOG: Available surface formats:\n"); // ADDED LOG (Detailed)
+    for(uint32_t i=0; i<c; i++){
+        fprintf(gFILE,"    Format[%u]: format=%d, colorSpace=%d\n",
+                i, arr[i].format, arr[i].colorSpace);
+    }
+
+    if(c==1 && arr[0].format==VK_FORMAT_UNDEFINED){
         vkFormat_color=VK_FORMAT_B8G8R8A8_UNORM;
-    else
+        fprintf(gFILE,"LOG: Only 1 format with UNDEFINED, defaulting to B8G8R8A8_UNORM.\n");
+    }
+    else {
+        // This code picks the first one, but in real code you might pick the "best" match.
         vkFormat_color=arr[0].format;
+    }
 
     vkColorSpaceKHR=arr[0].colorSpace;
     free(arr);
-    fprintf(gFILE,"LOG: ChooseSwapFormat() -> Chosen format %d\n", vkFormat_color); // ADDED LOG
+
+    fprintf(gFILE,"LOG: Chosen format=%d, colorSpace=%d\n", vkFormat_color, vkColorSpaceKHR);
     return VK_SUCCESS;
 }
 
@@ -490,7 +544,7 @@ static VkResult ChooseSwapFormat(void)
 // ------------------------------------------------------------------------
 static VkResult ChoosePresentMode(void)
 {
-    fprintf(gFILE,"LOG: ChoosePresentMode() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: ChoosePresentMode() Start\n");
     uint32_t c=0; 
     vkGetPhysicalDeviceSurfacePresentModesKHR(vkPhysicalDevice_selected,vkSurfaceKHR,&c,NULL);
     if(!c) return VK_ERROR_INITIALIZATION_FAILED;
@@ -498,15 +552,22 @@ static VkResult ChoosePresentMode(void)
     VkPresentModeKHR* arr=(VkPresentModeKHR*)malloc(sizeof(VkPresentModeKHR)*c);
     vkGetPhysicalDeviceSurfacePresentModesKHR(vkPhysicalDevice_selected,vkSurfaceKHR,&c,arr);
 
+    fprintf(gFILE,"LOG: Available present modes:\n"); // ADDED LOG (Detailed)
+    for(uint32_t i=0; i<c; i++){
+        fprintf(gFILE,"    PresentMode[%u] = %d\n", i, arr[i]);
+    }
+
     vkPresentModeKHR=VK_PRESENT_MODE_FIFO_KHR;
     for(uint32_t i=0;i<c;i++){
         if(arr[i]==VK_PRESENT_MODE_MAILBOX_KHR){
             vkPresentModeKHR=VK_PRESENT_MODE_MAILBOX_KHR; 
+            fprintf(gFILE,"LOG: Using MAILBOX present mode.\n");
             break;
         }
     }
     free(arr);
-    fprintf(gFILE,"LOG: Chosen Present Mode = %d\n", vkPresentModeKHR); // ADDED LOG
+
+    fprintf(gFILE,"LOG: Final chosen present mode=%d\n", vkPresentModeKHR);
     return VK_SUCCESS;
 }
 
@@ -515,7 +576,7 @@ static VkResult ChoosePresentMode(void)
 // ------------------------------------------------------------------------
 static VkResult CreateSwapchain(void)
 {
-    fprintf(gFILE,"LOG: CreateSwapchain() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateSwapchain() Start\n");
     ChooseSwapFormat(); 
     ChoosePresentMode();
 
@@ -523,8 +584,13 @@ static VkResult CreateSwapchain(void)
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
         vkPhysicalDevice_selected,vkSurfaceKHR,&cap);
 
+    fprintf(gFILE,"LOG: SurfaceCapabilities => minImageCount=%u, maxImageCount=%u, currentExtent=(%u,%u)\n",
+            cap.minImageCount, cap.maxImageCount,
+            cap.currentExtent.width, cap.currentExtent.height);
+
     uint32_t desired=cap.minImageCount+1;
-    if(cap.maxImageCount>0 && desired>cap.maxImageCount) desired=cap.maxImageCount;
+    if(cap.maxImageCount>0 && desired>cap.maxImageCount) 
+        desired=cap.maxImageCount;
 
     if(cap.currentExtent.width!=UINT32_MAX){
         vkExtent2D_SwapChain=cap.currentExtent;
@@ -540,6 +606,11 @@ static VkResult CreateSwapchain(void)
         if(vkExtent2D_SwapChain.height>cap.maxImageExtent.height)
             vkExtent2D_SwapChain.height=cap.maxImageExtent.height;
     }
+
+    fprintf(gFILE,"LOG: Creating swapchain => desiredImageCount=%u, finalExtent=(%u,%u)\n",
+            desired, 
+            vkExtent2D_SwapChain.width, 
+            vkExtent2D_SwapChain.height);
 
     VkSwapchainCreateInfoKHR sci={VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR};
     sci.surface=vkSurfaceKHR;
@@ -561,9 +632,9 @@ static VkResult CreateSwapchain(void)
 
     VkResult result = vkCreateSwapchainKHR(vkDevice,&sci,NULL,&vkSwapchainKHR);
     if(result == VK_SUCCESS)
-        fprintf(gFILE,"LOG: vkCreateSwapchainKHR() Successful.\n"); // ADDED LOG
+        fprintf(gFILE,"LOG: vkCreateSwapchainKHR() Successful.\n");
     else
-        fprintf(gFILE,"ERROR: vkCreateSwapchainKHR() Failed.\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: vkCreateSwapchainKHR() Failed.\n");
 
     return result;
 }
@@ -573,13 +644,15 @@ static VkResult CreateSwapchain(void)
 // ------------------------------------------------------------------------
 static VkResult CreateImagesViews(void)
 {
-    fprintf(gFILE,"LOG: CreateImagesViews() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateImagesViews() Start\n");
 
     vkGetSwapchainImagesKHR(vkDevice,vkSwapchainKHR,&swapchainImageCount,NULL);
     if(!swapchainImageCount) return VK_ERROR_INITIALIZATION_FAILED;
 
     swapChainImage_array=(VkImage*)malloc(sizeof(VkImage)*swapchainImageCount);
     vkGetSwapchainImagesKHR(vkDevice,vkSwapchainKHR,&swapchainImageCount,swapChainImage_array);
+
+    fprintf(gFILE,"LOG: swapchainImageCount=%u\n", swapchainImageCount); // ADDED LOG (Detailed)
 
     swapChainImageView_array=(VkImageView*)malloc(sizeof(VkImageView)*swapchainImageCount);
 
@@ -596,12 +669,14 @@ static VkResult CreateImagesViews(void)
 
         VkResult r=vkCreateImageView(vkDevice,&ivci,NULL,&swapChainImageView_array[i]);
         if(r!=VK_SUCCESS) {
-            fprintf(gFILE,"ERROR: vkCreateImageView() Failed for image index %u.\n", i); // ADDED LOG
+            fprintf(gFILE,"ERROR: vkCreateImageView() Failed for image index %u.\n", i);
             return r;
+        } else {
+            fprintf(gFILE,"LOG: Created ImageView[%u] => %p\n", i, (void*)swapChainImageView_array[i]);
         }
     }
 
-    fprintf(gFILE,"LOG: CreateImagesViews() Successfully created %u Image Views.\n", swapchainImageCount); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateImagesViews() Successfully created %u Image Views.\n", swapchainImageCount);
     return VK_SUCCESS;
 }
 
@@ -610,7 +685,7 @@ static VkResult CreateImagesViews(void)
 // ------------------------------------------------------------------------
 static VkResult CreateCommandPoolBuffers(void)
 {
-    fprintf(gFILE,"LOG: CreateCommandPoolBuffers() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateCommandPoolBuffers() Start\n");
 
     VkCommandPoolCreateInfo cpci={VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
     cpci.queueFamilyIndex=graphicsQuequeFamilyIndex_selected;
@@ -618,7 +693,7 @@ static VkResult CreateCommandPoolBuffers(void)
 
     VkResult r=vkCreateCommandPool(vkDevice,&cpci,NULL,&vkCommandPool);
     if(r!=VK_SUCCESS){
-        fprintf(gFILE,"ERROR: vkCreateCommandPool() Failed!\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: vkCreateCommandPool() Failed!\n");
         return r;
     }
 
@@ -631,12 +706,15 @@ static VkResult CreateCommandPoolBuffers(void)
     for(uint32_t i=0;i<swapchainImageCount;i++){
         r=vkAllocateCommandBuffers(vkDevice,&cbai,&vkCommandBuffer_array[i]);
         if(r!=VK_SUCCESS){
-            fprintf(gFILE,"ERROR: vkAllocateCommandBuffers() Failed for index %u!\n", i); // ADDED LOG
+            fprintf(gFILE,"ERROR: vkAllocateCommandBuffers() Failed for index %u!\n", i);
             return r;
+        } else {
+            fprintf(gFILE,"LOG: Allocated CommandBuffer[%u] => %p\n", 
+                i, (void*)vkCommandBuffer_array[i]);
         }
     }
 
-    fprintf(gFILE,"LOG: CreateCommandPoolBuffers() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateCommandPoolBuffers() Successful\n");
     return VK_SUCCESS;
 }
 
@@ -645,13 +723,17 @@ static VkResult CreateCommandPoolBuffers(void)
 // ------------------------------------------------------------------------
 static VkResult buildCommandBuffers(void)
 {
-    fprintf(gFILE,"LOG: buildCommandBuffers() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: buildCommandBuffers() Start\n");
 
     for(uint32_t i=0;i<swapchainImageCount;i++){
         vkResetCommandBuffer(vkCommandBuffer_array[i],0);
 
         VkCommandBufferBeginInfo bi={VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
-        vkBeginCommandBuffer(vkCommandBuffer_array[i],&bi);
+        VkResult r = vkBeginCommandBuffer(vkCommandBuffer_array[i],&bi);
+        if(r != VK_SUCCESS){
+            fprintf(gFILE,"ERROR: vkBeginCommandBuffer failed at index %u.\n", i);
+            return r;
+        }
 
         // Transition to COLOR_ATTACHMENT_OPTIMAL
         VkImageMemoryBarrier toColor={VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
@@ -661,7 +743,9 @@ static VkResult buildCommandBuffers(void)
         toColor.dstQueueFamilyIndex=VK_QUEUE_FAMILY_IGNORED;
         toColor.image=swapChainImage_array[i];
         toColor.subresourceRange.aspectMask=VK_IMAGE_ASPECT_COLOR_BIT;
+        toColor.subresourceRange.baseMipLevel=0;
         toColor.subresourceRange.levelCount=1;
+        toColor.subresourceRange.baseArrayLayer=0;
         toColor.subresourceRange.layerCount=1;
         toColor.srcAccessMask=0;
         toColor.dstAccessMask=VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
@@ -670,8 +754,12 @@ static VkResult buildCommandBuffers(void)
             vkCommandBuffer_array[i],
             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            0,0,NULL,0,NULL,1,&toColor
+            0,
+            0,NULL,
+            0,NULL,
+            1,&toColor
         );
+        fprintf(gFILE,"LOG: CmdBuffer[%u]: transition from UNDEFINED to COLOR_ATTACHMENT_OPTIMAL\n", i);
 
         // Dynamic Rendering: Clear
         VkRenderingAttachmentInfoKHR colAtt={VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO_KHR};
@@ -689,9 +777,16 @@ static VkResult buildCommandBuffers(void)
         ri.colorAttachmentCount=1;
         ri.pColorAttachments=&colAtt;
 
-        pfnCmdBeginRenderingKHR(vkCommandBuffer_array[i],&ri);
+        pfnCmdBeginRenderingKHR(vkCommandBuffer_array[i], &ri);
+        fprintf(gFILE,"LOG: CmdBuffer[%u]: begin rendering (clear color=%.2f,%.2f,%.2f,%.2f)\n",
+                i,
+                vkClearColorValue.float32[0],
+                vkClearColorValue.float32[1],
+                vkClearColorValue.float32[2],
+                vkClearColorValue.float32[3]);
         // No draw commands, just clearing
         pfnCmdEndRenderingKHR(vkCommandBuffer_array[i]);
+        fprintf(gFILE,"LOG: CmdBuffer[%u]: end rendering\n", i);
 
         // Transition to PRESENT_SRC_KHR
         VkImageMemoryBarrier toPresent={VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
@@ -701,7 +796,9 @@ static VkResult buildCommandBuffers(void)
         toPresent.dstQueueFamilyIndex=VK_QUEUE_FAMILY_IGNORED;
         toPresent.image=swapChainImage_array[i];
         toPresent.subresourceRange.aspectMask=VK_IMAGE_ASPECT_COLOR_BIT;
+        toPresent.subresourceRange.baseMipLevel=0;
         toPresent.subresourceRange.levelCount=1;
+        toPresent.subresourceRange.baseArrayLayer=0;
         toPresent.subresourceRange.layerCount=1;
         toPresent.srcAccessMask=VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
         toPresent.dstAccessMask=0;
@@ -710,13 +807,17 @@ static VkResult buildCommandBuffers(void)
             vkCommandBuffer_array[i],
             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
             VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            0,0,NULL,0,NULL,1,&toPresent
+            0,
+            0,NULL,
+            0,NULL,
+            1,&toPresent
         );
+        fprintf(gFILE,"LOG: CmdBuffer[%u]: transition from COLOR_ATTACHMENT_OPTIMAL to PRESENT_SRC_KHR\n", i);
 
         vkEndCommandBuffer(vkCommandBuffer_array[i]);
     }
 
-    fprintf(gFILE,"LOG: buildCommandBuffers() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: buildCommandBuffers() Successful\n");
     return VK_SUCCESS;
 }
 
@@ -725,23 +826,30 @@ static VkResult buildCommandBuffers(void)
 // ------------------------------------------------------------------------
 static VkResult CreateSyncObjects(void)
 {
-    fprintf(gFILE,"LOG: CreateSyncObjects() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateSyncObjects() Start\n");
     VkSemaphoreCreateInfo sci={VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO};
     VkFenceCreateInfo fci={VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
     fci.flags=VK_FENCE_CREATE_SIGNALED_BIT;
 
     for(int i=0;i<MAX_FRAMES_IN_FLIGHT;i++){
-        if(vkCreateSemaphore(vkDevice,&sci,NULL,&imageAvailableSemaphores[i])!=VK_SUCCESS)
+        if(vkCreateSemaphore(vkDevice,&sci,NULL,&imageAvailableSemaphores[i])!=VK_SUCCESS){
+            fprintf(gFILE,"ERROR: vkCreateSemaphore() imageAvailable failed at i=%d\n", i);
             return VK_ERROR_INITIALIZATION_FAILED;
+        }
+        if(vkCreateSemaphore(vkDevice,&sci,NULL,&renderFinishedSemaphores[i])!=VK_SUCCESS){
+            fprintf(gFILE,"ERROR: vkCreateSemaphore() renderFinished failed at i=%d\n", i);
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+        if(vkCreateFence(vkDevice,&fci,NULL,&inFlightFences[i])!=VK_SUCCESS){
+            fprintf(gFILE,"ERROR: vkCreateFence() failed at i=%d\n", i);
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
 
-        if(vkCreateSemaphore(vkDevice,&sci,NULL,&renderFinishedSemaphores[i])!=VK_SUCCESS)
-            return VK_ERROR_INITIALIZATION_FAILED;
-
-        if(vkCreateFence(vkDevice,&fci,NULL,&inFlightFences[i])!=VK_SUCCESS)
-            return VK_ERROR_INITIALIZATION_FAILED;
+        fprintf(gFILE,"LOG: Created sync objects for frame=%d => imageAvail=%p, renderFinish=%p, fence=%p\n",
+            i, (void*)imageAvailableSemaphores[i], (void*)renderFinishedSemaphores[i], (void*)inFlightFences[i]);
     }
 
-    fprintf(gFILE,"LOG: CreateSyncObjects() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: CreateSyncObjects() Successful\n");
     return VK_SUCCESS;
 }
 
@@ -750,22 +858,31 @@ static VkResult CreateSyncObjects(void)
 // ------------------------------------------------------------------------
 static void cleanupSwapchain(void)
 {
-    fprintf(gFILE,"LOG: cleanupSwapchain()\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: cleanupSwapchain() Start\n");
     vkDeviceWaitIdle(vkDevice);
 
     if(vkCommandBuffer_array){
-        for(uint32_t i=0;i<swapchainImageCount;i++)
-            vkFreeCommandBuffers(vkDevice,vkCommandPool,1,&vkCommandBuffer_array[i]);
+        for(uint32_t i=0;i<swapchainImageCount;i++){
+            if(vkCommandBuffer_array[i]){
+                vkFreeCommandBuffers(vkDevice,vkCommandPool,1,&vkCommandBuffer_array[i]);
+                fprintf(gFILE,"LOG: Freed CommandBuffer[%u]\n", i);
+            }
+        }
         free(vkCommandBuffer_array); 
         vkCommandBuffer_array=NULL;
     }
     if(vkCommandPool){
         vkDestroyCommandPool(vkDevice,vkCommandPool,NULL);
+        fprintf(gFILE,"LOG: Destroyed Command Pool\n");
         vkCommandPool=VK_NULL_HANDLE;
     }
     if(swapChainImageView_array){
-        for(uint32_t i=0;i<swapchainImageCount;i++)
-            vkDestroyImageView(vkDevice,swapChainImageView_array[i],NULL);
+        for(uint32_t i=0;i<swapchainImageCount;i++){
+            if(swapChainImageView_array[i]){
+                vkDestroyImageView(vkDevice,swapChainImageView_array[i],NULL);
+                fprintf(gFILE,"LOG: Destroyed ImageView[%u]\n", i);
+            }
+        }
         free(swapChainImageView_array); 
         swapChainImageView_array=NULL;
     }
@@ -775,8 +892,10 @@ static void cleanupSwapchain(void)
     }
     if(vkSwapchainKHR){
         vkDestroySwapchainKHR(vkDevice,vkSwapchainKHR,NULL);
+        fprintf(gFILE,"LOG: Destroyed Swapchain\n");
         vkSwapchainKHR=VK_NULL_HANDLE;
     }
+    fprintf(gFILE,"LOG: cleanupSwapchain() End\n");
 }
 
 // ------------------------------------------------------------------------
@@ -784,8 +903,11 @@ static void cleanupSwapchain(void)
 // ------------------------------------------------------------------------
 static VkResult recreateSwapchain(void)
 {
-    fprintf(gFILE,"LOG: recreateSwapchain() Start\n"); // ADDED LOG
-    if(winWidth==0||winHeight==0) return VK_SUCCESS;
+    fprintf(gFILE,"LOG: recreateSwapchain() Start\n");
+    if(winWidth==0||winHeight==0) {
+        fprintf(gFILE,"LOG: Window minimized, skip recreate.\n");
+        return VK_SUCCESS;
+    }
 
     cleanupSwapchain();
 
@@ -798,7 +920,9 @@ static VkResult recreateSwapchain(void)
     r=CreateCommandPoolBuffers(); 
     if(r!=VK_SUCCESS) return r;
 
-    return buildCommandBuffers();
+    r=buildCommandBuffers();
+    fprintf(gFILE,"LOG: recreateSwapchain() End with result=%d\n", r);
+    return r;
 }
 
 // ------------------------------------------------------------------------
@@ -806,7 +930,7 @@ static VkResult recreateSwapchain(void)
 // ------------------------------------------------------------------------
 void resize(int w,int h)
 {
-    fprintf(gFILE,"LOG: resize(%d, %d)\n", w, h); // ADDED LOG
+    fprintf(gFILE,"LOG: resize(%d, %d)\n", w, h);
     winWidth=w; 
     winHeight=h;
     if(winWidth && winHeight) 
@@ -819,8 +943,16 @@ void resize(int w,int h)
 static VkResult drawFrame(void)
 {
     // Wait for the GPU to finish with this frame
-    vkWaitForFences(vkDevice,1,&inFlightFences[currentFrame],VK_TRUE,UINT64_MAX);
-    vkResetFences(vkDevice,1,&inFlightFences[currentFrame]);
+    VkResult fenceWait = vkWaitForFences(vkDevice,1,&inFlightFences[currentFrame],VK_TRUE,UINT64_MAX);
+    if(fenceWait != VK_SUCCESS){
+        fprintf(gFILE,"ERROR: vkWaitForFences failed or timed out. Result=%d\n", fenceWait);
+        return fenceWait;
+    }
+    VkResult fenceReset = vkResetFences(vkDevice,1,&inFlightFences[currentFrame]);
+    if(fenceReset != VK_SUCCESS){
+        fprintf(gFILE,"ERROR: vkResetFences failed. Result=%d\n", fenceReset);
+        return fenceReset;
+    }
 
     // Acquire next image
     uint32_t imgIndex;
@@ -832,8 +964,9 @@ static VkResult drawFrame(void)
         VK_NULL_HANDLE,
         &imgIndex);
 
+    fprintf(gFILE,"LOG: vkAcquireNextImageKHR => result=%d, imgIndex=%u\n", r, imgIndex);
     if(r==VK_ERROR_OUT_OF_DATE_KHR){
-        fprintf(gFILE,"LOG: vkAcquireNextImageKHR -> VK_ERROR_OUT_OF_DATE_KHR, recreateSwapchain()\n"); // ADDED LOG
+        fprintf(gFILE,"LOG: Swapchain out of date, calling recreateSwapchain().\n");
         recreateSwapchain();
         return VK_SUCCESS;
     }
@@ -853,9 +986,11 @@ static VkResult drawFrame(void)
 
     r=vkQueueSubmit(vkQueue,1,&si,inFlightFences[currentFrame]);
     if(r!=VK_SUCCESS) {
-        fprintf(gFILE,"ERROR: vkQueueSubmit failed!\n"); // ADDED LOG
+        fprintf(gFILE,"ERROR: vkQueueSubmit failed with result=%d\n", r);
         return r;
     }
+    fprintf(gFILE,"LOG: Submitted CmdBuffer for imageIndex=%u, signaled fence/inFlightFences[%u]\n", 
+        imgIndex, currentFrame);
 
     // Present
     VkPresentInfoKHR pi={VK_STRUCTURE_TYPE_PRESENT_INFO_KHR};
@@ -866,8 +1001,10 @@ static VkResult drawFrame(void)
     pi.pImageIndices=&imgIndex;
 
     r=vkQueuePresentKHR(vkQueue,&pi);
+    fprintf(gFILE,"LOG: vkQueuePresentKHR => result=%d\n", r);
+
     if(r==VK_ERROR_OUT_OF_DATE_KHR || r==VK_SUBOPTIMAL_KHR){
-        fprintf(gFILE,"LOG: vkQueuePresentKHR -> out_of_date or suboptimal, recreateSwapchain()\n"); // ADDED LOG
+        fprintf(gFILE,"LOG: Present => swapchain out_of_date/suboptimal, calling recreateSwapchain().\n");
         recreateSwapchain();
     }
 
@@ -880,7 +1017,7 @@ static VkResult drawFrame(void)
 // ------------------------------------------------------------------------
 VkResult initialize(void)
 {
-    fprintf(gFILE,"LOG: initialize() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: initialize() Start\n");
     VkResult r=CreateVulkanInstance(); 
     if(r!=VK_SUCCESS) return r;
 
@@ -910,28 +1047,31 @@ VkResult initialize(void)
     vkClearColorValue.float32[1]=0.0f;
     vkClearColorValue.float32[2]=1.0f;
     vkClearColorValue.float32[3]=1.0f;
+    fprintf(gFILE,"LOG: Clear color set to (%.2f, %.2f, %.2f, %.2f)\n",
+        vkClearColorValue.float32[0],
+        vkClearColorValue.float32[1],
+        vkClearColorValue.float32[2],
+        vkClearColorValue.float32[3]);
 
     r=buildCommandBuffers(); 
     if(r!=VK_SUCCESS) return r;
 
     bInitialized=TRUE;
-    fprintf(gFILE,"LOG: initialize() Successful\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: initialize() Successful\n");
     return VK_SUCCESS;
 }
 
 VkResult display(void){ 
-    // We only do one call to drawFrame here
     return drawFrame(); 
 }
 
 void update(void){
     // Put any dynamic updates here if needed
-    // For now, no logs since it's empty
 }
 
 void uninitialize(void)
 {
-    fprintf(gFILE,"LOG: uninitialize() Start\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: uninitialize() Start\n");
     if(gbFullscreen){
         ToggleFullscreen(); 
         gbFullscreen=FALSE;
@@ -942,27 +1082,44 @@ void uninitialize(void)
 
         // Destroy sync objects
         for(int i=0;i<MAX_FRAMES_IN_FLIGHT;i++){
-            if(inFlightFences[i]) vkDestroyFence(vkDevice,inFlightFences[i],NULL);
-            if(renderFinishedSemaphores[i]) vkDestroySemaphore(vkDevice,renderFinishedSemaphores[i],NULL);
-            if(imageAvailableSemaphores[i]) vkDestroySemaphore(vkDevice,imageAvailableSemaphores[i],NULL);
+            if(inFlightFences[i]) {
+                vkDestroyFence(vkDevice,inFlightFences[i],NULL);
+                fprintf(gFILE,"LOG: Destroyed fence[%d]\n", i);
+            }
+            if(renderFinishedSemaphores[i]) {
+                vkDestroySemaphore(vkDevice,renderFinishedSemaphores[i],NULL);
+                fprintf(gFILE,"LOG: Destroyed renderFinished semaphore[%d]\n", i);
+            }
+            if(imageAvailableSemaphores[i]) {
+                vkDestroySemaphore(vkDevice,imageAvailableSemaphores[i],NULL);
+                fprintf(gFILE,"LOG: Destroyed imageAvailable semaphore[%d]\n", i);
+            }
         }
 
         cleanupSwapchain();
         vkDestroyDevice(vkDevice,NULL);
+        fprintf(gFILE,"LOG: Destroyed logical device\n");
     }
 
-    if(gDebugUtilsMessenger) 
+    if(gDebugUtilsMessenger) {
         DestroyDebugUtilsMessengerEXT(vkInstance,gDebugUtilsMessenger,NULL);
+        fprintf(gFILE,"LOG: Destroyed debug messenger\n");
+    }
 
-    if(vkSurfaceKHR) 
+    if(vkSurfaceKHR) {
         vkDestroySurfaceKHR(vkInstance,vkSurfaceKHR,NULL);
+        fprintf(gFILE,"LOG: Destroyed surface\n");
+    }
 
-    if(vkInstance) 
+    if(vkInstance) {
         vkDestroyInstance(vkInstance,NULL);
+        fprintf(gFILE,"LOG: Destroyed Vulkan instance\n");
+    }
 
     if(ghwnd){
         DestroyWindow(ghwnd); 
         ghwnd=NULL;
+        fprintf(gFILE,"LOG: Destroyed main window\n");
     }
 
     if(gFILE){
@@ -970,7 +1127,6 @@ void uninitialize(void)
         fclose(gFILE);
         gFILE=NULL;
     }
-    fprintf(gFILE,"LOG: uninitialize() End\n"); // ADDED LOG (will print only if gFILE still open)
 }
 
 // ------------------------------------------------------------------------
@@ -1003,11 +1159,11 @@ int WINAPI WinMain(HINSTANCE hInst,HINSTANCE hPrev,LPSTR lpszCmdLine,int iCmdSho
         return 0;
     }
 
-    fprintf(gFILE,"LOG: Creating Main Window\n"); // ADDED LOG
+    fprintf(gFILE,"LOG: Creating Main Window\n");
     ghwnd=CreateWindowEx(
         WS_EX_APPWINDOW,
         gpszAppName,
-        TEXT("DynamicRenderingNoLinkError - with logs"),
+        TEXT("DynamicRenderingNoLinkError - Detailed Logs"),
         WS_OVERLAPPEDWINDOW|WS_VISIBLE,
         x,y,
         WIN_WIDTH,WIN_HEIGHT,
@@ -1016,7 +1172,7 @@ int WINAPI WinMain(HINSTANCE hInst,HINSTANCE hPrev,LPSTR lpszCmdLine,int iCmdSho
 
     VkResult r=initialize(); 
     if(r!=VK_SUCCESS){
-        fprintf(gFILE,"ERROR: initialize() failed with VkResult %d\n", r); // ADDED LOG
+        fprintf(gFILE,"ERROR: initialize() failed with VkResult %d\n", r);
         DestroyWindow(ghwnd); 
         ghwnd=NULL;
     }
