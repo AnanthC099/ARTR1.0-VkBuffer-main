@@ -1,0 +1,74 @@
+LOG: Creating Main Window
+LOG: Window gained focus.
+LOG: initialize() Start
+LOG: CreateVulkanInstance() Start
+LOG: FillInstanceExtensions() Start
+LOG: FillInstanceExtensions() Successful
+LOG: TryAddDebugExt() Start
+LOG: Found VK_EXT_debug_utils, enabling debug extension.
+LOG: TryAddValidationLayer() Start
+LOG: Found VK_LAYER_KHRONOS_validation -> enabling validation layer.
+LOG: Debug Messenger Created.
+LOG: CreateVulkanInstance() Successful
+LOG: CreateSurface() Start
+LOG: Surface creation successful.
+LOG: PickPhysicalDevice() Start
+LOG: PickPhysicalDevice() Successful
+LOG: CreateDeviceQueue() Start
+LOG: CheckDevExtensions() Start
+LOG: CheckDevExtensions() Successful
+LOG: CreateDeviceQueue() Successful
+LOG: CreateSwapchain() Start
+LOG: ChooseSwapFormat() Start
+LOG: ChoosePresentMode() Start
+LOG: vkCreateSwapchainKHR() Successful.
+LOG: CreateImagesViews() Start
+LOG: CreateCommandPoolBuffers() Start
+LOG: CreateVertexBuffer() Start
+LOG: CreateVertexBuffer() successful
+LOG: CreatePipelineLayout() Start
+LOG: CreateGraphicsPipeline() Start
+LOG: CreateGraphicsPipeline() Successful
+LOG: CreateSyncObjects() Start
+LOG: buildCommandBuffers() Start
+LOG: Toggle fullscreen.
+LOG: WM_SIZE -> resize(1920, 1080)
+LOG: resize(1920, 1080)
+LOG: recreateSwapchain() Start
+LOG: cleanupSwapchain() Start
+LOG: CreateSwapchain() Start
+LOG: ChooseSwapFormat() Start
+LOG: ChoosePresentMode() Start
+LOG: vkCreateSwapchainKHR() Successful.
+LOG: CreateImagesViews() Start
+LOG: CreateCommandPoolBuffers() Start
+LOG: buildCommandBuffers() Start
+LOG: Toggle fullscreen.
+LOG: WM_SIZE -> resize(800, 600)
+LOG: resize(800, 600)
+LOG: recreateSwapchain() Start
+LOG: cleanupSwapchain() Start
+LOG: CreateSwapchain() Start
+LOG: ChooseSwapFormat() Start
+LOG: ChoosePresentMode() Start
+LOG: vkCreateSwapchainKHR() Successful.
+LOG: CreateImagesViews() Start
+LOG: CreateCommandPoolBuffers() Start
+LOG: buildCommandBuffers() Start
+LOG: WM_SIZE -> resize(784, 561)
+LOG: resize(784, 561)
+LOG: recreateSwapchain() Start
+LOG: cleanupSwapchain() Start
+LOG: CreateSwapchain() Start
+LOG: ChooseSwapFormat() Start
+LOG: ChoosePresentMode() Start
+LOG: vkCreateSwapchainKHR() Successful.
+LOG: CreateImagesViews() Start
+LOG: CreateCommandPoolBuffers() Start
+LOG: buildCommandBuffers() Start
+LOG: WM_CLOSE received, destroying window.
+LOG: Window lost focus.
+LOG: WM_DESTROY received, PostQuitMessage.
+LOG: uninitialize() Start
+LOG: cleanupSwapchain() Start
+Program ended.
