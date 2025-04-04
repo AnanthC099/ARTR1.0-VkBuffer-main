@@ -1,0 +1,44 @@
+LOG: Creating Main Window
+LOG: Window gained focus.
+LOG: initialize() Start
+LOG: CreateVulkanInstance() Start
+LOG: FillInstanceExtensions() Start
+LOG: FillInstanceExtensions() Successful
+LOG: TryAddDebugExt()
+LOG: Found VK_EXT_DEBUG_UTILS_EXTENSION_NAME
+LOG: TryAddValidationLayer()
+LOG: Found VK_LAYER_KHRONOS_validation
+LOG: Debug Messenger Created.
+LOG: CreateVulkanInstance() Successful
+LOG: CreateSurface() Start
+LOG: Surface creation successful.
+LOG: PickPhysicalDevice() Start
+LOG: Physical Device chosen at index 0, queue family 0
+LOG: PickPhysicalDevice() Successful
+LOG: CreateDeviceQueue() Start
+LOG: CheckDevExtensions() Start
+LOG: Found VK_KHR_dynamic_rendering extension.
+LOG: CheckDevExtensions() Successful
+LOG: LoadDynamicRenderingFunctions()
+LOG: CreateDeviceQueue() Successful
+LOG: CreateSwapchain() Start
+LOG: ChooseSwapFormat() Start
+LOG: ChooseSwapFormat() -> Chosen format 44
+LOG: ChoosePresentMode() Start
+LOG: Chosen Present Mode = 1
+LOG: vkCreateSwapchainKHR() Successful.
+LOG: CreateImagesViews() Start
+LOG: CreateImagesViews() Successfully created 3 Image Views.
+LOG: CreateCommandPoolBuffers() Start
+LOG: CreateCommandPoolBuffers() Successful
+LOG: CreateSyncObjects() Start
+LOG: CreateSyncObjects() Successful
+LOG: buildCommandBuffers() Start
+LOG: buildCommandBuffers() Successful
+LOG: initialize() Successful
+LOG: WM_CLOSE received, destroying window.
+LOG: Window lost focus.
+LOG: WM_DESTROY received, PostQuitMessage.
+LOG: uninitialize() Start
+LOG: cleanupSwapchain()
+Program ended.
