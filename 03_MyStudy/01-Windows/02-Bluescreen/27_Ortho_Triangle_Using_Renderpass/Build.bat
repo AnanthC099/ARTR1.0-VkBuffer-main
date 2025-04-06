@@ -1,8 +1,12 @@
 cls
 
-del Vk.exe Log.txt
+del Vk.exe Log.txt vert_shader.spv frag_shader.spv
 
-cl /I"C:\VulkanSDK\Vulkan\Include" /c Vk.c /Fo"Vk.obj"
+glslc -fshader-stage=vert vert_shader.glsl -o vert_shader.spv
+
+glslc -fshader-stage=frag frag_shader.glsl -o frag_shader.spv
+
+cl /EHsc /I"C:\VulkanSDK\Vulkan\Include" /c Vk.cpp /Fo"Vk.obj"
 
 rc.exe Vk.rc
 
