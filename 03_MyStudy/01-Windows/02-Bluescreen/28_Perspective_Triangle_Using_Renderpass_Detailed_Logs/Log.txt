@@ -1,0 +1,774 @@
+Program started.
+[LOG] Window class registered.
+[LOG] Window created successfully.
+[LOG] Entering initialize()...
+[LOG] Entering CreateVulkanInstance()...
+[LOG] Entering FillInstanceExtensionNames()...
+[LOG] Possible extension: VK_KHR_device_group_creation
+[LOG] Possible extension: VK_KHR_external_fence_capabilities
+[LOG] Possible extension: VK_KHR_external_memory_capabilities
+[LOG] Possible extension: VK_KHR_external_semaphore_capabilities
+[LOG] Possible extension: VK_KHR_get_physical_device_properties2
+[LOG] Possible extension: VK_KHR_get_surface_capabilities2
+[LOG] Possible extension: VK_KHR_surface
+[LOG] Possible extension: VK_KHR_surface_protected_capabilities
+[LOG] Possible extension: VK_KHR_win32_surface
+[LOG] Possible extension: VK_EXT_debug_report
+[LOG] Possible extension: VK_EXT_debug_utils
+[LOG] Possible extension: VK_EXT_surface_maintenance1
+[LOG] Possible extension: VK_EXT_swapchain_colorspace
+[LOG] Possible extension: VK_NV_external_memory_capabilities
+[LOG] Possible extension: VK_KHR_portability_enumeration
+[LOG] Possible extension: VK_LUNARG_direct_driver_loading
+[LOG] Checking if VK_EXT_debug_utils is present.
+[LOG] Exiting FillInstanceExtensionNames().
+[LOG] Entering FillInstanceLayerNames()...
+[LOG] Validation disabled, skipping instance layer checks.
+[LOG] vkCreateInstance() succeeded.
+[LOG] Entering CreateSurfaceWin32()...
+[LOG] vkCreateWin32SurfaceKHR() succeeded.
+[LOG] Entering SelectPhysicalDevice()...
+[LOG] Checking queueFamilyIndex=0 -> Graphics? YES, Present? YES
+[LOG] -> Found suitable GPU with queueFamilyIndex=0.
+[LOG] Physical device selected.
+[LOG] Entering CreateLogicalDeviceAndQueue()...
+[LOG] Entering FillDeviceExtensionNames()...
+[LOG] Found Device Extension: VK_KHR_16bit_storage
+[LOG] Found Device Extension: VK_KHR_8bit_storage
+[LOG] Found Device Extension: VK_KHR_acceleration_structure
+[LOG] Found Device Extension: VK_KHR_bind_memory2
+[LOG] Found Device Extension: VK_KHR_buffer_device_address
+[LOG] Found Device Extension: VK_KHR_calibrated_timestamps
+[LOG] Found Device Extension: VK_KHR_compute_shader_derivatives
+[LOG] Found Device Extension: VK_KHR_cooperative_matrix
+[LOG] Found Device Extension: VK_KHR_copy_commands2
+[LOG] Found Device Extension: VK_KHR_create_renderpass2
+[LOG] Found Device Extension: VK_KHR_dedicated_allocation
+[LOG] Found Device Extension: VK_KHR_deferred_host_operations
+[LOG] Found Device Extension: VK_KHR_depth_stencil_resolve
+[LOG] Found Device Extension: VK_KHR_descriptor_update_template
+[LOG] Found Device Extension: VK_KHR_device_group
+[LOG] Found Device Extension: VK_KHR_draw_indirect_count
+[LOG] Found Device Extension: VK_KHR_driver_properties
+[LOG] Found Device Extension: VK_KHR_dynamic_rendering
+[LOG] Found Device Extension: VK_KHR_dynamic_rendering_local_read
+[LOG] Found Device Extension: VK_KHR_external_fence
+[LOG] Found Device Extension: VK_KHR_external_fence_win32
+[LOG] Found Device Extension: VK_KHR_external_memory
+[LOG] Found Device Extension: VK_KHR_external_memory_win32
+[LOG] Found Device Extension: VK_KHR_external_semaphore
+[LOG] Found Device Extension: VK_KHR_external_semaphore_win32
+[LOG] Found Device Extension: VK_KHR_format_feature_flags2
+[LOG] Found Device Extension: VK_KHR_fragment_shader_barycentric
+[LOG] Found Device Extension: VK_KHR_fragment_shading_rate
+[LOG] Found Device Extension: VK_KHR_get_memory_requirements2
+[LOG] Found Device Extension: VK_KHR_global_priority
+[LOG] Found Device Extension: VK_KHR_image_format_list
+[LOG] Found Device Extension: VK_KHR_imageless_framebuffer
+[LOG] Found Device Extension: VK_KHR_index_type_uint8
+[LOG] Found Device Extension: VK_KHR_line_rasterization
+[LOG] Found Device Extension: VK_KHR_load_store_op_none
+[LOG] Found Device Extension: VK_KHR_maintenance1
+[LOG] Found Device Extension: VK_KHR_maintenance2
+[LOG] Found Device Extension: VK_KHR_maintenance3
+[LOG] Found Device Extension: VK_KHR_maintenance4
+[LOG] Found Device Extension: VK_KHR_maintenance5
+[LOG] Found Device Extension: VK_KHR_maintenance6
+[LOG] Found Device Extension: VK_KHR_maintenance7
+[LOG] Found Device Extension: VK_KHR_map_memory2
+[LOG] Found Device Extension: VK_KHR_multiview
+[LOG] Found Device Extension: VK_KHR_pipeline_binary
+[LOG] Found Device Extension: VK_KHR_pipeline_executable_properties
+[LOG] Found Device Extension: VK_KHR_pipeline_library
+[LOG] Found Device Extension: VK_KHR_present_id
+[LOG] Found Device Extension: VK_KHR_present_wait
+[LOG] Found Device Extension: VK_KHR_push_descriptor
+[LOG] Found Device Extension: VK_KHR_ray_query
+[LOG] Found Device Extension: VK_KHR_ray_tracing_maintenance1
+[LOG] Found Device Extension: VK_KHR_ray_tracing_pipeline
+[LOG] Found Device Extension: VK_KHR_ray_tracing_position_fetch
+[LOG] Found Device Extension: VK_KHR_relaxed_block_layout
+[LOG] Found Device Extension: VK_KHR_sampler_mirror_clamp_to_edge
+[LOG] Found Device Extension: VK_KHR_sampler_ycbcr_conversion
+[LOG] Found Device Extension: VK_KHR_separate_depth_stencil_layouts
+[LOG] Found Device Extension: VK_KHR_shader_atomic_int64
+[LOG] Found Device Extension: VK_KHR_shader_clock
+[LOG] Found Device Extension: VK_KHR_shader_draw_parameters
+[LOG] Found Device Extension: VK_KHR_shader_expect_assume
+[LOG] Found Device Extension: VK_KHR_shader_float16_int8
+[LOG] Found Device Extension: VK_KHR_shader_float_controls
+[LOG] Found Device Extension: VK_KHR_shader_float_controls2
+[LOG] Found Device Extension: VK_KHR_shader_integer_dot_product
+[LOG] Found Device Extension: VK_KHR_shader_maximal_reconvergence
+[LOG] Found Device Extension: VK_KHR_shader_non_semantic_info
+[LOG] Found Device Extension: VK_KHR_shader_quad_control
+[LOG] Found Device Extension: VK_KHR_shader_relaxed_extended_instruction
+[LOG] Found Device Extension: VK_KHR_shader_subgroup_extended_types
+[LOG] Found Device Extension: VK_KHR_shader_subgroup_rotate
+[LOG] Found Device Extension: VK_KHR_shader_subgroup_uniform_control_flow
+[LOG] Found Device Extension: VK_KHR_shader_terminate_invocation
+[LOG] Found Device Extension: VK_KHR_spirv_1_4
+[LOG] Found Device Extension: VK_KHR_storage_buffer_storage_class
+[LOG] Found Device Extension: VK_KHR_swapchain
+[LOG] Found Device Extension: VK_KHR_swapchain_mutable_format
+[LOG] Found Device Extension: VK_KHR_synchronization2
+[LOG] Found Device Extension: VK_KHR_timeline_semaphore
+[LOG] Found Device Extension: VK_KHR_uniform_buffer_standard_layout
+[LOG] Found Device Extension: VK_KHR_variable_pointers
+[LOG] Found Device Extension: VK_KHR_vertex_attribute_divisor
+[LOG] Found Device Extension: VK_KHR_video_decode_h264
+[LOG] Found Device Extension: VK_KHR_video_decode_h265
+[LOG] Found Device Extension: VK_KHR_video_decode_queue
+[LOG] Found Device Extension: VK_KHR_video_encode_h264
+[LOG] Found Device Extension: VK_KHR_video_encode_h265
+[LOG] Found Device Extension: VK_KHR_video_encode_queue
+[LOG] Found Device Extension: VK_KHR_video_maintenance1
+[LOG] Found Device Extension: VK_KHR_video_queue
+[LOG] Found Device Extension: VK_KHR_vulkan_memory_model
+[LOG] Found Device Extension: VK_KHR_win32_keyed_mutex
+[LOG] Found Device Extension: VK_KHR_workgroup_memory_explicit_layout
+[LOG] Found Device Extension: VK_KHR_zero_initialize_workgroup_memory
+[LOG] Found Device Extension: VK_EXT_4444_formats
+[LOG] Found Device Extension: VK_EXT_attachment_feedback_loop_dynamic_state
+[LOG] Found Device Extension: VK_EXT_attachment_feedback_loop_layout
+[LOG] Found Device Extension: VK_EXT_blend_operation_advanced
+[LOG] Found Device Extension: VK_EXT_border_color_swizzle
+[LOG] Found Device Extension: VK_EXT_buffer_device_address
+[LOG] Found Device Extension: VK_EXT_calibrated_timestamps
+[LOG] Found Device Extension: VK_EXT_color_write_enable
+[LOG] Found Device Extension: VK_EXT_conditional_rendering
+[LOG] Found Device Extension: VK_EXT_conservative_rasterization
+[LOG] Found Device Extension: VK_EXT_custom_border_color
+[LOG] Found Device Extension: VK_EXT_depth_bias_control
+[LOG] Found Device Extension: VK_EXT_depth_clamp_control
+[LOG] Found Device Extension: VK_EXT_depth_clamp_zero_one
+[LOG] Found Device Extension: VK_EXT_depth_clip_control
+[LOG] Found Device Extension: VK_EXT_depth_clip_enable
+[LOG] Found Device Extension: VK_EXT_depth_range_unrestricted
+[LOG] Found Device Extension: VK_EXT_descriptor_buffer
+[LOG] Found Device Extension: VK_EXT_descriptor_indexing
+[LOG] Found Device Extension: VK_EXT_device_fault
+[LOG] Found Device Extension: VK_EXT_device_generated_commands
+[LOG] Found Device Extension: VK_EXT_discard_rectangles
+[LOG] Found Device Extension: VK_EXT_dynamic_rendering_unused_attachments
+[LOG] Found Device Extension: VK_EXT_extended_dynamic_state
+[LOG] Found Device Extension: VK_EXT_extended_dynamic_state2
+[LOG] Found Device Extension: VK_EXT_extended_dynamic_state3
+[LOG] Found Device Extension: VK_EXT_external_memory_host
+[LOG] Found Device Extension: VK_EXT_fragment_shader_interlock
+[LOG] Found Device Extension: VK_EXT_full_screen_exclusive
+[LOG] Found Device Extension: VK_EXT_global_priority
+[LOG] Found Device Extension: VK_EXT_global_priority_query
+[LOG] Found Device Extension: VK_EXT_graphics_pipeline_library
+[LOG] Found Device Extension: VK_EXT_hdr_metadata
+[LOG] Found Device Extension: VK_EXT_host_image_copy
+[LOG] Found Device Extension: VK_EXT_host_query_reset
+[LOG] Found Device Extension: VK_EXT_image_2d_view_of_3d
+[LOG] Found Device Extension: VK_EXT_image_robustness
+[LOG] Found Device Extension: VK_EXT_image_sliced_view_of_3d
+[LOG] Found Device Extension: VK_EXT_image_view_min_lod
+[LOG] Found Device Extension: VK_EXT_index_type_uint8
+[LOG] Found Device Extension: VK_EXT_inline_uniform_block
+[LOG] Found Device Extension: VK_EXT_legacy_vertex_attributes
+[LOG] Found Device Extension: VK_EXT_line_rasterization
+[LOG] Found Device Extension: VK_EXT_load_store_op_none
+[LOG] Found Device Extension: VK_EXT_memory_budget
+[LOG] Found Device Extension: VK_EXT_memory_priority
+[LOG] Found Device Extension: VK_EXT_mesh_shader
+[LOG] Found Device Extension: VK_EXT_multi_draw
+[LOG] Found Device Extension: VK_EXT_mutable_descriptor_type
+[LOG] Found Device Extension: VK_EXT_nested_command_buffer
+[LOG] Found Device Extension: VK_EXT_non_seamless_cube_map
+[LOG] Found Device Extension: VK_EXT_opacity_micromap
+[LOG] Found Device Extension: VK_EXT_pageable_device_local_memory
+[LOG] Found Device Extension: VK_EXT_pci_bus_info
+[LOG] Found Device Extension: VK_EXT_pipeline_creation_cache_control
+[LOG] Found Device Extension: VK_EXT_pipeline_creation_feedback
+[LOG] Found Device Extension: VK_EXT_pipeline_library_group_handles
+[LOG] Found Device Extension: VK_EXT_pipeline_robustness
+[LOG] Found Device Extension: VK_EXT_post_depth_coverage
+[LOG] Found Device Extension: VK_EXT_primitive_topology_list_restart
+[LOG] Found Device Extension: VK_EXT_primitives_generated_query
+[LOG] Found Device Extension: VK_EXT_private_data
+[LOG] Found Device Extension: VK_EXT_provoking_vertex
+[LOG] Found Device Extension: VK_EXT_queue_family_foreign
+[LOG] Found Device Extension: VK_EXT_robustness2
+[LOG] Found Device Extension: VK_EXT_sample_locations
+[LOG] Found Device Extension: VK_EXT_sampler_filter_minmax
+[LOG] Found Device Extension: VK_EXT_scalar_block_layout
+[LOG] Found Device Extension: VK_EXT_separate_stencil_usage
+[LOG] Found Device Extension: VK_EXT_shader_atomic_float
+[LOG] Found Device Extension: VK_EXT_shader_demote_to_helper_invocation
+[LOG] Found Device Extension: VK_EXT_shader_image_atomic_int64
+[LOG] Found Device Extension: VK_EXT_shader_module_identifier
+[LOG] Found Device Extension: VK_EXT_shader_object
+[LOG] Found Device Extension: VK_EXT_shader_replicated_composites
+[LOG] Found Device Extension: VK_EXT_shader_subgroup_ballot
+[LOG] Found Device Extension: VK_EXT_shader_subgroup_vote
+[LOG] Found Device Extension: VK_EXT_shader_viewport_index_layer
+[LOG] Found Device Extension: VK_EXT_subgroup_size_control
+[LOG] Found Device Extension: VK_EXT_swapchain_maintenance1
+[LOG] Found Device Extension: VK_EXT_texel_buffer_alignment
+[LOG] Found Device Extension: VK_EXT_tooling_info
+[LOG] Found Device Extension: VK_EXT_transform_feedback
+[LOG] Found Device Extension: VK_EXT_vertex_attribute_divisor
+[LOG] Found Device Extension: VK_EXT_vertex_input_dynamic_state
+[LOG] Found Device Extension: VK_EXT_ycbcr_2plane_444_formats
+[LOG] Found Device Extension: VK_EXT_ycbcr_image_arrays
+[LOG] Found Device Extension: VK_NV_clip_space_w_scaling
+[LOG] Found Device Extension: VK_NV_cluster_acceleration_structure
+[LOG] Found Device Extension: VK_NV_compute_shader_derivatives
+[LOG] Found Device Extension: VK_NV_cooperative_matrix
+[LOG] Found Device Extension: VK_NV_cooperative_vector
+[LOG] Found Device Extension: VK_NV_copy_memory_indirect
+[LOG] Found Device Extension: VK_NV_corner_sampled_image
+[LOG] Found Device Extension: VK_NV_coverage_reduction_mode
+[LOG] Found Device Extension: VK_NV_cuda_kernel_launch
+[LOG] Found Device Extension: VK_NV_dedicated_allocation
+[LOG] Found Device Extension: VK_NV_dedicated_allocation_image_aliasing
+[LOG] Found Device Extension: VK_NV_descriptor_pool_overallocation
+[LOG] Found Device Extension: VK_NV_device_diagnostic_checkpoints
+[LOG] Found Device Extension: VK_NV_device_diagnostics_config
+[LOG] Found Device Extension: VK_NV_device_generated_commands
+[LOG] Found Device Extension: VK_NV_device_generated_commands_compute
+[LOG] Found Device Extension: VK_NV_external_memory
+[LOG] Found Device Extension: VK_NV_external_memory_win32
+[LOG] Found Device Extension: VK_NV_fill_rectangle
+[LOG] Found Device Extension: VK_NV_fragment_coverage_to_color
+[LOG] Found Device Extension: VK_NV_fragment_shader_barycentric
+[LOG] Found Device Extension: VK_NV_fragment_shading_rate_enums
+[LOG] Found Device Extension: VK_NV_framebuffer_mixed_samples
+[LOG] Found Device Extension: VK_NV_geometry_shader_passthrough
+[LOG] Found Device Extension: VK_NV_inherited_viewport_scissor
+[LOG] Found Device Extension: VK_NV_linear_color_attachment
+[LOG] Found Device Extension: VK_NV_low_latency
+[LOG] Found Device Extension: VK_NV_low_latency2
+[LOG] Found Device Extension: VK_NV_memory_decompression
+[LOG] Found Device Extension: VK_NV_mesh_shader
+[LOG] Found Device Extension: VK_NV_partitioned_acceleration_structure
+[LOG] Found Device Extension: VK_NV_present_metering
+[LOG] Found Device Extension: VK_NV_raw_access_chains
+[LOG] Found Device Extension: VK_NV_ray_tracing
+[LOG] Found Device Extension: VK_NV_ray_tracing_invocation_reorder
+[LOG] Found Device Extension: VK_NV_representative_fragment_test
+[LOG] Found Device Extension: VK_NV_sample_mask_override_coverage
+[LOG] Found Device Extension: VK_NV_scissor_exclusive
+[LOG] Found Device Extension: VK_NV_shader_atomic_float16_vector
+[LOG] Found Device Extension: VK_NV_shader_image_footprint
+[LOG] Found Device Extension: VK_NV_shader_sm_builtins
+[LOG] Found Device Extension: VK_NV_shader_subgroup_partitioned
+[LOG] Found Device Extension: VK_NV_shading_rate_image
+[LOG] Found Device Extension: VK_NV_viewport_array2
+[LOG] Found Device Extension: VK_NV_viewport_swizzle
+[LOG] Found Device Extension: VK_NV_win32_keyed_mutex
+[LOG] Found Device Extension: VK_NVX_binary_import
+[LOG] Found Device Extension: VK_NVX_image_view_handle
+[LOG] Found Device Extension: VK_NVX_multiview_per_view_attributes
+[LOG] Found Device Extension: VK_AMD_buffer_marker
+[LOG] Found Device Extension: VK_GOOGLE_user_type
+[LOG] Enabling device extension: VK_KHR_swapchain.
+[LOG] vkCreateDevice() succeeded.
+[LOG] Device queue retrieved successfully.
+[LOG] Entering CreateSwapChain()...
+[LOG] Entering getSurfaceFormatAndColorSpace()...
+[LOG] Using color format: 44, color space: 0
+[LOG] Using currentExtent from surfaceCaps: (784 x 561)
+[LOG] Entering getPresentMode()...
+[LOG] Checking PresentMode: 2
+[LOG] Checking PresentMode: 3
+[LOG] Checking PresentMode: 1
+[LOG] Present Mode chosen: 1
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] Entering CreateImagesAndImageViews()...
+[LOG] swapchainImageCount = 3.
+[LOG] Image views created successfully.
+[LOG] Entering CreateCommandPool()...
+[LOG] Command pool created successfully.
+[LOG] Entering CreateCommandBuffers()...
+[LOG] Command buffers allocated for each swapchain image.
+[LOG] Entering CreateRenderPass()...
+[LOG] Render pass created successfully.
+[LOG] Entering CreateFramebuffers()...
+[LOG] All framebuffers created successfully.
+[LOG] Entering CreateDescriptorSetLayout()...
+[LOG] Descriptor set layout created.
+[LOG] Entering CreateUniformBuffer()...
+[LOG] Uniform buffer size needed = 64 bytes.
+[LOG] Uniform buffer created.
+[LOG] Uniform buffer memory allocated.
+[LOG] Entering CreateDescriptorPool()...
+[LOG] Descriptor pool created.
+[LOG] Entering CreateDescriptorSet()...
+[LOG] Descriptor set allocated.
+[LOG] Descriptor set updated.
+[LOG] Entering CreateVertexBuffer()...
+[LOG] Vertex buffer size needed = 60 bytes.
+[LOG] Vertex buffer created.
+[LOG] Vertex buffer memory allocated.
+[LOG] Vertex data copied to buffer.
+[LOG] Entering CreateGraphicsPipeline()...
+[LOG] Attempting to read file: vert_shader.spv
+[LOG] Successfully read file: vert_shader.spv (1356 bytes)
+[LOG] Attempting to read file: frag_shader.spv
+[LOG] Successfully read file: frag_shader.spv (572 bytes)
+[LOG] Shader module created successfully.
+[LOG] Shader module created successfully.
+[LOG] Pipeline layout created.
+[LOG] Graphics pipeline created successfully.
+[LOG] Entering CreateSemaphores()...
+[LOG] Semaphores created for all frames in flight.
+[LOG] Entering CreateFences()...
+[LOG] Fences created for all frames in flight.
+[LOG] Entering buildCommandBuffers()...
+[LOG] Command buffers built successfully.
+[LOG] Exiting initialize() successfully.
+initialize() succeeded.
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] WM_SIZE -> Recreating swap chain for new size (1920 x 1080)
+[LOG] Entering recreateSwapChain()...
+[LOG] Entering cleanupSwapChain()...
+[LOG] Exiting cleanupSwapChain().
+[LOG] Entering CreateSwapChain()...
+[LOG] Entering getSurfaceFormatAndColorSpace()...
+[LOG] Using color format: 44, color space: 0
+[LOG] Using currentExtent from surfaceCaps: (1920 x 1080)
+[LOG] Entering getPresentMode()...
+[LOG] Checking PresentMode: 2
+[LOG] Checking PresentMode: 3
+[LOG] Checking PresentMode: 1
+[LOG] Present Mode chosen: 1
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] Entering CreateImagesAndImageViews()...
+[LOG] swapchainImageCount = 3.
+[LOG] Image views created successfully.
+[LOG] Entering CreateCommandPool()...
+[LOG] Command pool created successfully.
+[LOG] Entering CreateCommandBuffers()...
+[LOG] Command buffers allocated for each swapchain image.
+[LOG] Entering CreateRenderPass()...
+[LOG] Render pass created successfully.
+[LOG] Entering CreateFramebuffers()...
+[LOG] All framebuffers created successfully.
+[LOG] Entering CreateGraphicsPipeline()...
+[LOG] Attempting to read file: vert_shader.spv
+[LOG] Successfully read file: vert_shader.spv (1356 bytes)
+[LOG] Attempting to read file: frag_shader.spv
+[LOG] Successfully read file: frag_shader.spv (572 bytes)
+[LOG] Shader module created successfully.
+[LOG] Shader module created successfully.
+[LOG] Pipeline layout created.
+[LOG] Graphics pipeline created successfully.
+[LOG] Entering buildCommandBuffers()...
+[LOG] Command buffers built successfully.
+[LOG] Exiting recreateSwapChain().
+[LOG] Entered Fullscreen.
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] WM_SIZE -> Recreating swap chain for new size (800 x 600)
+[LOG] Entering recreateSwapChain()...
+[LOG] Entering cleanupSwapChain()...
+[LOG] Exiting cleanupSwapChain().
+[LOG] Entering CreateSwapChain()...
+[LOG] Entering getSurfaceFormatAndColorSpace()...
+[LOG] Using color format: 44, color space: 0
+[LOG] Using currentExtent from surfaceCaps: (800 x 600)
+[LOG] Entering getPresentMode()...
+[LOG] Checking PresentMode: 2
+[LOG] Checking PresentMode: 3
+[LOG] Checking PresentMode: 1
+[LOG] Present Mode chosen: 1
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] Entering CreateImagesAndImageViews()...
+[LOG] swapchainImageCount = 3.
+[LOG] Image views created successfully.
+[LOG] Entering CreateCommandPool()...
+[LOG] Command pool created successfully.
+[LOG] Entering CreateCommandBuffers()...
+[LOG] Command buffers allocated for each swapchain image.
+[LOG] Entering CreateRenderPass()...
+[LOG] Render pass created successfully.
+[LOG] Entering CreateFramebuffers()...
+[LOG] All framebuffers created successfully.
+[LOG] Entering CreateGraphicsPipeline()...
+[LOG] Attempting to read file: vert_shader.spv
+[LOG] Successfully read file: vert_shader.spv (1356 bytes)
+[LOG] Attempting to read file: frag_shader.spv
+[LOG] Successfully read file: frag_shader.spv (572 bytes)
+[LOG] Shader module created successfully.
+[LOG] Shader module created successfully.
+[LOG] Pipeline layout created.
+[LOG] Graphics pipeline created successfully.
+[LOG] Entering buildCommandBuffers()...
+[LOG] Command buffers built successfully.
+[LOG] Exiting recreateSwapChain().
+[LOG] WM_SIZE -> Recreating swap chain for new size (784 x 561)
+[LOG] Entering recreateSwapChain()...
+[LOG] Entering cleanupSwapChain()...
+[LOG] Exiting cleanupSwapChain().
+[LOG] Entering CreateSwapChain()...
+[LOG] Entering getSurfaceFormatAndColorSpace()...
+[LOG] Using color format: 44, color space: 0
+[LOG] Using currentExtent from surfaceCaps: (784 x 561)
+[LOG] Entering getPresentMode()...
+[LOG] Checking PresentMode: 2
+[LOG] Checking PresentMode: 3
+[LOG] Checking PresentMode: 1
+[LOG] Present Mode chosen: 1
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] Entering CreateImagesAndImageViews()...
+[LOG] swapchainImageCount = 3.
+[LOG] Image views created successfully.
+[LOG] Entering CreateCommandPool()...
+[LOG] Command pool created successfully.
+[LOG] Entering CreateCommandBuffers()...
+[LOG] Command buffers allocated for each swapchain image.
+[LOG] Entering CreateRenderPass()...
+[LOG] Render pass created successfully.
+[LOG] Entering CreateFramebuffers()...
+[LOG] All framebuffers created successfully.
+[LOG] Entering CreateGraphicsPipeline()...
+[LOG] Attempting to read file: vert_shader.spv
+[LOG] Successfully read file: vert_shader.spv (1356 bytes)
+[LOG] Attempting to read file: frag_shader.spv
+[LOG] Successfully read file: frag_shader.spv (572 bytes)
+[LOG] Shader module created successfully.
+[LOG] Shader module created successfully.
+[LOG] Pipeline layout created.
+[LOG] Graphics pipeline created successfully.
+[LOG] Entering buildCommandBuffers()...
+[LOG] Command buffers built successfully.
+[LOG] Exiting recreateSwapChain().
+[LOG] Exited Fullscreen.
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering uninitialize()...
+[LOG] Entering cleanupSwapChain()...
+[LOG] Exiting cleanupSwapChain().
+[LOG] uninitialize() completed. Exiting...
