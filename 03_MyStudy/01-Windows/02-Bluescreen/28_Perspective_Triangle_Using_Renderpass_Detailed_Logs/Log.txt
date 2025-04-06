@@ -308,7 +308,7 @@ Program started.
 [LOG] Vertex data copied to buffer.
 [LOG] Entering CreateGraphicsPipeline()...
 [LOG] Attempting to read file: vert_shader.spv
-[LOG] Successfully read file: vert_shader.spv (1356 bytes)
+[LOG] Successfully read file: vert_shader.spv (1348 bytes)
 [LOG] Attempting to read file: frag_shader.spv
 [LOG] Successfully read file: frag_shader.spv (572 bytes)
 [LOG] Shader module created successfully.
@@ -423,44 +423,6 @@ initialize() succeeded.
 [LOG] Exiting display()
 [LOG] Entering display() for frame 1
 [LOG] Exiting display()
-[LOG] WM_SIZE -> Recreating swap chain for new size (1920 x 1080)
-[LOG] Entering recreateSwapChain()...
-[LOG] Entering cleanupSwapChain()...
-[LOG] Exiting cleanupSwapChain().
-[LOG] Entering CreateSwapChain()...
-[LOG] Entering getSurfaceFormatAndColorSpace()...
-[LOG] Using color format: 44, color space: 0
-[LOG] Using currentExtent from surfaceCaps: (1920 x 1080)
-[LOG] Entering getPresentMode()...
-[LOG] Checking PresentMode: 2
-[LOG] Checking PresentMode: 3
-[LOG] Checking PresentMode: 1
-[LOG] Present Mode chosen: 1
-[LOG] vkCreateSwapchainKHR() succeeded.
-[LOG] Entering CreateImagesAndImageViews()...
-[LOG] swapchainImageCount = 3.
-[LOG] Image views created successfully.
-[LOG] Entering CreateCommandPool()...
-[LOG] Command pool created successfully.
-[LOG] Entering CreateCommandBuffers()...
-[LOG] Command buffers allocated for each swapchain image.
-[LOG] Entering CreateRenderPass()...
-[LOG] Render pass created successfully.
-[LOG] Entering CreateFramebuffers()...
-[LOG] All framebuffers created successfully.
-[LOG] Entering CreateGraphicsPipeline()...
-[LOG] Attempting to read file: vert_shader.spv
-[LOG] Successfully read file: vert_shader.spv (1356 bytes)
-[LOG] Attempting to read file: frag_shader.spv
-[LOG] Successfully read file: frag_shader.spv (572 bytes)
-[LOG] Shader module created successfully.
-[LOG] Shader module created successfully.
-[LOG] Pipeline layout created.
-[LOG] Graphics pipeline created successfully.
-[LOG] Entering buildCommandBuffers()...
-[LOG] Command buffers built successfully.
-[LOG] Exiting recreateSwapChain().
-[LOG] Entered Fullscreen.
 [LOG] Entering display() for frame 0
 [LOG] Exiting display()
 [LOG] Entering display() for frame 1
@@ -567,81 +529,122 @@ initialize() succeeded.
 [LOG] Exiting display()
 [LOG] Entering display() for frame 0
 [LOG] Exiting display()
-[LOG] WM_SIZE -> Recreating swap chain for new size (800 x 600)
-[LOG] Entering recreateSwapChain()...
-[LOG] Entering cleanupSwapChain()...
-[LOG] Exiting cleanupSwapChain().
-[LOG] Entering CreateSwapChain()...
-[LOG] Entering getSurfaceFormatAndColorSpace()...
-[LOG] Using color format: 44, color space: 0
-[LOG] Using currentExtent from surfaceCaps: (800 x 600)
-[LOG] Entering getPresentMode()...
-[LOG] Checking PresentMode: 2
-[LOG] Checking PresentMode: 3
-[LOG] Checking PresentMode: 1
-[LOG] Present Mode chosen: 1
-[LOG] vkCreateSwapchainKHR() succeeded.
-[LOG] Entering CreateImagesAndImageViews()...
-[LOG] swapchainImageCount = 3.
-[LOG] Image views created successfully.
-[LOG] Entering CreateCommandPool()...
-[LOG] Command pool created successfully.
-[LOG] Entering CreateCommandBuffers()...
-[LOG] Command buffers allocated for each swapchain image.
-[LOG] Entering CreateRenderPass()...
-[LOG] Render pass created successfully.
-[LOG] Entering CreateFramebuffers()...
-[LOG] All framebuffers created successfully.
-[LOG] Entering CreateGraphicsPipeline()...
-[LOG] Attempting to read file: vert_shader.spv
-[LOG] Successfully read file: vert_shader.spv (1356 bytes)
-[LOG] Attempting to read file: frag_shader.spv
-[LOG] Successfully read file: frag_shader.spv (572 bytes)
-[LOG] Shader module created successfully.
-[LOG] Shader module created successfully.
-[LOG] Pipeline layout created.
-[LOG] Graphics pipeline created successfully.
-[LOG] Entering buildCommandBuffers()...
-[LOG] Command buffers built successfully.
-[LOG] Exiting recreateSwapChain().
-[LOG] WM_SIZE -> Recreating swap chain for new size (784 x 561)
-[LOG] Entering recreateSwapChain()...
-[LOG] Entering cleanupSwapChain()...
-[LOG] Exiting cleanupSwapChain().
-[LOG] Entering CreateSwapChain()...
-[LOG] Entering getSurfaceFormatAndColorSpace()...
-[LOG] Using color format: 44, color space: 0
-[LOG] Using currentExtent from surfaceCaps: (784 x 561)
-[LOG] Entering getPresentMode()...
-[LOG] Checking PresentMode: 2
-[LOG] Checking PresentMode: 3
-[LOG] Checking PresentMode: 1
-[LOG] Present Mode chosen: 1
-[LOG] vkCreateSwapchainKHR() succeeded.
-[LOG] Entering CreateImagesAndImageViews()...
-[LOG] swapchainImageCount = 3.
-[LOG] Image views created successfully.
-[LOG] Entering CreateCommandPool()...
-[LOG] Command pool created successfully.
-[LOG] Entering CreateCommandBuffers()...
-[LOG] Command buffers allocated for each swapchain image.
-[LOG] Entering CreateRenderPass()...
-[LOG] Render pass created successfully.
-[LOG] Entering CreateFramebuffers()...
-[LOG] All framebuffers created successfully.
-[LOG] Entering CreateGraphicsPipeline()...
-[LOG] Attempting to read file: vert_shader.spv
-[LOG] Successfully read file: vert_shader.spv (1356 bytes)
-[LOG] Attempting to read file: frag_shader.spv
-[LOG] Successfully read file: frag_shader.spv (572 bytes)
-[LOG] Shader module created successfully.
-[LOG] Shader module created successfully.
-[LOG] Pipeline layout created.
-[LOG] Graphics pipeline created successfully.
-[LOG] Entering buildCommandBuffers()...
-[LOG] Command buffers built successfully.
-[LOG] Exiting recreateSwapChain().
-[LOG] Exited Fullscreen.
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
+[LOG] Entering display() for frame 1
+[LOG] Exiting display()
+[LOG] Entering display() for frame 0
+[LOG] Exiting display()
 [LOG] Entering display() for frame 1
 [LOG] Exiting display()
 [LOG] Entering display() for frame 0

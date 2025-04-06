@@ -146,7 +146,7 @@ static std::vector<Vertex> gTriangleVertices =
 };
 
 struct UniformBufferObject {
-    glm::mat4 proj;
+    glm::mat4 mvp;
 };
 
 // Pipeline data
@@ -1767,28 +1767,40 @@ VkResult display(void)
     return VK_SUCCESS;
 }
 
-// ============================================================================
-// Update -> we update our uniform buffer with an orthographic matrix
-// ============================================================================
 void UpdateUniformBuffer()
 {
     UniformBufferObject ubo{};
 
-    // Simple orthographic projection from -1..1 in X, and -1..1 in Y,
-    // adjusted by aspect ratio so the triangle doesn't look stretched.
+    // Simple model matrix (no transformations)
+    glm::mat4 model = glm::mat4(1.0f);
+    
+    // View matrix: shift the camera 2 units back along -Z
+    // so we can actually see the triangle
+    glm::mat4 view = glm::translate(glm::mat4(1.0f),
+                                    glm::vec3(0.0f, 0.0f, -2.0f));
+    
+    // Projection matrix: 45-degree FOV, aspect ratio = width / height,
+    // near = 0.1f, far = 10.0f
     float aspect = (float)winWidth / (float)winHeight;
-    // left, right, bottom, top, zNear, zFar
-    ubo.proj = glm::ortho(-1.0f, 1.0f, -1.0f/aspect, 1.0f/aspect, -1.0f, 1.0f);
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f),
+                                      aspect,
+                                      0.1f,
+                                      100.0f);
 
-    // If your triangle is upside down, you can flip Y:
-    // ubo.proj[1][1] *= -1.0f;
+    // In Vulkan, the Y coordinate of the clip space is flipped compared
+    // to OpenGL. This line flips the sign on the Y-axis of the projection.
+    proj[1][1] *= -1.0f;
 
-    // Copy to GPU
+    // Combine them into one matrix
+    ubo.mvp = proj * view * model;
+
+    // Map your uniform buffer memory and copy the data
     void* data;
     vkMapMemory(vkDevice, gUniformBufferMemory, 0, sizeof(ubo), 0, &data);
     memcpy(data, &ubo, sizeof(ubo));
     vkUnmapMemory(vkDevice, gUniformBufferMemory);
 }
+
 
 void update(void)
 {
