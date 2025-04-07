@@ -1,0 +1,27 @@
+Program started.
+[LOG] Window class registered.
+[LOG] Window created successfully.
+Entering initialize()...
+Using VK_LAYER_KHRONOS_validation.
+vkCreateInstance() succeeded.
+vkCreateWin32SurfaceKHR() succeeded.
+Physical device selected.
+[LOG] Enabling VK_KHR_dynamic_rendering.
+vkCreateDevice() succeeded, queue retrieved.
+vkCreateSwapchainKHR() succeeded.
+Image views created.
+Command pool created.
+Command buffers allocated.
+Descriptor set layout created.
+Uniform buffer created.
+Descriptor pool created.
+Descriptor set updated.
+Vertex buffer created & data copied.
+Graphics pipeline created.
+Semaphores created.
+Fences created.
+Command buffers built with layout transitions.
+initialize() completed.
+initialize() succeeded.
+Entering uninitialize()...
+uninitialize() completed. Exiting...
