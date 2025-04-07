@@ -1,9 +1,4 @@
-/*
-    Vulkan_Ortho_Triangle_DynamicRendering.cpp
-
-    A complete, self-contained example using Vulkan dynamic rendering
-    instead of a traditional render pass. Adapted from your original code.
-*/
+// Vulkan_Ortho_Square_DynamicRendering.cpp
 
 #include <windows.h>
 #include <stdio.h>
@@ -16,7 +11,7 @@
 #include <array>
 
 #include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"  // For glm::ortho, perspective, etc.
+#include "glm/gtc/matrix_transform.hpp"
 
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
@@ -30,7 +25,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 #define WIN_HEIGHT 600
 
 // Global Variables
-const char* gpszAppName = "Vulkan_Ortho_Triangle_DynamicRendering";
+const char* gpszAppName = "Vulkan_Ortho_Square_DynamicRendering";
 
 HWND  ghwnd          = NULL;
 BOOL  gbActive       = FALSE;
@@ -39,12 +34,9 @@ WINDOWPLACEMENT wpPrev{ sizeof(WINDOWPLACEMENT) };
 BOOL  gbFullscreen   = FALSE;
 
 FILE* gFILE          = nullptr;
-bool  gEnableValidation = false;  // Set to true if you want validation layers
+bool  gEnableValidation = true;  // Set to true if you want validation layers
 
-// Debug messenger
 static VkDebugUtilsMessengerEXT gDebugUtilsMessenger = VK_NULL_HANDLE;
-
-// Callback for debug messages
 static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT      messageSeverity,
     VkDebugUtilsMessageTypeFlagsEXT             messageType,
@@ -55,7 +47,6 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
     fflush(gFILE);
     return VK_FALSE;
 }
-
 static VkResult CreateDebugUtilsMessengerEXT(
     VkInstance                                  instance,
     const VkDebugUtilsMessengerCreateInfoEXT*   pCreateInfo,
@@ -69,7 +60,7 @@ static VkResult CreateDebugUtilsMessengerEXT(
     return VK_ERROR_EXTENSION_NOT_PRESENT;
 }
 static void DestroyDebugUtilsMessengerEXT(
-    VkInstance              instance,
+    VkInstance               instance,
     VkDebugUtilsMessengerEXT messenger,
     const VkAllocationCallbacks* pAllocator)
 {
@@ -79,7 +70,6 @@ static void DestroyDebugUtilsMessengerEXT(
         func(instance, messenger, pAllocator);
 }
 
-// Forward Declarations
 VkResult initialize(void);
 void     uninitialize(void);
 VkResult display(void);
@@ -112,59 +102,57 @@ VkExtent2D          vkExtent2D_SwapChain{ WIN_WIDTH, WIN_HEIGHT };
 VkCommandPool       vkCommandPool         = VK_NULL_HANDLE;
 VkCommandBuffer*    vkCommandBuffer_array = nullptr;
 
-// Per-frame sync
 #define MAX_FRAMES_IN_FLIGHT 2
 VkSemaphore imageAvailableSemaphores[MAX_FRAMES_IN_FLIGHT];
 VkSemaphore renderFinishedSemaphores[MAX_FRAMES_IN_FLIGHT];
 VkFence     inFlightFences[MAX_FRAMES_IN_FLIGHT];
-uint32_t    currentFrame = 0;
+uint32_t    currentFrame      = 0;
 uint32_t    currentImageIndex = UINT32_MAX;
 
-// For clearing the screen to (0.5, 0.5, 0.5, 1.0)
 VkClearColorValue vkClearColorValue{};
 
-// Window dimension
 int  winWidth  = WIN_WIDTH;
 int  winHeight = WIN_HEIGHT;
 BOOL bInitialized = FALSE;
 
-// ====================== Triangle + MVP data =======================
+// ===========================================================
+// Vertices for a square (two triangles, 6 vertices total)
+// ===========================================================
 struct Vertex {
     glm::vec2 pos;
     glm::vec3 color;
 };
 
-static std::vector<Vertex> gTriangleVertices =
+static std::vector<Vertex> gSquareVertices =
 {
-    //   position      ,    color
-    {{  0.0f,  -0.5f }, { 1.0f, 0.0f, 0.0f }},  // bottom center - RED
-    {{  0.5f,   0.5f }, { 0.0f, 1.0f, 0.0f }},  // right top - GREEN
-    {{ -0.5f,   0.5f }, { 0.0f, 0.0f, 1.0f }},  // left top - BLUE
+    // First triangle
+    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},  // bottom-left  (RED)
+    {{ 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},  // bottom-right (GREEN)
+    {{ 0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}},  // top-right    (BLUE)
+
+    // Second triangle
+    {{ 0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}},  // top-right    (BLUE)
+    {{-0.5f,  0.5f}, {1.0f, 1.0f, 0.0f}},  // top-left     (YELLOW)
+    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},  // bottom-left  (RED)
 };
 
 struct UniformBufferObject {
     glm::mat4 mvp;
 };
 
-// Pipeline data
 VkPipelineLayout      gPipelineLayout      = VK_NULL_HANDLE;
 VkPipeline            gGraphicsPipeline    = VK_NULL_HANDLE;
 VkDescriptorSetLayout gDescriptorSetLayout = VK_NULL_HANDLE;
 VkDescriptorPool      gDescriptorPool      = VK_NULL_HANDLE;
 VkDescriptorSet       gDescriptorSet       = VK_NULL_HANDLE;
 
-// Buffers
 VkBuffer       gVertexBuffer        = VK_NULL_HANDLE;
 VkDeviceMemory gVertexBufferMemory  = VK_NULL_HANDLE;
 VkBuffer       gUniformBuffer       = VK_NULL_HANDLE;
 VkDeviceMemory gUniformBufferMemory = VK_NULL_HANDLE;
 
-// ============================================================================
-// Windows Entry
-// ============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
-    // Create/Open log file
     gFILE = fopen("Log.txt", "w");
     if (!gFILE) {
         MessageBox(NULL, TEXT("Cannot open Log file."), TEXT("Error"), MB_OK | MB_ICONERROR);
@@ -173,24 +161,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     fprintf(gFILE, "Program started.\n");
     fflush(gFILE);
 
-    // Window class
     WNDCLASSEX wndclass{};
     wndclass.cbSize        = sizeof(WNDCLASSEX);
     wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = 0;
     wndclass.lpfnWndProc   = WndProc;
     wndclass.hInstance     = hInstance;
     wndclass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
     wndclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
     wndclass.lpszClassName = gpszAppName;
-    wndclass.lpszMenuName  = NULL;
-
     RegisterClassEx(&wndclass);
-    fprintf(gFILE, "[LOG] Window class registered.\n");
-    fflush(gFILE);
 
-    // Position window
     int screenW = GetSystemMetrics(SM_CXSCREEN);
     int screenH = GetSystemMetrics(SM_CYSCREEN);
     int xCoord  = (screenW - WIN_WIDTH ) / 2;
@@ -199,34 +179,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     ghwnd = CreateWindowEx(
         WS_EX_APPWINDOW,
         gpszAppName,
-        TEXT("Vulkan + glm + Dynamic Rendering Triangle"),
+        TEXT("Vulkan + glm + Dynamic Rendering Square"),
         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
-        xCoord,
-        yCoord,
-        WIN_WIDTH,
-        WIN_HEIGHT,
-        NULL,
-        NULL,
-        hInstance,
-        NULL
-    );
+        xCoord, yCoord,
+        WIN_WIDTH, WIN_HEIGHT,
+        NULL, NULL,
+        hInstance, NULL);
 
     if (!ghwnd) {
         fprintf(gFILE, "Cannot create window.\n");
         fflush(gFILE);
         return 0;
     }
-    fprintf(gFILE, "[LOG] Window created successfully.\n");
-    fflush(gFILE);
 
-    // Initialize Vulkan
     VkResult vkResult = initialize();
     if (vkResult != VK_SUCCESS) {
         fprintf(gFILE, "initialize() failed with VkResult = %d.\n", vkResult);
         DestroyWindow(ghwnd);
         ghwnd = NULL;
-    } else {
-        fprintf(gFILE, "initialize() succeeded.\n");
     }
 
     ShowWindow(ghwnd, iCmdShow);
@@ -236,18 +206,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
     BOOL bDone = FALSE;
     MSG msg{};
-    while (bDone == FALSE) {
+    while (!bDone) {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-            if (msg.message == WM_QUIT)
+            if (msg.message == WM_QUIT) {
                 bDone = TRUE;
-            else {
+            } else {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
         } else {
-            if (gbActive == TRUE) {
+            if (gbActive) {
                 display();
-                update(); // Update the uniform buffer each frame
+                update();
             }
         }
     }
@@ -256,12 +226,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     return (int)msg.wParam;
 }
 
-// Window Procedure
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (iMsg) {
     case WM_CREATE:
-        memset((void*)&wpPrev, 0, sizeof(WINDOWPLACEMENT));
+        memset(&wpPrev, 0, sizeof(WINDOWPLACEMENT));
         wpPrev.length = sizeof(WINDOWPLACEMENT);
         break;
 
@@ -274,16 +243,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_SIZE:
-        if (bInitialized == TRUE) {
+        if (bInitialized) {
             int width  = LOWORD(lParam);
             int height = HIWORD(lParam);
-
-            winWidth  = width;
-            winHeight = height;
-
+            winWidth   = width;
+            winHeight  = height;
             if (width > 0 && height > 0) {
-                fprintf(gFILE, "[LOG] WM_SIZE -> Recreating swap chain for new size (%d x %d)\n", width, height);
-                fflush(gFILE);
                 recreateSwapChain();
             }
         }
@@ -304,13 +269,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             if (!gbFullscreen) {
                 ToggleFullscreen();
                 gbFullscreen = TRUE;
-                fprintf(gFILE, "[LOG] Entered Fullscreen.\n");
             } else {
                 ToggleFullscreen();
                 gbFullscreen = FALSE;
-                fprintf(gFILE, "[LOG] Exited Fullscreen.\n");
             }
-            fflush(gFILE);
             break;
         }
         break;
@@ -322,14 +284,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
-
-    default:
-        break;
     }
     return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
 
-// ToggleFullscreen
 void ToggleFullscreen(void)
 {
     MONITORINFO mi{ sizeof(MONITORINFO) };
@@ -357,18 +315,16 @@ void ToggleFullscreen(void)
     }
 }
 
-// ============================================================================
-// Vulkan Initialization Steps
-// ============================================================================
+// ----------------------------------------------------------------
+//  Vulkan Setup
+// ----------------------------------------------------------------
 static uint32_t enabledInstanceLayerCount = 0;
 static const char* enabledInstanceLayerNames_array[1];
-
 static VkResult FillInstanceLayerNames()
 {
     if (!gEnableValidation) {
         return VK_SUCCESS;
     }
-
     uint32_t layerCount = 0;
     vkEnumerateInstanceLayerProperties(&layerCount, NULL);
     if (layerCount == 0) {
@@ -386,33 +342,26 @@ static VkResult FillInstanceLayerNames()
             break;
         }
     }
-
     if (foundValidation) {
         enabledInstanceLayerNames_array[0] = "VK_LAYER_KHRONOS_validation";
         enabledInstanceLayerCount = 1;
-        fprintf(gFILE, "Using VK_LAYER_KHRONOS_validation.\n");
     } else {
         fprintf(gFILE, "Validation layer not found.\n");
     }
-
     fflush(gFILE);
     return VK_SUCCESS;
 }
 
 static uint32_t enabledInstanceExtensionsCount = 0;
 static const char* enabledInstanceExtensionNames_array[4];
-
 static void AddDebugUtilsExtensionIfPresent()
 {
     if (!gEnableValidation) return;
-
     uint32_t extCount = 0;
     vkEnumerateInstanceExtensionProperties(nullptr, &extCount, nullptr);
     if (extCount == 0) return;
-
     std::vector<VkExtensionProperties> props(extCount);
     vkEnumerateInstanceExtensionProperties(nullptr, &extCount, props.data());
-
     for (auto& ep : props) {
         if (strcmp(ep.extensionName, VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0) {
             enabledInstanceExtensionNames_array[enabledInstanceExtensionsCount++] = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
@@ -423,7 +372,6 @@ static void AddDebugUtilsExtensionIfPresent()
 
 static VkResult FillInstanceExtensionNames()
 {
-    // We definitely need the surface/Win32 surface
     uint32_t extensionCount = 0;
     vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
     if (extensionCount == 0) return VK_ERROR_INITIALIZATION_FAILED;
@@ -431,40 +379,30 @@ static VkResult FillInstanceExtensionNames()
     bool foundSurface      = false;
     bool foundWin32Surface = false;
 
-    {
-        std::vector<VkExtensionProperties> exts(extensionCount);
-        vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, exts.data());
-        for (auto& e : exts) {
-            if (strcmp(e.extensionName, VK_KHR_SURFACE_EXTENSION_NAME) == 0)
-                foundSurface = true;
-            if (strcmp(e.extensionName, VK_KHR_WIN32_SURFACE_EXTENSION_NAME) == 0)
-                foundWin32Surface = true;
-        }
+    std::vector<VkExtensionProperties> exts(extensionCount);
+    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, exts.data());
+    for (auto& e : exts) {
+        if (strcmp(e.extensionName, VK_KHR_SURFACE_EXTENSION_NAME) == 0)
+            foundSurface = true;
+        if (strcmp(e.extensionName, VK_KHR_WIN32_SURFACE_EXTENSION_NAME) == 0)
+            foundWin32Surface = true;
     }
-
     if (!foundSurface || !foundWin32Surface) {
         fprintf(gFILE, "Required instance extension(s) not found.\n");
         fflush(gFILE);
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-
     enabledInstanceExtensionsCount = 0;
     enabledInstanceExtensionNames_array[enabledInstanceExtensionsCount++] = VK_KHR_SURFACE_EXTENSION_NAME;
     enabledInstanceExtensionNames_array[enabledInstanceExtensionsCount++] = VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
-
-    // Optionally add debug utils
     AddDebugUtilsExtensionIfPresent();
-
     return VK_SUCCESS;
 }
 
 static VkResult CreateVulkanInstance()
 {
-    VkResult vkResult;
-
-    vkResult = FillInstanceExtensionNames();
+    VkResult vkResult = FillInstanceExtensionNames();
     if (vkResult != VK_SUCCESS) return vkResult;
-
     vkResult = FillInstanceLayerNames();
     if (vkResult != VK_SUCCESS) return vkResult;
 
@@ -474,7 +412,7 @@ static VkResult CreateVulkanInstance()
     appInfo.applicationVersion = 1;
     appInfo.pEngineName        = gpszAppName;
     appInfo.engineVersion      = 1;
-    appInfo.apiVersion         = VK_API_VERSION_1_3; // request at least 1.3 if possible
+    appInfo.apiVersion         = VK_API_VERSION_1_3;
 
     VkInstanceCreateInfo createInfo{};
     createInfo.sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -489,16 +427,14 @@ static VkResult CreateVulkanInstance()
         fprintf(gFILE, "vkCreateInstance() failed\n");
         return vkResult;
     }
-
-    // If validation is enabled, create debug messenger
     if (gEnableValidation && (enabledInstanceLayerCount > 0)) {
         VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
         debugCreateInfo.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        debugCreateInfo.messageSeverity =
+        debugCreateInfo.messageSeverity = 
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        debugCreateInfo.messageType =
+        debugCreateInfo.messageType = 
             VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
             VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
@@ -509,8 +445,6 @@ static VkResult CreateVulkanInstance()
             gDebugUtilsMessenger = VK_NULL_HANDLE;
         }
     }
-    fprintf(gFILE, "vkCreateInstance() succeeded.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
@@ -526,8 +460,6 @@ static VkResult CreateSurfaceWin32()
         fprintf(gFILE, "vkCreateWin32SurfaceKHR() failed.\n");
         return vkResult;
     }
-    fprintf(gFILE, "vkCreateWin32SurfaceKHR() succeeded.\n");
-    fflush(gFILE);
     return vkResult;
 }
 
@@ -543,10 +475,8 @@ static VkResult SelectPhysicalDevice()
     if (vkResult != VK_SUCCESS) {
         return vkResult;
     }
-
     bool found = false;
     for (auto pd : physicalDevices) {
-        // Check queue families
         uint32_t queueCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(pd, &queueCount, nullptr);
         std::vector<VkQueueFamilyProperties> qfProps(queueCount);
@@ -556,7 +486,6 @@ static VkResult SelectPhysicalDevice()
         for (uint32_t i = 0; i < queueCount; i++) {
             vkGetPhysicalDeviceSurfaceSupportKHR(pd, i, vkSurfaceKHR, &canPresent[i]);
         }
-
         for (uint32_t i = 0; i < queueCount; i++) {
             if ((qfProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && canPresent[i]) {
                 vkPhysicalDevice_sel = pd;
@@ -567,25 +496,19 @@ static VkResult SelectPhysicalDevice()
         }
         if (found) break;
     }
-
     if (!found) {
         fprintf(gFILE, "Failed to find a suitable GPU with Graphics+Present.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-
     vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice_sel, &vkPhysicalDeviceMemoryProperties);
-    fprintf(gFILE, "Physical device selected.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// --- We add dynamic rendering extension if needed
 static uint32_t enabledDeviceExtensionsCount = 0;
-static const char* enabledDeviceExtensionNames_array[2]; // e.g. swapchain + dynamic_rendering
+static const char* enabledDeviceExtensionNames_array[2];
 
 static VkResult FillDeviceExtensionNames()
 {
-    // Check device-level extensions:
     uint32_t extCount = 0;
     vkEnumerateDeviceExtensionProperties(vkPhysicalDevice_sel, nullptr, &extCount, nullptr);
     if (extCount == 0) {
@@ -597,7 +520,7 @@ static VkResult FillDeviceExtensionNames()
     vkEnumerateDeviceExtensionProperties(vkPhysicalDevice_sel, nullptr, &extCount, exts.data());
 
     bool foundSwapchain = false;
-    bool foundDynRender = false; // We'll see if "VK_KHR_dynamic_rendering" is present
+    bool foundDynRender = false;
     for (auto &e : exts) {
         if (strcmp(e.extensionName, VK_KHR_SWAPCHAIN_EXTENSION_NAME) == 0) {
             foundSwapchain = true;
@@ -606,37 +529,22 @@ static VkResult FillDeviceExtensionNames()
             foundDynRender = true;
         }
     }
-
     if (!foundSwapchain) {
         fprintf(gFILE, "Device does not have VK_KHR_swapchain.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-
     enabledDeviceExtensionsCount = 0;
     enabledDeviceExtensionNames_array[enabledDeviceExtensionsCount++] = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
 
-    // If you're on Vulkan 1.3 but you still want to rely on extension, or if you need it:
-    // Check for dynamic rendering
     if (foundDynRender) {
         enabledDeviceExtensionNames_array[enabledDeviceExtensionsCount++] = "VK_KHR_dynamic_rendering";
-        fprintf(gFILE, "[LOG] Enabling VK_KHR_dynamic_rendering.\n");
-    } else {
-        // If you are running core Vulkan 1.3, you might not need this extension,
-        // but if your environment truly lacks it, you'll need to handle that.
-        fprintf(gFILE, "[LOG] VK_KHR_dynamic_rendering extension not found; "
-                       "hoping Vulkan 1.3 is available.\n");
     }
-    fflush(gFILE);
-
     return VK_SUCCESS;
 }
 
 static VkResult CreateLogicalDeviceAndQueue()
 {
-    VkResult vkResult;
-
-    // Fill device extension
-    vkResult = FillDeviceExtensionNames();
+    VkResult vkResult = FillDeviceExtensionNames();
     if (vkResult != VK_SUCCESS) return vkResult;
 
     float queuePriority = 1.0f;
@@ -646,14 +554,13 @@ static VkResult CreateLogicalDeviceAndQueue()
     queueInfo.queueCount       = 1;
     queueInfo.pQueuePriorities = &queuePriority;
 
-    // If using the extension on 1.2 or lower, we must enable the dynamic rendering feature
     VkPhysicalDeviceDynamicRenderingFeatures dynRenderingFeatures{};
     dynRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
     dynRenderingFeatures.dynamicRendering = VK_TRUE;
 
     VkDeviceCreateInfo createInfo{};
     createInfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    createInfo.pNext                   = &dynRenderingFeatures; // attach dynamic rendering if needed
+    createInfo.pNext                   = &dynRenderingFeatures;
     createInfo.queueCreateInfoCount    = 1;
     createInfo.pQueueCreateInfos       = &queueInfo;
     createInfo.enabledExtensionCount   = enabledDeviceExtensionsCount;
@@ -665,16 +572,10 @@ static VkResult CreateLogicalDeviceAndQueue()
         fprintf(gFILE, "vkCreateDevice() failed.\n");
         return vkResult;
     }
-    fprintf(gFILE, "vkCreateDevice() succeeded.\n");
-
-    // Retrieve the queue
     vkGetDeviceQueue(vkDevice, graphicsQueueIndex, 0, &vkQueue);
-    fprintf(gFILE, "Device queue retrieved.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// --- Create Swapchain
 static VkResult getSurfaceFormatAndColorSpace()
 {
     uint32_t formatCount = 0;
@@ -688,7 +589,6 @@ static VkResult getSurfaceFormatAndColorSpace()
         vkFormat_color   = VK_FORMAT_B8G8R8A8_UNORM;
         vkColorSpaceKHR  = formats[0].colorSpace;
     } else {
-        // Just pick the first
         vkFormat_color   = formats[0].format;
         vkColorSpaceKHR  = formats[0].colorSpace;
     }
@@ -704,7 +604,6 @@ static VkResult getPresentMode()
     std::vector<VkPresentModeKHR> presentModes(presentModeCount);
     vkGetPhysicalDeviceSurfacePresentModesKHR(vkPhysicalDevice_sel, vkSurfaceKHR, &presentModeCount, presentModes.data());
 
-    // default to FIFO
     vkPresentModeKHR = VK_PRESENT_MODE_FIFO_KHR;
     for (auto pm : presentModes) {
         if (pm == VK_PRESENT_MODE_MAILBOX_KHR) {
@@ -753,16 +652,12 @@ VkResult CreateSwapChain(VkBool32 vsync = VK_FALSE)
     swapInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     swapInfo.presentMode      = vkPresentModeKHR;
     swapInfo.clipped          = VK_TRUE;
-    swapInfo.oldSwapchain     = VK_NULL_HANDLE;
 
     vkResult = vkCreateSwapchainKHR(vkDevice, &swapInfo, nullptr, &vkSwapchainKHR);
     if (vkResult != VK_SUCCESS) {
         fprintf(gFILE, "vkCreateSwapchainKHR() failed.\n");
         return vkResult;
     }
-
-    fprintf(gFILE, "vkCreateSwapchainKHR() succeeded.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
@@ -798,8 +693,6 @@ VkResult CreateImagesAndImageViews()
             return VK_ERROR_INITIALIZATION_FAILED;
         }
     }
-    fprintf(gFILE, "Image views created.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
@@ -809,13 +702,10 @@ VkResult CreateCommandPool()
     poolInfo.sType            = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.queueFamilyIndex = graphicsQueueIndex;
     poolInfo.flags            = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-
     if (vkCreateCommandPool(vkDevice, &poolInfo, nullptr, &vkCommandPool) != VK_SUCCESS) {
         fprintf(gFILE, "vkCreateCommandPool() failed.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-    fprintf(gFILE, "Command pool created.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
@@ -832,13 +722,8 @@ VkResult CreateCommandBuffers()
         fprintf(gFILE, "vkAllocateCommandBuffers() failed.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-    fprintf(gFILE, "Command buffers allocated.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
-
-// We do not create a "RenderPass" or "Framebuffers" now!
-// We'll do dynamic rendering
 
 VkResult CreateSemaphores()
 {
@@ -850,8 +735,6 @@ VkResult CreateSemaphores()
             return VK_ERROR_INITIALIZATION_FAILED;
         }
     }
-    fprintf(gFILE, "Semaphores created.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
@@ -865,14 +748,9 @@ VkResult CreateFences()
             return VK_ERROR_INITIALIZATION_FAILED;
         }
     }
-    fprintf(gFILE, "Fences created.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// ============================================================================
-// Buffers for vertices & uniforms
-// ============================================================================
 static uint32_t FindMemoryTypeIndex(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {
     for (uint32_t i = 0; i < vkPhysicalDeviceMemoryProperties.memoryTypeCount; i++) {
@@ -888,7 +766,7 @@ static uint32_t FindMemoryTypeIndex(uint32_t typeFilter, VkMemoryPropertyFlags p
 
 VkResult CreateVertexBuffer()
 {
-    VkDeviceSize bufferSize = sizeof(Vertex) * gTriangleVertices.size();
+    VkDeviceSize bufferSize = sizeof(Vertex) * gSquareVertices.size();
 
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -910,7 +788,6 @@ VkResult CreateVertexBuffer()
         memReq.memoryTypeBits,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
     );
-
     if (allocInfo.memoryTypeIndex == UINT32_MAX) {
         fprintf(gFILE, "Could not find suitable memory type for vertex buffer.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
@@ -925,18 +802,15 @@ VkResult CreateVertexBuffer()
 
     void* data;
     vkMapMemory(vkDevice, gVertexBufferMemory, 0, bufferSize, 0, &data);
-    memcpy(data, gTriangleVertices.data(), (size_t)bufferSize);
+    memcpy(data, gSquareVertices.data(), (size_t)bufferSize);
     vkUnmapMemory(vkDevice, gVertexBufferMemory);
 
-    fprintf(gFILE, "Vertex buffer created & data copied.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
 VkResult CreateUniformBuffer()
 {
     VkDeviceSize bufferSize = sizeof(UniformBufferObject);
-
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size        = bufferSize;
@@ -969,13 +843,9 @@ VkResult CreateUniformBuffer()
     }
 
     vkBindBufferMemory(vkDevice, gUniformBuffer, gUniformBufferMemory, 0);
-
-    fprintf(gFILE, "Uniform buffer created.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// Descriptor set layout + pool + set
 VkResult CreateDescriptorSetLayout()
 {
     VkDescriptorSetLayoutBinding uboLayoutBinding{};
@@ -983,7 +853,6 @@ VkResult CreateDescriptorSetLayout()
     uboLayoutBinding.descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     uboLayoutBinding.descriptorCount    = 1;
     uboLayoutBinding.stageFlags         = VK_SHADER_STAGE_VERTEX_BIT;
-    uboLayoutBinding.pImmutableSamplers = nullptr;
 
     VkDescriptorSetLayoutCreateInfo layoutInfo{};
     layoutInfo.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -994,8 +863,6 @@ VkResult CreateDescriptorSetLayout()
         fprintf(gFILE, "Failed to create descriptor set layout.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-    fprintf(gFILE, "Descriptor set layout created.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
@@ -1015,8 +882,6 @@ VkResult CreateDescriptorPool()
         fprintf(gFILE, "Failed to create descriptor pool.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-    fprintf(gFILE, "Descriptor pool created.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
@@ -1048,12 +913,9 @@ VkResult CreateDescriptorSet()
     descriptorWrite.pBufferInfo     = &bufferInfo;
 
     vkUpdateDescriptorSets(vkDevice, 1, &descriptorWrite, 0, nullptr);
-    fprintf(gFILE, "Descriptor set updated.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// Helpers to load SPIR-V
 std::vector<char> ReadFile(const std::string& filename)
 {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
@@ -1069,6 +931,7 @@ std::vector<char> ReadFile(const std::string& filename)
     file.close();
     return buffer;
 }
+
 VkShaderModule CreateShaderModule(const std::vector<char>& code)
 {
     if (code.empty()) {
@@ -1090,7 +953,6 @@ VkShaderModule CreateShaderModule(const std::vector<char>& code)
     return shaderModule;
 }
 
-// Create Graphics Pipeline with Dynamic Rendering
 VkVertexInputBindingDescription GetVertexBindingDescription()
 {
     VkVertexInputBindingDescription bindingDesc{};
@@ -1099,16 +961,15 @@ VkVertexInputBindingDescription GetVertexBindingDescription()
     bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
     return bindingDesc;
 }
+
 std::array<VkVertexInputAttributeDescription, 2> GetVertexAttributeDescriptions()
 {
     std::array<VkVertexInputAttributeDescription, 2> attributes{};
-    // position
     attributes[0].binding  = 0;
     attributes[0].location = 0;
     attributes[0].format   = VK_FORMAT_R32G32_SFLOAT;
     attributes[0].offset   = offsetof(Vertex, pos);
 
-    // color
     attributes[1].binding  = 0;
     attributes[1].location = 1;
     attributes[1].format   = VK_FORMAT_R32G32B32_SFLOAT;
@@ -1119,13 +980,11 @@ std::array<VkVertexInputAttributeDescription, 2> GetVertexAttributeDescriptions(
 
 VkResult CreateGraphicsPipeline()
 {
-    // Load SPIR-V
-    // Make sure vert_shader.spv and frag_shader.spv exist in your working directory
     auto vertCode = ReadFile("vert_shader.spv");
     auto fragCode = ReadFile("frag_shader.spv");
-
     VkShaderModule vertModule = CreateShaderModule(vertCode);
     VkShaderModule fragModule = CreateShaderModule(fragCode);
+
     if (vertModule == VK_NULL_HANDLE || fragModule == VK_NULL_HANDLE) {
         fprintf(gFILE, "Could not create shader modules.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
@@ -1156,9 +1015,8 @@ VkResult CreateGraphicsPipeline()
     vertexInputInfo.pVertexAttributeDescriptions    = attributeDescs.data();
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
-    inputAssembly.sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    inputAssembly.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    inputAssembly.primitiveRestartEnable = VK_FALSE;
+    inputAssembly.sType    = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 
     VkViewport viewport{};
     viewport.x        = 0.0f;
@@ -1169,8 +1027,8 @@ VkResult CreateGraphicsPipeline()
     viewport.maxDepth = 1.0f;
 
     VkRect2D scissor{};
-    scissor.offset    = {0,0};
-    scissor.extent    = vkExtent2D_SwapChain;
+    scissor.offset = {0, 0};
+    scissor.extent = vkExtent2D_SwapChain;
 
     VkPipelineViewportStateCreateInfo viewportState{};
     viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -1181,8 +1039,6 @@ VkResult CreateGraphicsPipeline()
 
     VkPipelineRasterizationStateCreateInfo rasterizer{};
     rasterizer.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-    rasterizer.depthClampEnable        = VK_FALSE;
-    rasterizer.rasterizerDiscardEnable = VK_FALSE;
     rasterizer.polygonMode             = VK_POLYGON_MODE_FILL;
     rasterizer.lineWidth               = 1.0f;
     rasterizer.cullMode                = VK_CULL_MODE_NONE;
@@ -1196,15 +1052,12 @@ VkResult CreateGraphicsPipeline()
     colorBlendAttachment.colorWriteMask =
         VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
         VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    colorBlendAttachment.blendEnable = VK_FALSE;
 
     VkPipelineColorBlendStateCreateInfo colorBlending{};
     colorBlending.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    colorBlending.logicOpEnable   = VK_FALSE;
     colorBlending.attachmentCount = 1;
     colorBlending.pAttachments    = &colorBlendAttachment;
 
-    // Pipeline layout
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType          = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pipelineLayoutInfo.setLayoutCount = 1;
@@ -1215,18 +1068,15 @@ VkResult CreateGraphicsPipeline()
         return VK_ERROR_INITIALIZATION_FAILED;
     }
 
-    // For dynamic rendering, specify color attachment format in VkPipelineRenderingCreateInfo
     VkPipelineRenderingCreateInfo pipelineRenderingInfo{};
     pipelineRenderingInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
     pipelineRenderingInfo.colorAttachmentCount = 1;
-    VkFormat colorFormat = vkFormat_color; // The swapchain format
+    VkFormat colorFormat = vkFormat_color;
     pipelineRenderingInfo.pColorAttachmentFormats = &colorFormat;
-    // If we had a depth format, we'd specify pipelineRenderingInfo.depthAttachmentFormat = ...
-    // etc.
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.pNext               = &pipelineRenderingInfo; // dynamic rendering
+    pipelineInfo.pNext               = &pipelineRenderingInfo;
     pipelineInfo.stageCount          = 2;
     pipelineInfo.pStages             = shaderStages;
     pipelineInfo.pVertexInputState   = &vertexInputInfo;
@@ -1236,23 +1086,17 @@ VkResult CreateGraphicsPipeline()
     pipelineInfo.pMultisampleState   = &multisampling;
     pipelineInfo.pColorBlendState    = &colorBlending;
     pipelineInfo.layout              = gPipelineLayout;
-    // No renderPass or subpass needed!
 
     if (vkCreateGraphicsPipelines(vkDevice, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &gGraphicsPipeline) != VK_SUCCESS) {
         fprintf(gFILE, "Failed to create graphics pipeline.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
-    fprintf(gFILE, "Graphics pipeline created.\n");
 
-    // Cleanup shader modules
     vkDestroyShaderModule(vkDevice, fragModule, nullptr);
     vkDestroyShaderModule(vkDevice, vertModule, nullptr);
-
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// Build command buffers with vkCmdBeginRendering/EndRendering
 VkResult buildCommandBuffers()
 {
     for (uint32_t i = 0; i < swapchainImageCount; i++) {
@@ -1260,25 +1104,21 @@ VkResult buildCommandBuffers()
             fprintf(gFILE, "Failed to reset command buffer at index %u.\n", i);
             return VK_ERROR_INITIALIZATION_FAILED;
         }
-
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         vkBeginCommandBuffer(vkCommandBuffer_array[i], &beginInfo);
 
-        // Clear color
         VkClearValue clearValue{};
         clearValue.color = vkClearColorValue;
 
-        // Prepare color attachment info for dynamic rendering
         VkRenderingAttachmentInfo colorAttachment{};
-        colorAttachment.sType          = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-        colorAttachment.imageView      = swapChainImageView_array[i];
-        colorAttachment.imageLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-        colorAttachment.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        colorAttachment.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
-        colorAttachment.clearValue     = clearValue;
+        colorAttachment.sType       = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+        colorAttachment.imageView   = swapChainImageView_array[i];
+        colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        colorAttachment.loadOp      = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        colorAttachment.storeOp     = VK_ATTACHMENT_STORE_OP_STORE;
+        colorAttachment.clearValue  = clearValue;
 
-        // Begin rendering
         VkRenderingInfo renderingInfo{};
         renderingInfo.sType                = VK_STRUCTURE_TYPE_RENDERING_INFO;
         renderingInfo.renderArea.offset    = {0,0};
@@ -1288,11 +1128,8 @@ VkResult buildCommandBuffers()
         renderingInfo.pColorAttachments    = &colorAttachment;
 
         vkCmdBeginRendering(vkCommandBuffer_array[i], &renderingInfo);
-
-        // Bind pipeline
         vkCmdBindPipeline(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, gGraphicsPipeline);
 
-        // Bind descriptor set (uniform buffer)
         vkCmdBindDescriptorSets(
             vkCommandBuffer_array[i],
             VK_PIPELINE_BIND_POINT_GRAPHICS,
@@ -1304,29 +1141,22 @@ VkResult buildCommandBuffers()
             nullptr
         );
 
-        // Bind vertex buffer
         VkBuffer vb[] = { gVertexBuffer };
         VkDeviceSize offsets[] = { 0 };
         vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, vb, offsets);
 
-        // Draw 3 vertices
-        vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0);
+        // Draw 6 vertices for the square
+        vkCmdDraw(vkCommandBuffer_array[i], 6, 1, 0, 0);
 
         vkCmdEndRendering(vkCommandBuffer_array[i]);
-
         vkEndCommandBuffer(vkCommandBuffer_array[i]);
     }
-    fprintf(gFILE, "Command buffers built with dynamic rendering.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// cleanupSwapChain
 void cleanupSwapChain()
 {
     vkDeviceWaitIdle(vkDevice);
-
-    // We do not destroy framebuffers or render pass, since we never created them.
 
     if (vkCommandBuffer_array) {
         vkFreeCommandBuffers(vkDevice, vkCommandPool, swapchainImageCount, vkCommandBuffer_array);
@@ -1361,17 +1191,14 @@ VkResult recreateSwapChain()
     if (winWidth == 0 || winHeight == 0) {
         return VK_SUCCESS;
     }
-
     cleanupSwapChain();
 
-    // Recreate everything
     VkResult vkRes;
     vkRes = CreateSwapChain(VK_FALSE);       if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateImagesAndImageViews();     if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateCommandPool();             if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateCommandBuffers();          if (vkRes != VK_SUCCESS) return vkRes;
 
-    // Re-create pipeline (depends on swapchain size)
     if (gGraphicsPipeline) {
         vkDestroyPipeline(vkDevice, gGraphicsPipeline, nullptr);
         gGraphicsPipeline = VK_NULL_HANDLE;
@@ -1381,45 +1208,33 @@ VkResult recreateSwapChain()
         gPipelineLayout = VK_NULL_HANDLE;
     }
     vkRes = CreateGraphicsPipeline();        if (vkRes != VK_SUCCESS) return vkRes;
-
-    // Rebuild command buffers
     vkRes = buildCommandBuffers();           if (vkRes != VK_SUCCESS) return vkRes;
 
     return VK_SUCCESS;
 }
 
-// initialize()
 VkResult initialize(void)
 {
-    fprintf(gFILE, "Entering initialize()...\n");
-    fflush(gFILE);
+    VkResult vkResult;
 
-    VkResult vkResult = VK_SUCCESS;
+    vkResult = CreateVulkanInstance();         if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateSurfaceWin32();           if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = SelectPhysicalDevice();         if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateLogicalDeviceAndQueue();  if (vkResult != VK_SUCCESS) return vkResult;
 
-    vkResult = CreateVulkanInstance();      if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateSurfaceWin32();        if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = SelectPhysicalDevice();      if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateLogicalDeviceAndQueue(); if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateSwapChain(VK_FALSE);      if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateImagesAndImageViews();    if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateCommandPool();            if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateCommandBuffers();         if (vkResult != VK_SUCCESS) return vkResult;
 
-    vkResult = CreateSwapChain(VK_FALSE);   if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateImagesAndImageViews(); if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateCommandPool();         if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateCommandBuffers();      if (vkResult != VK_SUCCESS) return vkResult;
-
-    // Descriptors/Buffers
-    vkResult = CreateDescriptorSetLayout(); if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateUniformBuffer();       if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateDescriptorPool();      if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateDescriptorSet();       if (vkResult != VK_SUCCESS) return vkResult;
-
-    vkResult = CreateVertexBuffer();        if (vkResult != VK_SUCCESS) return vkResult;
-
-    // Pipeline
-    vkResult = CreateGraphicsPipeline();    if (vkResult != VK_SUCCESS) return vkResult;
-
-    // Sync objects
-    vkResult = CreateSemaphores();          if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateFences();              if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateDescriptorSetLayout();    if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateUniformBuffer();          if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateDescriptorPool();         if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateDescriptorSet();          if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateVertexBuffer();           if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateGraphicsPipeline();       if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateSemaphores();             if (vkResult != VK_SUCCESS) return vkResult;
+    vkResult = CreateFences();                 if (vkResult != VK_SUCCESS) return vkResult;
 
     memset(&vkClearColorValue, 0, sizeof(vkClearColorValue));
     vkClearColorValue.float32[0] = 0.5f;
@@ -1427,17 +1242,13 @@ VkResult initialize(void)
     vkClearColorValue.float32[2] = 0.5f;
     vkClearColorValue.float32[3] = 1.0f;
 
-    // Build command buffers with dynamic rendering
     vkResult = buildCommandBuffers();
     if (vkResult != VK_SUCCESS) return vkResult;
 
     bInitialized = TRUE;
-    fprintf(gFILE, "initialize() completed.\n");
-    fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// display()
 VkResult display(void)
 {
     if (!bInitialized) return VK_SUCCESS;
@@ -1453,7 +1264,6 @@ VkResult display(void)
         VK_NULL_HANDLE,
         &currentImageIndex
     );
-
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
         recreateSwapChain();
         return VK_SUCCESS;
@@ -1495,19 +1305,14 @@ VkResult display(void)
     return VK_SUCCESS;
 }
 
-// update()
 void UpdateUniformBuffer()
 {
     UniformBufferObject ubo{};
-
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view  = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -2.0f));
     float aspect    = (float)winWidth / (float)winHeight;
     glm::mat4 proj  = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-
-    // Flip Y for Vulkan
     proj[1][1] *= -1.0f;
-
     ubo.mvp = proj * view * model;
 
     void* data;
@@ -1521,21 +1326,15 @@ void update(void)
     UpdateUniformBuffer();
 }
 
-// uninitialize()
 void uninitialize(void)
 {
-    fprintf(gFILE, "Entering uninitialize()...\n");
-    fflush(gFILE);
-
     if (gbFullscreen) {
         ToggleFullscreen();
         gbFullscreen = FALSE;
     }
-
     if (vkDevice) {
         vkDeviceWaitIdle(vkDevice);
 
-        // Cleanup sync
         for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
             if (inFlightFences[i]) {
                 vkDestroyFence(vkDevice, inFlightFences[i], nullptr);
@@ -1602,14 +1401,12 @@ void uninitialize(void)
         vkDestroyInstance(vkInstance, nullptr);
         vkInstance = VK_NULL_HANDLE;
     }
-
     if (ghwnd) {
         DestroyWindow(ghwnd);
         ghwnd = NULL;
     }
-
     if (gFILE) {
-        fprintf(gFILE, "uninitialize() completed. Exiting...\n");
+        fprintf(gFILE, "uninitialize() completed.\n");
         fclose(gFILE);
         gFILE = nullptr;
     }
