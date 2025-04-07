@@ -3,6 +3,10 @@
 
     A complete, self-contained example using Vulkan dynamic rendering
     with explicit layout transitions for swapchain images.
+
+    CHANGE:
+    - Removed "proj[1][1] *= -1.0f;" inside UpdateUniformBuffer()
+      to avoid flipping the rendered output upside down.
 */
 
 #include <windows.h>
@@ -1243,7 +1247,6 @@ VkResult buildCommandBuffers()
         vkBeginCommandBuffer(vkCommandBuffer_array[i], &beginInfo);
 
         // Transition (UNDEFINED -> COLOR_ATTACHMENT_OPTIMAL)
-        // (In a real app, oldLayout might be PRESENT_SRC_KHR for subsequent frames.)
         {
             VkImageMemoryBarrier barrier{};
             barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -1257,13 +1260,13 @@ VkResult buildCommandBuffers()
             barrier.subresourceRange.levelCount     = 1;
             barrier.subresourceRange.baseArrayLayer = 0;
             barrier.subresourceRange.layerCount     = 1;
-            barrier.srcAccessMask                   = 0;  // We don't depend on prior usage
+            barrier.srcAccessMask                   = 0;
             barrier.dstAccessMask                   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
             vkCmdPipelineBarrier(
                 vkCommandBuffer_array[i],
-                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,                // src stage
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,    // dst stage
+                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                 0,
                 0, nullptr,
                 0, nullptr,
@@ -1525,11 +1528,14 @@ void UpdateUniformBuffer()
 
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view  = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -2.0f));
+
     float aspect    = (float)winWidth / (float)winHeight;
     glm::mat4 proj  = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 
-    // Flip Y for Vulkan
-    proj[1][1] *= -1.0f;
+    // ----------------------------------------------------
+    // REMOVED this line to avoid flipping the image:
+    // proj[1][1] *= -1.0f;
+    // ----------------------------------------------------
 
     ubo.mvp = proj * view * model;
 
