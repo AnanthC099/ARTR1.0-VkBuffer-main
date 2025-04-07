@@ -1,0 +1,1648 @@
+Log file created.
+[WinMain] Window created. Initializing Vulkan...
+[InitVulkan] Initializing Vulkan...
+[InitVulkan] Found 1 physical device(s).
+  -> Device 0: Name: Intel(R) UHD Graphics 730 | VendorID: 0x8086 | DeviceID: 0xA782 | API Version: 1.4.303
+[InitVulkan] Chosen device: Intel(R) UHD Graphics 730
+[InitVulkan] Queue family index: 0
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateDescriptorSetLayout] Creating descriptor set layout...
+[CreateDescriptorSetLayout] Descriptor set layout created.
+[CreateUniformBuffer] Creating uniform buffer...
+[CreateUniformBuffer] Uniform buffer created.
+[CreateDescriptorPool] Creating descriptor pool...
+[CreateDescriptorPool] Descriptor pool created.
+[CreateDescriptorSet] Allocating and updating descriptor set...
+[CreateDescriptorSet] Descriptor set allocated and updated.
+[CreateVertexBuffer] Creating vertex buffer...
+[CreateVertexBuffer] Vertex buffer created and data copied.
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[InitVulkan] Vulkan initialized successfully.
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[WM_SIZE] Recreating swap chain with new size: 785 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 797 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 809 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 823 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 830 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 838 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 846 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 847 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[WM_SIZE] Recreating swap chain with new size: 848 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 849 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 864 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 898 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 911 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 926 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 950 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 961 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 964 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 965 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 1002 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 1061 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[WM_SIZE] Recreating swap chain with new size: 1075 x 561
+[recreateSwapChain] Recreating swap chain...
+[cleanupSwapChain] Cleaning up swap chain...
+[CreateSwapchain] Creating swap chain...
+[CreateSwapchain] Swap chain created. Image count: 3
+[CreateCommandPool] Creating command pool...
+[CreateCommandBuffers] Creating command buffers...
+[CreateRenderPass] Creating render pass...
+[CreateFramebuffers] Creating framebuffers...
+[CreateGraphicsPipeline] Creating graphics pipeline...
+[ReadFile] Successfully read file: vert_shader.spv (1348 bytes)
+[ReadFile] Successfully read file: frag_shader.spv (572 bytes)
+[CreateShaderModule] Shader module created successfully.
+[CreateShaderModule] Shader module created successfully.
+[CreateGraphicsPipeline] Graphics pipeline created successfully.
+[recreateSwapChain] Swap chain recreated successfully.
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 1
+[UpdateUniformBuffer] Uniform buffer (MVP) updated.
+[drawFrame] Starting frame. CurrentFrame: 0
+[Cleanup] Cleaning up...
+[cleanupSwapChain] Cleaning up swap chain...
+[Cleanup] Cleanup done.
+[WinMain] Exiting application.
