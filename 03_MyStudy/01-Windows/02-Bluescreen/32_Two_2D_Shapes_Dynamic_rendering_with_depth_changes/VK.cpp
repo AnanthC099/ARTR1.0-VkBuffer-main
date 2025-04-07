@@ -1,13 +1,18 @@
 /*
-    Vulkan_DynamicRendering_WithLayoutTransitions.cpp
+    Vulkan_DynamicRendering_WithLayoutTransitions_AndDepth.cpp
 
     A complete, self-contained example using Vulkan dynamic rendering
-    with explicit layout transitions for swapchain images.
+    with explicit layout transitions for swapchain images **and** a depth buffer.
 
-    CHANGES for 2-Shape Rendering + Y-Flip:
+    CHANGES:
     - We render 2 shapes (triangle on the left, square on the right).
-    - We reintroduce "proj[1][1] *= -1.0f;" in UpdateUniformBuffer() to fix the
-      typical upside-down rendering in Vulkan (due to OpenGL-style clip space).
+    - Reintroduce "proj[1][1] *= -1.0f;" in UpdateUniformBuffer() to handle the Y-flip.
+    - Added depth buffer support, including:
+        * Depth images + memory + views (one per swapchain image).
+        * Pipeline depth-stencil state.
+        * PipelineRenderingCreateInfo includes depthAttachmentFormat.
+        * A layout transition to depth attachment optimal.
+        * A depth attachment in dynamic rendering (loadOp=clear, storeOp=store).
 */
 
 #include <windows.h>
@@ -35,7 +40,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 #define WIN_HEIGHT 600
 
 // Global Variables
-const char* gpszAppName = "Vulkan_DynamicRendering_LayoutTransitions";
+const char* gpszAppName = "Vulkan_DynamicRendering_LayoutTransitions_AndDepth";
 
 HWND  ghwnd          = NULL;
 BOOL  gbActive       = FALSE;
@@ -133,7 +138,6 @@ int  winHeight = WIN_HEIGHT;
 BOOL bInitialized = FALSE;
 
 // ====================== Vertex + Uniform Data =======================
-
 struct Vertex {
     glm::vec2 pos;
     glm::vec3 color;
@@ -171,6 +175,15 @@ VkBuffer       gVertexBuffer        = VK_NULL_HANDLE;
 VkDeviceMemory gVertexBufferMemory  = VK_NULL_HANDLE;
 VkBuffer       gUniformBuffer       = VK_NULL_HANDLE;
 VkDeviceMemory gUniformBufferMemory = VK_NULL_HANDLE;
+
+// ============================================================================
+// [DEPTH]: new globals for depth resources
+// We will create one depth image per swapchain image
+// ============================================================================
+VkFormat       gDepthFormat               = VK_FORMAT_UNDEFINED;
+VkImage*       gDepthImages               = nullptr;
+VkDeviceMemory* gDepthImageMemories       = nullptr;
+VkImageView*   gDepthImageViews           = nullptr;
 
 // ============================================================================
 // Windows Entry
@@ -212,7 +225,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     ghwnd = CreateWindowEx(
         WS_EX_APPWINDOW,
         gpszAppName,
-        TEXT("Vulkan Dynamic Rendering + Layout Transitions"),
+        TEXT("Vulkan Dynamic Rendering + Layout Transitions + Depth"),
         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
         xCoord,
         yCoord,
@@ -660,13 +673,13 @@ static VkResult FillDeviceExtensionNames()
 
     enabledDeviceExtensionsCount = 0;
     enabledDeviceExtensionNames_array[enabledDeviceExtensionsCount++] = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
-    fprintf(gFILE, "[LOG] Enabling device extension: VK_KHR_SWAPCHAIN_EXTENSION_NAME\n");
+    fprintf(gFILE, "[LOG] Enabling device extension: VK_KHR_swapchain_extension_name\n");
 
     if (foundDynRender) {
         enabledDeviceExtensionNames_array[enabledDeviceExtensionsCount++] = "VK_KHR_dynamic_rendering";
         fprintf(gFILE, "[LOG] Enabling device extension: VK_KHR_dynamic_rendering\n");
     } else {
-        fprintf(gFILE, "[WARN] 'VK_KHR_dynamic_rendering' not found. Hoping Vulkan 1.3 is core.\n");
+        fprintf(gFILE, "[WARN] 'VK_KHR_dynamic_rendering' not found. (Likely core in 1.3)\n");
     }
     fflush(gFILE);
 
@@ -1165,6 +1178,121 @@ VkShaderModule CreateShaderModule(const std::vector<char>& code)
     return shaderModule;
 }
 
+// [DEPTH]: function to find a suitable depth format
+// We'll pick D32_SFLOAT if available, else fallback
+VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+{
+    for (VkFormat format : candidates)
+    {
+        VkFormatProperties props;
+        vkGetPhysicalDeviceFormatProperties(vkPhysicalDevice_sel, format, &props);
+
+        if (tiling == VK_IMAGE_TILING_LINEAR  && (props.linearTilingFeatures & features) == features) {
+            return format;
+        }
+        if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+            return format;
+        }
+    }
+    return VK_FORMAT_UNDEFINED;
+}
+
+VkFormat FindDepthFormat()
+{
+    std::vector<VkFormat> candidates = {
+        VK_FORMAT_D32_SFLOAT,
+        VK_FORMAT_D32_SFLOAT_S8_UINT,
+        VK_FORMAT_D24_UNORM_S8_UINT
+    };
+    return FindSupportedFormat(
+        candidates,
+        VK_IMAGE_TILING_OPTIMAL,
+        VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+    );
+}
+
+// [DEPTH]: create depth resources
+// We create one depth image+view for each swapchain image
+VkResult CreateDepthResources()
+{
+    fprintf(gFILE, "[LOG] --- CreateDepthResources() ---\n");
+
+    gDepthFormat = FindDepthFormat();
+    if (gDepthFormat == VK_FORMAT_UNDEFINED) {
+        fprintf(gFILE, "[ERROR] No suitable depth format found!\n");
+        return VK_ERROR_INITIALIZATION_FAILED;
+    }
+    fprintf(gFILE, "[LOG] Using depth format: %d\n", (int)gDepthFormat);
+
+    gDepthImages        = (VkImage*)       malloc(sizeof(VkImage)       * swapchainImageCount);
+    gDepthImageMemories = (VkDeviceMemory*)malloc(sizeof(VkDeviceMemory)* swapchainImageCount);
+    gDepthImageViews    = (VkImageView*)   malloc(sizeof(VkImageView)   * swapchainImageCount);
+
+    for (uint32_t i = 0; i < swapchainImageCount; i++) {
+        // Create depth image
+        VkImageCreateInfo imgInfo{};
+        imgInfo.sType         = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        imgInfo.imageType     = VK_IMAGE_TYPE_2D;
+        imgInfo.extent.width  = vkExtent2D_SwapChain.width;
+        imgInfo.extent.height = vkExtent2D_SwapChain.height;
+        imgInfo.extent.depth  = 1;
+        imgInfo.mipLevels     = 1;
+        imgInfo.arrayLayers   = 1;
+        imgInfo.format        = gDepthFormat;
+        imgInfo.tiling        = VK_IMAGE_TILING_OPTIMAL;
+        imgInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        imgInfo.usage         = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        imgInfo.samples       = VK_SAMPLE_COUNT_1_BIT;
+        imgInfo.sharingMode   = VK_SHARING_MODE_EXCLUSIVE;
+
+        if (vkCreateImage(vkDevice, &imgInfo, nullptr, &gDepthImages[i]) != VK_SUCCESS) {
+            fprintf(gFILE, "[ERROR] Failed to create depth image (%u)\n", i);
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        VkMemoryRequirements memReq;
+        vkGetImageMemoryRequirements(vkDevice, gDepthImages[i], &memReq);
+
+        VkMemoryAllocateInfo allocInfo{};
+        allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize  = memReq.size;
+        allocInfo.memoryTypeIndex = FindMemoryTypeIndex(memReq.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+        if (allocInfo.memoryTypeIndex == UINT32_MAX) {
+            fprintf(gFILE, "[ERROR] Could not find suitable memory for depth image.\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        if (vkAllocateMemory(vkDevice, &allocInfo, nullptr, &gDepthImageMemories[i]) != VK_SUCCESS) {
+            fprintf(gFILE, "[ERROR] Failed to allocate memory for depth image.\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        vkBindImageMemory(vkDevice, gDepthImages[i], gDepthImageMemories[i], 0);
+
+        // Create depth image view
+        VkImageViewCreateInfo viewInfo{};
+        viewInfo.sType                           = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        viewInfo.image                           = gDepthImages[i];
+        viewInfo.viewType                        = VK_IMAGE_VIEW_TYPE_2D;
+        viewInfo.format                          = gDepthFormat;
+        viewInfo.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_DEPTH_BIT;
+        viewInfo.subresourceRange.baseMipLevel   = 0;
+        viewInfo.subresourceRange.levelCount     = 1;
+        viewInfo.subresourceRange.baseArrayLayer = 0;
+        viewInfo.subresourceRange.layerCount     = 1;
+
+        if (vkCreateImageView(vkDevice, &viewInfo, nullptr, &gDepthImageViews[i]) != VK_SUCCESS) {
+            fprintf(gFILE, "[ERROR] Failed to create depth image view.\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+    }
+
+    fprintf(gFILE, "[LOG] Depth resources created for all swapchain images.\n");
+    fflush(gFILE);
+    return VK_SUCCESS;
+}
+
 // Create Graphics Pipeline with Dynamic Rendering
 VkVertexInputBindingDescription GetVertexBindingDescription()
 {
@@ -1267,6 +1395,15 @@ VkResult CreateGraphicsPipeline()
     multisampling.sType                = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
+    // [DEPTH]: Add a depth stencil state
+    VkPipelineDepthStencilStateCreateInfo depthStencil{};
+    depthStencil.sType                 = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencil.depthTestEnable       = VK_TRUE;   // enable depth test
+    depthStencil.depthWriteEnable      = VK_TRUE;   // enable writes to depth buffer
+    depthStencil.depthCompareOp        = VK_COMPARE_OP_LESS;
+    depthStencil.depthBoundsTestEnable = VK_FALSE;
+    depthStencil.stencilTestEnable     = VK_FALSE;
+
     VkPipelineColorBlendAttachmentState colorBlendAttachment{};
     colorBlendAttachment.colorWriteMask =
         VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
@@ -1291,11 +1428,14 @@ VkResult CreateGraphicsPipeline()
     }
     fprintf(gFILE, "[LOG] Pipeline layout created.\n");
 
+    // [DEPTH]: Provide depthAttachmentFormat in pipeline rendering
     VkPipelineRenderingCreateInfo pipelineRenderingInfo{};
     pipelineRenderingInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
     pipelineRenderingInfo.colorAttachmentCount = 1;
     VkFormat colorFormat = vkFormat_color;
     pipelineRenderingInfo.pColorAttachmentFormats = &colorFormat;
+    // Provide the depth format:
+    pipelineRenderingInfo.depthAttachmentFormat = gDepthFormat;
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -1307,6 +1447,7 @@ VkResult CreateGraphicsPipeline()
     pipelineInfo.pViewportState      = &viewportState;
     pipelineInfo.pRasterizationState = &rasterizer;
     pipelineInfo.pMultisampleState   = &multisampling;
+    pipelineInfo.pDepthStencilState  = &depthStencil;   // Depth/Stencil
     pipelineInfo.pColorBlendState    = &colorBlending;
     pipelineInfo.layout              = gPipelineLayout;
 
@@ -1325,9 +1466,7 @@ VkResult CreateGraphicsPipeline()
     return VK_SUCCESS;
 }
 
-// ============================================================================
 // buildCommandBuffers() with layout transitions
-// ============================================================================
 VkResult buildCommandBuffers()
 {
     fprintf(gFILE, "[LOG] --- buildCommandBuffers() ---\n");
@@ -1341,7 +1480,7 @@ VkResult buildCommandBuffers()
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         vkBeginCommandBuffer(vkCommandBuffer_array[i], &beginInfo);
 
-        // Transition (UNDEFINED -> COLOR_ATTACHMENT_OPTIMAL)
+        // Transition swapchain image (UNDEFINED -> COLOR_ATTACHMENT_OPTIMAL)
         {
             VkImageMemoryBarrier barrier{};
             barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -1369,17 +1508,60 @@ VkResult buildCommandBuffers()
             );
         }
 
-        // Begin dynamic rendering
-        VkClearValue clearValue{};
-        clearValue.color = vkClearColorValue;
+        // [DEPTH]: Transition depth (UNDEFINED -> DEPTH_ATTACHMENT_OPTIMAL)
+        {
+            VkImageMemoryBarrier depthBarrier{};
+            depthBarrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+            depthBarrier.oldLayout                       = VK_IMAGE_LAYOUT_UNDEFINED;
+            depthBarrier.newLayout                       = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
+            depthBarrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+            depthBarrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+            depthBarrier.image                           = gDepthImages[i];
+            depthBarrier.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_DEPTH_BIT;
+            depthBarrier.subresourceRange.baseMipLevel   = 0;
+            depthBarrier.subresourceRange.levelCount     = 1;
+            depthBarrier.subresourceRange.baseArrayLayer = 0;
+            depthBarrier.subresourceRange.layerCount     = 1;
+            depthBarrier.srcAccessMask                   = 0;
+            depthBarrier.dstAccessMask                   = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
+            vkCmdPipelineBarrier(
+                vkCommandBuffer_array[i],
+                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+                0,
+                0, nullptr,
+                0, nullptr,
+                1, &depthBarrier
+            );
+        }
+
+        // Begin dynamic rendering
+        VkClearValue clearColor{};
+        clearColor.color = vkClearColorValue;
+
+        // [DEPTH]: We'll also clear the depth
+        VkClearValue clearDepth{};
+        clearDepth.depthStencil.depth = 1.0f;
+        clearDepth.depthStencil.stencil = 0;
+
+        // Color attachment
         VkRenderingAttachmentInfo colorAttachment{};
         colorAttachment.sType          = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
         colorAttachment.imageView      = swapChainImageView_array[i];
         colorAttachment.imageLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         colorAttachment.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
         colorAttachment.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
-        colorAttachment.clearValue     = clearValue;
+        colorAttachment.clearValue     = clearColor;
+
+        // Depth attachment
+        VkRenderingAttachmentInfo depthAttachment{};
+        depthAttachment.sType          = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+        depthAttachment.imageView      = gDepthImageViews[i];
+        depthAttachment.imageLayout    = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
+        depthAttachment.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        depthAttachment.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
+        depthAttachment.clearValue     = clearDepth;
 
         VkRenderingInfo renderingInfo{};
         renderingInfo.sType                = VK_STRUCTURE_TYPE_RENDERING_INFO;
@@ -1388,6 +1570,7 @@ VkResult buildCommandBuffers()
         renderingInfo.layerCount           = 1;
         renderingInfo.colorAttachmentCount = 1;
         renderingInfo.pColorAttachments    = &colorAttachment;
+        renderingInfo.pDepthAttachment     = &depthAttachment; // attach depth
 
         vkCmdBeginRendering(vkCommandBuffer_array[i], &renderingInfo);
 
@@ -1413,27 +1596,20 @@ VkResult buildCommandBuffers()
         VkDeviceSize offsets[] = { 0 };
         vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, vb, offsets);
 
-        // -----------------------------------------------------
-        // Now we have 9 vertices total:
-        //   - first 3  => left triangle
-        //   - next 6   => right square
-        // So we make two separate draw calls:
-        // -----------------------------------------------------
-
-        // 1) Draw the 3 vertices for the left triangle
+        // Draw the 3 vertices for the left triangle
         vkCmdDraw(vkCommandBuffer_array[i],
-                  3, // vertexCount
-                  1, // instanceCount
-                  0, // firstVertex
-                  0  // firstInstance
+                  3,
+                  1,
+                  0,
+                  0
         );
 
-        // 2) Draw the 6 vertices for the square
+        // Draw the 6 vertices for the square
         vkCmdDraw(vkCommandBuffer_array[i],
-                  6, // vertexCount
-                  1, // instanceCount
-                  3, // firstVertex (skip the first 3 used by the triangle)
-                  0  // firstInstance
+                  6,
+                  1,
+                  3,
+                  0
         );
 
         vkCmdEndRendering(vkCommandBuffer_array[i]);
@@ -1509,6 +1685,36 @@ void cleanupSwapChain()
         vkDestroySwapchainKHR(vkDevice, vkSwapchainKHR, nullptr);
         vkSwapchainKHR = VK_NULL_HANDLE;
     }
+
+    // [DEPTH]: Destroy all depth resources
+    if (gDepthImageViews) {
+        for (uint32_t i = 0; i < swapchainImageCount; i++) {
+            if (gDepthImageViews[i]) {
+                vkDestroyImageView(vkDevice, gDepthImageViews[i], nullptr);
+            }
+        }
+        free(gDepthImageViews);
+        gDepthImageViews = nullptr;
+    }
+    if (gDepthImages) {
+        for (uint32_t i = 0; i < swapchainImageCount; i++) {
+            if (gDepthImages[i]) {
+                vkDestroyImage(vkDevice, gDepthImages[i], nullptr);
+            }
+        }
+        free(gDepthImages);
+        gDepthImages = nullptr;
+    }
+    if (gDepthImageMemories) {
+        for (uint32_t i = 0; i < swapchainImageCount; i++) {
+            if (gDepthImageMemories[i]) {
+                vkFreeMemory(vkDevice, gDepthImageMemories[i], nullptr);
+            }
+        }
+        free(gDepthImageMemories);
+        gDepthImageMemories = nullptr;
+    }
+
     fflush(gFILE);
 }
 
@@ -1527,6 +1733,9 @@ VkResult recreateSwapChain()
     vkRes = CreateImagesAndImageViews();     if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateCommandPool();             if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateCommandBuffers();          if (vkRes != VK_SUCCESS) return vkRes;
+
+    // [DEPTH]
+    vkRes = CreateDepthResources();          if (vkRes != VK_SUCCESS) return vkRes;
 
     if (gGraphicsPipeline) {
         fprintf(gFILE, "[LOG] Destroying old graphics pipeline.\n");
@@ -1561,6 +1770,9 @@ VkResult initialize(void)
     vkResult = CreateImagesAndImageViews();    if (vkResult != VK_SUCCESS) return vkResult;
     vkResult = CreateCommandPool();            if (vkResult != VK_SUCCESS) return vkResult;
     vkResult = CreateCommandBuffers();         if (vkResult != VK_SUCCESS) return vkResult;
+
+    // [DEPTH]
+    vkResult = CreateDepthResources();         if (vkResult != VK_SUCCESS) return vkResult;
 
     vkResult = CreateDescriptorSetLayout();    if (vkResult != VK_SUCCESS) return vkResult;
     vkResult = CreateUniformBuffer();          if (vkResult != VK_SUCCESS) return vkResult;
@@ -1662,9 +1874,7 @@ void UpdateUniformBuffer()
     float aspect    = (float)winWidth / (float)winHeight;
     glm::mat4 proj  = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 
-    // -------------------------------------------------
-    //  Reintroduced Y-flip to fix Vulkan's clip-space:
-    // -------------------------------------------------
+    // Reintroduced Y-flip to fix Vulkan's clip-space:
     proj[1][1] *= -1.0f;
 
     ubo.mvp = proj * view * model;
@@ -1714,7 +1924,7 @@ void uninitialize(void)
             }
         }
 
-        // Cleanup swapchain resources
+        // Cleanup swapchain resources (includes depth)
         cleanupSwapChain();
 
         if (gGraphicsPipeline) {
