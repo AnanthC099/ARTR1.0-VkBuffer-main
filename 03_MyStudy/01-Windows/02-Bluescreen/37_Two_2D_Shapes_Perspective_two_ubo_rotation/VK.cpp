@@ -1,21 +1,6 @@
-/*
-    Vulkan_RenderPass_WithLayoutTransitions.cpp
-
-    A complete, self-contained example using a standard Vulkan render pass +
-    framebuffers, with explicit layout transitions for swapchain images.
-
-    CHANGES for 2-Shape Rendering + Y-Flip:
-    - We render 2 shapes (triangle on the left, square on the right).
-    - We reintroduce "proj[1][1] *= -1.0f;" in UpdateUniformBuffer() to fix
-      the typical upside-down rendering in Vulkan (due to OpenGL-style clip space).
-
-    CHANGES from Dynamic Rendering sample:
-    - Removed all dynamic rendering structures (VK_KHR_dynamic_rendering).
-    - Added a traditional render pass and framebuffers.
-    - The pipeline references the render pass (pipelineInfo.renderPass = gRenderPass).
-    - In buildCommandBuffers(), we call vkCmdBeginRenderPass / vkCmdEndRenderPass.
-*/
-
+// ============================================================================
+//  Vk.cpp
+// ============================================================================
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -170,16 +155,30 @@ struct UniformBufferObject {
     glm::mat4 mvp;
 };
 
-VkPipelineLayout      gPipelineLayout      = VK_NULL_HANDLE;
-VkPipeline            gGraphicsPipeline    = VK_NULL_HANDLE;
+// (!!!) --------------------------------------------------------------------------------
+// Instead of a single uniform buffer, we create separate ones for Triangle & Square.
+// And we create separate descriptor sets as well.
+// (!!!) --------------------------------------------------------------------------------
+VkBuffer       gUniformBufferTriangle       = VK_NULL_HANDLE;
+VkDeviceMemory gUniformBufferMemoryTriangle = VK_NULL_HANDLE;
+
+VkBuffer       gUniformBufferSquare        = VK_NULL_HANDLE;
+VkDeviceMemory gUniformBufferMemorySquare  = VK_NULL_HANDLE;
+
+// We'll have two separate descriptor sets:
 VkDescriptorSetLayout gDescriptorSetLayout = VK_NULL_HANDLE;
 VkDescriptorPool      gDescriptorPool      = VK_NULL_HANDLE;
-VkDescriptorSet       gDescriptorSet       = VK_NULL_HANDLE;
+
+VkDescriptorSet       gDescriptorSetTriangle = VK_NULL_HANDLE;
+VkDescriptorSet       gDescriptorSetSquare   = VK_NULL_HANDLE;
 
 VkBuffer       gVertexBuffer        = VK_NULL_HANDLE;
 VkDeviceMemory gVertexBufferMemory  = VK_NULL_HANDLE;
-VkBuffer       gUniformBuffer       = VK_NULL_HANDLE;
-VkDeviceMemory gUniformBufferMemory = VK_NULL_HANDLE;
+
+// Pipeline objects
+VkPipelineLayout      gPipelineLayout      = VK_NULL_HANDLE;
+VkPipeline            gGraphicsPipeline    = VK_NULL_HANDLE;
+
 
 // ============================================================================
 // Windows Entry
@@ -221,7 +220,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     ghwnd = CreateWindowEx(
         WS_EX_APPWINDOW,
         gpszAppName,
-        TEXT("Vulkan Render Pass + Layout Transitions"),
+        TEXT("Vulkan Render Pass + Layout Transitions (Separate UBO)"),
         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
         xCoord,
         yCoord,
@@ -926,20 +925,18 @@ VkResult CreateRenderPass()
 {
     fprintf(gFILE, "[LOG] --- CreateRenderPass() ---\n");
 
-    // We have a single color attachment for each swapchain image
     VkAttachmentDescription colorAttachment{};
     colorAttachment.format         = vkFormat_color;
     colorAttachment.samples        = VK_SAMPLE_COUNT_1_BIT;
-    colorAttachment.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;   // we will clear
-    colorAttachment.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;  // store result
+    colorAttachment.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    colorAttachment.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
     colorAttachment.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     colorAttachment.initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
     colorAttachment.finalLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-    // Subpass references that attachment
     VkAttachmentReference colorAttachmentRef{};
-    colorAttachmentRef.attachment = 0; // index 0 in the pAttachments array
+    colorAttachmentRef.attachment = 0;
     colorAttachmentRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
     VkSubpassDescription subpass{};
@@ -947,10 +944,6 @@ VkResult CreateRenderPass()
     subpass.colorAttachmentCount    = 1;
     subpass.pColorAttachments       = &colorAttachmentRef;
 
-    // We do not rely on subpass dependencies for layout transitions;
-    // we'll do explicit pipeline barriers in command buffers.  
-    // But we must have at least one subpass dependency if we want
-    // to ensure correct pipeline stages. The simplest possible:
     VkSubpassDependency dependency{};
     dependency.srcSubpass      = VK_SUBPASS_EXTERNAL;
     dependency.dstSubpass      = 0;
@@ -977,7 +970,7 @@ VkResult CreateRenderPass()
     return VK_SUCCESS;
 }
 
-// Create one framebuffer for each swapchain image
+// Create framebuffers
 VkResult CreateFramebuffers()
 {
     fprintf(gFILE, "[LOG] --- CreateFramebuffers() ---\n");
@@ -1028,7 +1021,6 @@ static uint32_t FindMemoryTypeIndex(uint32_t typeFilter, VkMemoryPropertyFlags p
 VkResult CreateVertexBuffer()
 {
     fprintf(gFILE, "[LOG] --- CreateVertexBuffer() ---\n");
-    // We have 9 vertices in gVertices.
     VkDeviceSize bufferSize = sizeof(Vertex) * gVertices.size();
 
     VkBufferCreateInfo bufferInfo{};
@@ -1077,52 +1069,97 @@ VkResult CreateVertexBuffer()
     return VK_SUCCESS;
 }
 
-VkResult CreateUniformBuffer()
+// (!!!) ============================================================================
+// Create TWO uniform buffers: one for the triangle and one for the square
+// ============================================================================
+VkResult CreateUniformBuffers()
 {
-    fprintf(gFILE, "[LOG] --- CreateUniformBuffer() ---\n");
-    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+    fprintf(gFILE, "[LOG] --- CreateUniformBuffers() ---\n");
 
-    VkBufferCreateInfo bufferInfo{};
-    bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size        = bufferSize;
-    bufferInfo.usage       = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    // --- Triangle UBO ---
+    {
+        VkDeviceSize bufferSize = sizeof(UniformBufferObject);
 
-    if (vkCreateBuffer(vkDevice, &bufferInfo, nullptr, &gUniformBuffer) != VK_SUCCESS) {
-        fprintf(gFILE, "[ERROR] Failed to create uniform buffer.\n");
-        return VK_ERROR_INITIALIZATION_FAILED;
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size        = bufferSize;
+        bufferInfo.usage       = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        if (vkCreateBuffer(vkDevice, &bufferInfo, nullptr, &gUniformBufferTriangle) != VK_SUCCESS) {
+            fprintf(gFILE, "[ERROR] Failed to create UBO buffer (triangle).\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        VkMemoryRequirements memReq;
+        vkGetBufferMemoryRequirements(vkDevice, gUniformBufferTriangle, &memReq);
+
+        VkMemoryAllocateInfo allocInfo{};
+        allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize  = memReq.size;
+        allocInfo.memoryTypeIndex = FindMemoryTypeIndex(
+            memReq.memoryTypeBits,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+        );
+
+        if (allocInfo.memoryTypeIndex == UINT32_MAX) {
+            fprintf(gFILE, "[ERROR] Could not find suitable memory for triangle UBO.\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        if (vkAllocateMemory(vkDevice, &allocInfo, nullptr, &gUniformBufferMemoryTriangle) != VK_SUCCESS) {
+            fprintf(gFILE, "[ERROR] Failed to allocate memory for triangle UBO.\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        vkBindBufferMemory(vkDevice, gUniformBufferTriangle, gUniformBufferMemoryTriangle, 0);
+        fprintf(gFILE, "[LOG] Triangle uniform buffer created.\n");
     }
 
-    VkMemoryRequirements memReq;
-    vkGetBufferMemoryRequirements(vkDevice, gUniformBuffer, &memReq);
-    fprintf(gFILE, "[LOG] Uniform buffer mem requirements: size=%llu, alignment=%llu, memTypeBits=0x%X\n",
-            (unsigned long long)memReq.size, (unsigned long long)memReq.alignment, memReq.memoryTypeBits);
+    // --- Square UBO ---
+    {
+        VkDeviceSize bufferSize = sizeof(UniformBufferObject);
 
-    VkMemoryAllocateInfo allocInfo{};
-    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.allocationSize  = memReq.size;
-    allocInfo.memoryTypeIndex = FindMemoryTypeIndex(
-        memReq.memoryTypeBits,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-    );
-    if (allocInfo.memoryTypeIndex == UINT32_MAX) {
-        fprintf(gFILE, "[ERROR] Could not find suitable memory for uniform buffer.\n");
-        return VK_ERROR_INITIALIZATION_FAILED;
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size        = bufferSize;
+        bufferInfo.usage       = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        if (vkCreateBuffer(vkDevice, &bufferInfo, nullptr, &gUniformBufferSquare) != VK_SUCCESS) {
+            fprintf(gFILE, "[ERROR] Failed to create UBO buffer (square).\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        VkMemoryRequirements memReq;
+        vkGetBufferMemoryRequirements(vkDevice, gUniformBufferSquare, &memReq);
+
+        VkMemoryAllocateInfo allocInfo{};
+        allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize  = memReq.size;
+        allocInfo.memoryTypeIndex = FindMemoryTypeIndex(
+            memReq.memoryTypeBits,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+        );
+        if (allocInfo.memoryTypeIndex == UINT32_MAX) {
+            fprintf(gFILE, "[ERROR] Could not find suitable memory for square UBO.\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        if (vkAllocateMemory(vkDevice, &allocInfo, nullptr, &gUniformBufferMemorySquare) != VK_SUCCESS) {
+            fprintf(gFILE, "[ERROR] Failed to allocate memory for square UBO.\n");
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
+
+        vkBindBufferMemory(vkDevice, gUniformBufferSquare, gUniformBufferMemorySquare, 0);
+        fprintf(gFILE, "[LOG] Square uniform buffer created.\n");
     }
 
-    if (vkAllocateMemory(vkDevice, &allocInfo, nullptr, &gUniformBufferMemory) != VK_SUCCESS) {
-        fprintf(gFILE, "[ERROR] Failed to allocate memory for uniform buffer.\n");
-        return VK_ERROR_INITIALIZATION_FAILED;
-    }
-
-    vkBindBufferMemory(vkDevice, gUniformBuffer, gUniformBufferMemory, 0);
-
-    fprintf(gFILE, "[LOG] Uniform buffer created (size=%llu bytes).\n", (unsigned long long)bufferSize);
     fflush(gFILE);
     return VK_SUCCESS;
 }
 
-// Descriptor set layout + pool + set
+// Descriptor set layout + pool + sets
 VkResult CreateDescriptorSetLayout()
 {
     fprintf(gFILE, "[LOG] --- CreateDescriptorSetLayout() ---\n");
@@ -1147,18 +1184,19 @@ VkResult CreateDescriptorSetLayout()
     return VK_SUCCESS;
 }
 
+// We need a descriptor pool that can handle 2 uniform buffers total
 VkResult CreateDescriptorPool()
 {
     fprintf(gFILE, "[LOG] --- CreateDescriptorPool() ---\n");
     VkDescriptorPoolSize poolSize{};
     poolSize.type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    poolSize.descriptorCount = 1;
+    poolSize.descriptorCount = 2; // one for triangle, one for square
 
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes    = &poolSize;
-    poolInfo.maxSets       = 1;
+    poolInfo.maxSets       = 2;  // we want two sets
 
     if (vkCreateDescriptorPool(vkDevice, &poolInfo, nullptr, &gDescriptorPool) != VK_SUCCESS) {
         fprintf(gFILE, "[ERROR] Failed to create descriptor pool.\n");
@@ -1169,36 +1207,70 @@ VkResult CreateDescriptorPool()
     return VK_SUCCESS;
 }
 
-VkResult CreateDescriptorSet()
+// (!!!) Allocate & update TWO descriptor sets: one for triangle, one for square
+VkResult CreateDescriptorSets()
 {
-    fprintf(gFILE, "[LOG] --- CreateDescriptorSet() ---\n");
+    fprintf(gFILE, "[LOG] --- CreateDescriptorSets() ---\n");
+    std::vector<VkDescriptorSetLayout> layouts = {
+        gDescriptorSetLayout,
+        gDescriptorSetLayout
+    };
+
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.descriptorPool     = gDescriptorPool;
-    allocInfo.descriptorSetCount = 1;
-    allocInfo.pSetLayouts        = &gDescriptorSetLayout;
+    allocInfo.descriptorSetCount = 2;
+    allocInfo.pSetLayouts        = layouts.data();
 
-    if (vkAllocateDescriptorSets(vkDevice, &allocInfo, &gDescriptorSet) != VK_SUCCESS) {
-        fprintf(gFILE, "[ERROR] Failed to allocate descriptor set.\n");
+    std::vector<VkDescriptorSet> sets(2);
+    if (vkAllocateDescriptorSets(vkDevice, &allocInfo, sets.data()) != VK_SUCCESS) {
+        fprintf(gFILE, "[ERROR] Failed to allocate descriptor sets.\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
 
-    VkDescriptorBufferInfo bufferInfo{};
-    bufferInfo.buffer = gUniformBuffer;
-    bufferInfo.offset = 0;
-    bufferInfo.range  = sizeof(UniformBufferObject);
+    gDescriptorSetTriangle = sets[0];
+    gDescriptorSetSquare   = sets[1];
 
-    VkWriteDescriptorSet descriptorWrite{};
-    descriptorWrite.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.dstSet          = gDescriptorSet;
-    descriptorWrite.dstBinding      = 0;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    descriptorWrite.descriptorCount = 1;
-    descriptorWrite.pBufferInfo     = &bufferInfo;
+    // Write #1: triangle
+    {
+        VkDescriptorBufferInfo bufferInfo{};
+        bufferInfo.buffer = gUniformBufferTriangle;
+        bufferInfo.offset = 0;
+        bufferInfo.range  = sizeof(UniformBufferObject);
 
-    vkUpdateDescriptorSets(vkDevice, 1, &descriptorWrite, 0, nullptr);
-    fprintf(gFILE, "[LOG] Descriptor set updated.\n");
+        VkWriteDescriptorSet descriptorWrite{};
+        descriptorWrite.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        descriptorWrite.dstSet          = gDescriptorSetTriangle;
+        descriptorWrite.dstBinding      = 0;
+        descriptorWrite.dstArrayElement = 0;
+        descriptorWrite.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        descriptorWrite.descriptorCount = 1;
+        descriptorWrite.pBufferInfo     = &bufferInfo;
+
+        vkUpdateDescriptorSets(vkDevice, 1, &descriptorWrite, 0, nullptr);
+        fprintf(gFILE, "[LOG] Updated descriptor set (triangle).\n");
+    }
+
+    // Write #2: square
+    {
+        VkDescriptorBufferInfo bufferInfo{};
+        bufferInfo.buffer = gUniformBufferSquare;
+        bufferInfo.offset = 0;
+        bufferInfo.range  = sizeof(UniformBufferObject);
+
+        VkWriteDescriptorSet descriptorWrite{};
+        descriptorWrite.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        descriptorWrite.dstSet          = gDescriptorSetSquare;
+        descriptorWrite.dstBinding      = 0;
+        descriptorWrite.dstArrayElement = 0;
+        descriptorWrite.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        descriptorWrite.descriptorCount = 1;
+        descriptorWrite.pBufferInfo     = &bufferInfo;
+
+        vkUpdateDescriptorSets(vkDevice, 1, &descriptorWrite, 0, nullptr);
+        fprintf(gFILE, "[LOG] Updated descriptor set (square).\n");
+    }
+
     fflush(gFILE);
     return VK_SUCCESS;
 }
@@ -1256,13 +1328,11 @@ VkVertexInputBindingDescription GetVertexBindingDescription()
 std::array<VkVertexInputAttributeDescription, 2> GetVertexAttributeDescriptions()
 {
     std::array<VkVertexInputAttributeDescription, 2> attributes{};
-    // position
     attributes[0].binding  = 0;
     attributes[0].location = 0;
     attributes[0].format   = VK_FORMAT_R32G32_SFLOAT;
     attributes[0].offset   = offsetof(Vertex, pos);
 
-    // color
     attributes[1].binding  = 0;
     attributes[1].location = 1;
     attributes[1].format   = VK_FORMAT_R32G32B32_SFLOAT;
@@ -1274,7 +1344,6 @@ std::array<VkVertexInputAttributeDescription, 2> GetVertexAttributeDescriptions(
 VkResult CreateGraphicsPipeline()
 {
     fprintf(gFILE, "[LOG] --- CreateGraphicsPipeline() ---\n");
-    // Load SPIR-V
     auto vertCode = ReadFile("vert_shader.spv");
     auto fragCode = ReadFile("frag_shader.spv");
 
@@ -1361,6 +1430,7 @@ VkResult CreateGraphicsPipeline()
     // Pipeline layout
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType          = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    // We have a single descriptor set layout but will bind multiple sets at runtime
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts    = &gDescriptorSetLayout;
 
@@ -1370,7 +1440,6 @@ VkResult CreateGraphicsPipeline()
     }
     fprintf(gFILE, "[LOG] Pipeline layout created.\n");
 
-    // Now we reference the render pass we created
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     pipelineInfo.stageCount          = 2;
@@ -1459,29 +1528,33 @@ VkResult buildCommandBuffers()
 
         vkCmdBeginRenderPass(vkCommandBuffer_array[i], &rpBegin, VK_SUBPASS_CONTENTS_INLINE);
 
-        // Bind pipeline + descriptor sets + vertex buffer
+        // Bind pipeline
         vkCmdBindPipeline(
             vkCommandBuffer_array[i],
             VK_PIPELINE_BIND_POINT_GRAPHICS,
             gGraphicsPipeline
         );
 
+        // Bind vertex buffer
+        VkBuffer vb[] = { gVertexBuffer };
+        VkDeviceSize offsets[] = { 0 };
+        vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, vb, offsets);
+
+        // (!!!) --------------------------------------------------------------
+        // 1) Bind the descriptor set for the triangle and draw it
+        // (the first 3 vertices in our vertex buffer).
+        // (!!!) --------------------------------------------------------------
         vkCmdBindDescriptorSets(
             vkCommandBuffer_array[i],
             VK_PIPELINE_BIND_POINT_GRAPHICS,
             gPipelineLayout,
             0,
             1,
-            &gDescriptorSet,
+            &gDescriptorSetTriangle,  // <-- Triangle descriptor
             0,
             nullptr
         );
 
-        VkBuffer vb[] = { gVertexBuffer };
-        VkDeviceSize offsets[] = { 0 };
-        vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, vb, offsets);
-
-        // -- Draw the left triangle (first 3 vertices) --
         vkCmdDraw(vkCommandBuffer_array[i],
                   3, // vertexCount
                   1, // instanceCount
@@ -1489,11 +1562,25 @@ VkResult buildCommandBuffers()
                   0  // firstInstance
         );
 
-        // -- Draw the right square (next 6 vertices) --
+        // (!!!) --------------------------------------------------------------
+        // 2) Bind the descriptor set for the square and draw it
+        // (the next 6 vertices in our vertex buffer).
+        // (!!!) --------------------------------------------------------------
+        vkCmdBindDescriptorSets(
+            vkCommandBuffer_array[i],
+            VK_PIPELINE_BIND_POINT_GRAPHICS,
+            gPipelineLayout,
+            0,
+            1,
+            &gDescriptorSetSquare,  // <-- Square descriptor
+            0,
+            nullptr
+        );
+
         vkCmdDraw(vkCommandBuffer_array[i],
                   6, // vertexCount
                   1, // instanceCount
-                  3, // firstVertex
+                  3, // firstVertex (skip the first 3 from the triangle)
                   0  // firstInstance
         );
 
@@ -1601,14 +1688,14 @@ VkResult recreateSwapChain()
     VkResult vkRes;
     vkRes = CreateSwapChain(VK_FALSE);       if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateImagesAndImageViews();     if (vkRes != VK_SUCCESS) return vkRes;
-    
-    // Recreate the render pass and framebuffers for the new swapchain size
+
     vkRes = CreateRenderPass();              if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateFramebuffers();            if (vkRes != VK_SUCCESS) return vkRes;
 
     vkRes = CreateCommandPool();             if (vkRes != VK_SUCCESS) return vkRes;
     vkRes = CreateCommandBuffers();          if (vkRes != VK_SUCCESS) return vkRes;
 
+    // Re-create pipeline
     if (gGraphicsPipeline) {
         fprintf(gFILE, "[LOG] Destroying old graphics pipeline.\n");
         vkDestroyPipeline(vkDevice, gGraphicsPipeline, nullptr);
@@ -1641,22 +1728,28 @@ VkResult initialize(void)
     vkResult = CreateSwapChain(VK_FALSE);      if (vkResult != VK_SUCCESS) return vkResult;
     vkResult = CreateImagesAndImageViews();    if (vkResult != VK_SUCCESS) return vkResult;
 
-    // Create a standard render pass & framebuffers:
     vkResult = CreateRenderPass();             if (vkResult != VK_SUCCESS) return vkResult;
     vkResult = CreateFramebuffers();           if (vkResult != VK_SUCCESS) return vkResult;
 
     vkResult = CreateCommandPool();            if (vkResult != VK_SUCCESS) return vkResult;
     vkResult = CreateCommandBuffers();         if (vkResult != VK_SUCCESS) return vkResult;
 
+    // Layout for UBO
     vkResult = CreateDescriptorSetLayout();    if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateUniformBuffer();          if (vkResult != VK_SUCCESS) return vkResult;
+    // Two UBOs
+    vkResult = CreateUniformBuffers();         if (vkResult != VK_SUCCESS) return vkResult;
+    // Pool for descriptor sets
     vkResult = CreateDescriptorPool();         if (vkResult != VK_SUCCESS) return vkResult;
-    vkResult = CreateDescriptorSet();          if (vkResult != VK_SUCCESS) return vkResult;
+    // Allocate 2 sets and update them
+    vkResult = CreateDescriptorSets();         if (vkResult != VK_SUCCESS) return vkResult;
 
+    // Vertex buffer
     vkResult = CreateVertexBuffer();           if (vkResult != VK_SUCCESS) return vkResult;
 
+    // Pipeline
     vkResult = CreateGraphicsPipeline();       if (vkResult != VK_SUCCESS) return vkResult;
 
+    // Sync objects
     vkResult = CreateSemaphores();             if (vkResult != VK_SUCCESS) return vkResult;
     vkResult = CreateFences();                 if (vkResult != VK_SUCCESS) return vkResult;
 
@@ -1673,6 +1766,78 @@ VkResult initialize(void)
     fprintf(gFILE, "[LOG] === initialize() completed ===\n");
     fflush(gFILE);
     return VK_SUCCESS;
+}
+
+// (!!!) ==================================================================================
+// Now we have two separate update functions for the two uniform buffers.
+// =========================================================================================
+
+void UpdateTriangleUniformBuffer()
+{
+    // Keep the angle around X-axis for the Triangle
+    static float angleTriangle = 0.0f;
+
+    // Increase by some small amount every frame
+    angleTriangle += 0.5f;   // degrees per frame, tweak as desired
+    if (angleTriangle >= 360.0f)
+        angleTriangle -= 360.0f;
+
+    UniformBufferObject ubo{};
+
+    // Model: rotate about X-axis
+    glm::mat4 model = glm::rotate(glm::mat4(1.0f), 
+                                  glm::radians(angleTriangle), 
+                                  glm::vec3(1.0f, 0.0f, 0.0f));
+    // View: same as before
+    glm::mat4 view  = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -2.0f));
+
+    // Projection: same as before
+    float aspect    = (float)winWidth / (float)winHeight;
+    glm::mat4 proj  = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+    proj[1][1] *= -1.0f; // Flip Y in Vulkan
+
+    // Final
+    ubo.mvp = proj * view * model;
+
+    // Copy to GPU
+    void* data;
+    vkMapMemory(vkDevice, gUniformBufferMemoryTriangle, 0, sizeof(ubo), 0, &data);
+    memcpy(data, &ubo, sizeof(ubo));
+    vkUnmapMemory(vkDevice, gUniformBufferMemoryTriangle);
+}
+
+void UpdateSquareUniformBuffer()
+{
+    // Keep the angle around Y-axis for the Square
+    static float angleSquare = 0.0f;
+
+    // Increase by some small amount every frame
+    angleSquare += 0.75f;   // degrees per frame, tweak as desired
+    if (angleSquare >= 360.0f)
+        angleSquare -= 360.0f;
+
+    UniformBufferObject ubo{};
+
+    // Model: rotate about Y-axis
+    glm::mat4 model = glm::rotate(glm::mat4(1.0f),
+                                  glm::radians(angleSquare), 
+                                  glm::vec3(0.0f, 1.0f, 0.0f));
+    // View
+    glm::mat4 view  = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -2.0f));
+
+    // Projection
+    float aspect    = (float)winWidth / (float)winHeight;
+    glm::mat4 proj  = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+    proj[1][1] *= -1.0f; // Flip Y
+
+    // Final
+    ubo.mvp = proj * view * model;
+
+    // Copy to GPU
+    void* data;
+    vkMapMemory(vkDevice, gUniformBufferMemorySquare, 0, sizeof(ubo), 0, &data);
+    memcpy(data, &ubo, sizeof(ubo));
+    vkUnmapMemory(vkDevice, gUniformBufferMemorySquare);
 }
 
 // display()
@@ -1738,32 +1903,11 @@ VkResult display(void)
 }
 
 // update()
-void UpdateUniformBuffer()
-{
-    UniformBufferObject ubo{};
-
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view  = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -2.0f));
-
-    float aspect    = (float)winWidth / (float)winHeight;
-    glm::mat4 proj  = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-
-    // -------------------------------------------------
-    //  Reintroduced Y-flip to fix Vulkan's clip-space:
-    // -------------------------------------------------
-    proj[1][1] *= -1.0f;
-
-    ubo.mvp = proj * view * model;
-
-    void* data;
-    vkMapMemory(vkDevice, gUniformBufferMemory, 0, sizeof(ubo), 0, &data);
-    memcpy(data, &ubo, sizeof(ubo));
-    vkUnmapMemory(vkDevice, gUniformBufferMemory);
-}
-
 void update(void)
 {
-    UpdateUniformBuffer();
+    // (!!!) We separately update each shape's uniform buffer
+    UpdateTriangleUniformBuffer();
+    UpdateSquareUniformBuffer();
 }
 
 // uninitialize()
@@ -1823,6 +1967,27 @@ void uninitialize(void)
             vkDestroyDescriptorSetLayout(vkDevice, gDescriptorSetLayout, nullptr);
             gDescriptorSetLayout = VK_NULL_HANDLE;
         }
+        // Destroy our 2 uniform buffers
+        if (gUniformBufferTriangle) {
+            fprintf(gFILE, "[LOG] Destroying triangle uniform buffer.\n");
+            vkDestroyBuffer(vkDevice, gUniformBufferTriangle, nullptr);
+            gUniformBufferTriangle = VK_NULL_HANDLE;
+        }
+        if (gUniformBufferMemoryTriangle) {
+            fprintf(gFILE, "[LOG] Freeing triangle uniform buffer memory.\n");
+            vkFreeMemory(vkDevice, gUniformBufferMemoryTriangle, nullptr);
+            gUniformBufferMemoryTriangle = VK_NULL_HANDLE;
+        }
+        if (gUniformBufferSquare) {
+            fprintf(gFILE, "[LOG] Destroying square uniform buffer.\n");
+            vkDestroyBuffer(vkDevice, gUniformBufferSquare, nullptr);
+            gUniformBufferSquare = VK_NULL_HANDLE;
+        }
+        if (gUniformBufferMemorySquare) {
+            fprintf(gFILE, "[LOG] Freeing square uniform buffer memory.\n");
+            vkFreeMemory(vkDevice, gUniformBufferMemorySquare, nullptr);
+            gUniformBufferMemorySquare = VK_NULL_HANDLE;
+        }
         if (gVertexBuffer) {
             fprintf(gFILE, "[LOG] Destroying vertex buffer.\n");
             vkDestroyBuffer(vkDevice, gVertexBuffer, nullptr);
@@ -1832,16 +1997,6 @@ void uninitialize(void)
             fprintf(gFILE, "[LOG] Freeing vertex buffer memory.\n");
             vkFreeMemory(vkDevice, gVertexBufferMemory, nullptr);
             gVertexBufferMemory = VK_NULL_HANDLE;
-        }
-        if (gUniformBuffer) {
-            fprintf(gFILE, "[LOG] Destroying uniform buffer.\n");
-            vkDestroyBuffer(vkDevice, gUniformBuffer, nullptr);
-            gUniformBuffer = VK_NULL_HANDLE;
-        }
-        if (gUniformBufferMemory) {
-            fprintf(gFILE, "[LOG] Freeing uniform buffer memory.\n");
-            vkFreeMemory(vkDevice, gUniformBufferMemory, nullptr);
-            gUniformBufferMemory = VK_NULL_HANDLE;
         }
 
         fprintf(gFILE, "[LOG] Destroying logical device.\n");
