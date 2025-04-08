@@ -1,0 +1,15 @@
+Program started.
+[LOG] Window class registered.
+[LOG] Window created successfully.
+[LOG] === initialize() ===
+[LOG] === initialize() done ===
+initialize() succeeded.
+[LOG] WM_SIZE -> RecreateSwapChain (1920 x 1080)
+[LOG] recreateSwapChain()...
+[LOG] Entered Fullscreen.
+[LOG] uninitialize()...
+[LOG] WM_SIZE -> RecreateSwapChain (800 x 600)
+[LOG] recreateSwapChain()...
+[LOG] WM_SIZE -> RecreateSwapChain (784 x 561)
+[LOG] recreateSwapChain()...
+uninitialize() completed.
