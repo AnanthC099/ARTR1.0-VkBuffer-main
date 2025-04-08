@@ -390,6 +390,200 @@ initialize() succeeded.
 [LOG] --- buildCommandBuffers() ---
 [LOG] Command buffers built with layout transitions.
 [LOG] Entered Fullscreen.
+[LOG] WM_SIZE -> Recreating swap chain for new size (800 x 600)
+[LOG] --- recreateSwapChain() ---
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 5 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 4 present modes.
+[LOG] Chosen present mode: MAILBOX.
+[LOG] Creating swapchain with imageCount=3, size=(800 x 600)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] Destroying old graphics pipeline.
+[LOG] Destroying old pipeline layout.
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] WM_SIZE -> Recreating swap chain for new size (784 x 561)
+[LOG] --- recreateSwapChain() ---
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 5 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 4 present modes.
+[LOG] Chosen present mode: MAILBOX.
+[LOG] Creating swapchain with imageCount=3, size=(784 x 561)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] Destroying old graphics pipeline.
+[LOG] Destroying old pipeline layout.
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] Exited Fullscreen.
+[LOG] WM_SIZE -> Recreating swap chain for new size (800 x 600)
+[LOG] --- recreateSwapChain() ---
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 5 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 4 present modes.
+[LOG] Chosen present mode: MAILBOX.
+[LOG] Creating swapchain with imageCount=3, size=(800 x 600)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] Destroying old graphics pipeline.
+[LOG] Destroying old pipeline layout.
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] WM_SIZE -> Recreating swap chain for new size (1920 x 1080)
+[LOG] --- recreateSwapChain() ---
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 5 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 4 present modes.
+[LOG] Chosen present mode: MAILBOX.
+[LOG] Creating swapchain with imageCount=3, size=(1920 x 1080)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] Destroying old graphics pipeline.
+[LOG] Destroying old pipeline layout.
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] Entered Fullscreen.
 [LOG] Entering uninitialize()...
 [LOG] WM_SIZE -> Recreating swap chain for new size (800 x 600)
 [LOG] --- recreateSwapChain() ---

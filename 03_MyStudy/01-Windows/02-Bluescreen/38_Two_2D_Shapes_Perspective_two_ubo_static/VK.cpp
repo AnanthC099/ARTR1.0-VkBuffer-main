@@ -1808,7 +1808,7 @@ void UpdateTriangleUniformBuffer()
 	 float aspect   = static_cast<float>(winWidth) / static_cast<float>(winHeight);
      glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
 	  proj[1][1] *= -1.0f;  // Flip Y-axis for Vulkan
-	  ubo.mvp = proj * view * model * glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -4.0f));;
+	  ubo.mvp = proj * view * model * glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, 0.0f, -4.0f));;
 
     // Copy to GPU memory
     void* data;
@@ -1853,7 +1853,7 @@ void UpdateSquareUniformBuffer()
 	 float aspect   = static_cast<float>(winWidth) / static_cast<float>(winHeight);
      glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 1000.0f);
 	  proj[1][1] *= -1.0f;  // Flip Y-axis for Vulkan
-	  ubo.mvp = proj * view * model * glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -4.0f));
+	  ubo.mvp = proj * view * model * glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.0f, -4.0f));
 
     // Copy to GPU memory
     void* data;
