@@ -300,7 +300,6 @@ Program started.
 [LOG] --- buildCommandBuffers() ---
 [LOG] Command buffers built with layout transitions.
 [LOG] Entered Fullscreen.
-[LOG] Entering uninitialize()...
 [LOG] WM_SIZE -> Recreating swap chain for new size (800 x 600)
 [LOG] --- recreateSwapChain() ---
 [LOG] --- cleanupSwapChain() ---
@@ -397,6 +396,8 @@ Program started.
 [LOG] Destroyed temporary shader modules.
 [LOG] --- buildCommandBuffers() ---
 [LOG] Command buffers built with layout transitions.
+[LOG] Exited Fullscreen.
+[LOG] Entering uninitialize()...
 [LOG] Device wait idle...
 [LOG] Destroying fence (frame 0).
 [LOG] Destroying renderFinishedSemaphore (frame 0).
