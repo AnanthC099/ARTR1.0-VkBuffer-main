@@ -1,0 +1,430 @@
+Program started.
+[LOG] Window class registered.
+[LOG] Window created successfully.
+[LOG] === Entering initialize() ===
+[LOG] --- CreateVulkanInstance() ---
+[LOG] Checking for required instance extensions...
+[LOG] Found 13 instance extensions available.
+[LOG] Checking for VK_EXT_debug_utils extension...
+[LOG] Found 13 instance extensions.
+[LOG] Enabling VK_EXT_debug_utils extension.
+[LOG] Final instance extensions:
+   -> VK_KHR_surface
+   -> VK_KHR_win32_surface
+   -> VK_EXT_debug_utils
+[LOG] Checking for validation layers...
+[LOG] Found 10 instance layers.
+   Available layer: VK_LAYER_OBS_HOOK
+   Available layer: VK_LAYER_LUNARG_api_dump
+   Available layer: VK_LAYER_LUNARG_gfxreconstruct
+   Available layer: VK_LAYER_KHRONOS_synchronization2
+   Available layer: VK_LAYER_KHRONOS_validation
+   Available layer: VK_LAYER_LUNARG_monitor
+   Available layer: VK_LAYER_LUNARG_screenshot
+   Available layer: VK_LAYER_KHRONOS_profiles
+   Available layer: VK_LAYER_KHRONOS_shader_object
+   Available layer: VK_LAYER_LUNARG_crash_diagnostic
+[LOG] Using VK_LAYER_KHRONOS_validation.
+[LOG] Calling vkCreateInstance()...
+[LOG] vkCreateInstance() succeeded.
+[LOG] Creating debug utils messenger...
+[LOG] Debug Utils Messenger created.
+[LOG] --- CreateSurfaceWin32() ---
+[LOG] vkCreateWin32SurfaceKHR() succeeded.
+[LOG] --- SelectPhysicalDevice() ---
+[LOG] Found 1 physical devices.
+[LOG] Physical device selected at queue family index = 0.
+[LOG] --- CreateLogicalDeviceAndQueue() ---
+[LOG] Checking device extension properties...
+[LOG] Found 145 device extensions.
+   Device extension: VK_EXT_device_address_binding_report
+   Device extension: VK_EXT_full_screen_exclusive
+   Device extension: VK_KHR_swapchain
+   Device extension: VK_KHR_external_memory
+   Device extension: VK_KHR_external_memory_win32
+   Device extension: VK_EXT_external_memory_host
+   Device extension: VK_KHR_external_semaphore
+   Device extension: VK_KHR_external_semaphore_win32
+   Device extension: VK_KHR_external_fence
+   Device extension: VK_KHR_external_fence_win32
+   Device extension: VK_KHR_timeline_semaphore
+   Device extension: VK_KHR_win32_keyed_mutex
+   Device extension: VK_KHR_get_memory_requirements2
+   Device extension: VK_KHR_bind_memory2
+   Device extension: VK_KHR_dedicated_allocation
+   Device extension: VK_KHR_sampler_mirror_clamp_to_edge
+   Device extension: VK_KHR_maintenance1
+   Device extension: VK_KHR_maintenance2
+   Device extension: VK_KHR_maintenance3
+   Device extension: VK_KHR_maintenance4
+   Device extension: VK_KHR_maintenance5
+   Device extension: VK_KHR_maintenance6
+   Device extension: VK_KHR_maintenance7
+   Device extension: VK_KHR_synchronization2
+   Device extension: VK_KHR_shader_draw_parameters
+   Device extension: VK_KHR_push_descriptor
+   Device extension: VK_KHR_descriptor_update_template
+   Device extension: VK_KHR_multiview
+   Device extension: VK_KHR_shader_float16_int8
+   Device extension: VK_KHR_shader_float_controls
+   Device extension: VK_KHR_16bit_storage
+   Device extension: VK_KHR_8bit_storage
+   Device extension: VK_EXT_shader_subgroup_ballot
+   Device extension: VK_EXT_shader_subgroup_vote
+   Device extension: VK_KHR_storage_buffer_storage_class
+   Device extension: VK_KHR_variable_pointers
+   Device extension: VK_KHR_relaxed_block_layout
+   Device extension: VK_EXT_sampler_filter_minmax
+   Device extension: VK_KHR_device_group
+   Device extension: VK_KHR_sampler_ycbcr_conversion
+   Device extension: VK_EXT_ycbcr_2plane_444_formats
+   Device extension: VK_EXT_4444_formats
+   Device extension: VK_EXT_post_depth_coverage
+   Device extension: VK_EXT_shader_viewport_index_layer
+   Device extension: VK_EXT_shader_stencil_export
+   Device extension: VK_EXT_conservative_rasterization
+   Device extension: VK_EXT_sample_locations
+   Device extension: VK_KHR_draw_indirect_count
+   Device extension: VK_EXT_multi_draw
+   Device extension: VK_KHR_image_format_list
+   Device extension: VK_EXT_image_view_min_lod
+   Device extension: VK_KHR_vertex_attribute_divisor
+   Device extension: VK_EXT_vertex_attribute_divisor
+   Device extension: VK_EXT_descriptor_indexing
+   Device extension: VK_EXT_mutable_descriptor_type
+   Device extension: VK_EXT_inline_uniform_block
+   Device extension: VK_KHR_create_renderpass2
+   Device extension: VK_KHR_dynamic_rendering
+   Device extension: VK_KHR_dynamic_rendering_local_read
+   Device extension: VK_KHR_load_store_op_none
+   Device extension: VK_EXT_load_store_op_none
+   Device extension: VK_KHR_swapchain_mutable_format
+   Device extension: VK_KHR_depth_stencil_resolve
+   Device extension: VK_KHR_driver_properties
+   Device extension: VK_KHR_vulkan_memory_model
+   Device extension: VK_EXT_conditional_rendering
+   Device extension: VK_EXT_hdr_metadata
+   Device extension: VK_KHR_fragment_shading_rate
+   Device extension: VK_EXT_depth_clip_enable
+   Device extension: VK_EXT_depth_clip_control
+   Device extension: VK_EXT_scalar_block_layout
+   Device extension: VK_KHR_imageless_framebuffer
+   Device extension: VK_KHR_buffer_device_address
+   Device extension: VK_EXT_buffer_device_address
+   Device extension: VK_KHR_pipeline_library
+   Device extension: VK_EXT_host_query_reset
+   Device extension: VK_KHR_performance_query
+   Device extension: VK_NV_device_diagnostic_checkpoints
+   Device extension: VK_KHR_separate_depth_stencil_layouts
+   Device extension: VK_KHR_shader_clock
+   Device extension: VK_KHR_spirv_1_4
+   Device extension: VK_KHR_uniform_buffer_standard_layout
+   Device extension: VK_EXT_separate_stencil_usage
+   Device extension: VK_EXT_fragment_shader_interlock
+   Device extension: VK_EXT_index_type_uint8
+   Device extension: VK_KHR_index_type_uint8
+   Device extension: VK_EXT_primitive_topology_list_restart
+   Device extension: VK_KHR_shader_subgroup_extended_types
+   Device extension: VK_KHR_line_rasterization
+   Device extension: VK_EXT_line_rasterization
+   Device extension: VK_EXT_memory_budget
+   Device extension: VK_EXT_memory_priority
+   Device extension: VK_EXT_pageable_device_local_memory
+   Device extension: VK_EXT_texel_buffer_alignment
+   Device extension: VK_INTEL_performance_query
+   Device extension: VK_EXT_subgroup_size_control
+   Device extension: VK_EXT_shader_demote_to_helper_invocation
+   Device extension: VK_EXT_pipeline_creation_feedback
+   Device extension: VK_EXT_pipeline_creation_cache_control
+   Device extension: VK_KHR_pipeline_executable_properties
+   Device extension: VK_EXT_graphics_pipeline_library
+   Device extension: VK_EXT_transform_feedback
+   Device extension: VK_EXT_provoking_vertex
+   Device extension: VK_EXT_extended_dynamic_state
+   Device extension: VK_EXT_extended_dynamic_state2
+   Device extension: VK_EXT_extended_dynamic_state3
+   Device extension: VK_EXT_vertex_input_dynamic_state
+   Device extension: VK_EXT_custom_border_color
+   Device extension: VK_EXT_robustness2
+   Device extension: VK_EXT_image_robustness
+   Device extension: VK_EXT_pipeline_robustness
+   Device extension: VK_KHR_calibrated_timestamps
+   Device extension: VK_EXT_calibrated_timestamps
+   Device extension: VK_KHR_shader_integer_dot_product
+   Device extension: VK_KHR_shader_subgroup_uniform_control_flow
+   Device extension: VK_KHR_shader_terminate_invocation
+   Device extension: VK_KHR_workgroup_memory_explicit_layout
+   Device extension: VK_EXT_shader_atomic_float
+   Device extension: VK_KHR_copy_commands2
+   Device extension: VK_KHR_shader_non_semantic_info
+   Device extension: VK_KHR_zero_initialize_workgroup_memory
+   Device extension: VK_EXT_shader_atomic_float2
+   Device extension: VK_EXT_global_priority
+   Device extension: VK_EXT_global_priority_query
+   Device extension: VK_KHR_global_priority
+   Device extension: VK_KHR_format_feature_flags2
+   Device extension: VK_KHR_video_queue
+   Device extension: VK_KHR_video_decode_queue
+   Device extension: VK_KHR_video_decode_h264
+   Device extension: VK_KHR_video_decode_h265
+   Device extension: VK_KHR_video_decode_av1
+   Device extension: VK_EXT_color_write_enable
+   Device extension: VK_NV_compute_shader_derivatives
+   Device extension: VK_EXT_private_data
+   Device extension: VK_EXT_image_2d_view_of_3d
+   Device extension: VK_EXT_primitives_generated_query
+   Device extension: VK_EXT_shader_module_identifier
+   Device extension: VK_EXT_attachment_feedback_loop_layout
+   Device extension: VK_KHR_map_memory2
+   Device extension: VK_KHR_shader_maximal_reconvergence
+   Device extension: VK_KHR_shader_quad_control
+   Device extension: VK_EXT_host_image_copy
+   Device extension: VK_KHR_shader_subgroup_rotate
+   Device extension: VK_KHR_shader_expect_assume
+   Device extension: VK_KHR_shader_float_controls2
+[LOG] Enabling device extension: VK_KHR_swapchain
+[LOG] Calling vkCreateDevice()...
+[LOG] vkCreateDevice() succeeded.
+[LOG] Retrieved device queue at index 0.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 4 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 2 present modes.
+[LOG] Chosen present mode: FIFO (default).
+[LOG] Creating swapchain with imageCount=3, size=(784 x 561)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] --- CreateDescriptorSetLayout() ---
+[LOG] Descriptor set layout created.
+[LOG] --- CreateUniformBuffers() ---
+[LOG] FindMemoryTypeIndex() -> typeFilter=0x7, properties=0x6
+[LOG] Found suitable memory type at index=1
+[LOG] Triangle uniform buffer created.
+[LOG] FindMemoryTypeIndex() -> typeFilter=0x7, properties=0x6
+[LOG] Found suitable memory type at index=1
+[LOG] Square uniform buffer created.
+[LOG] --- CreateDescriptorPool() ---
+[LOG] Descriptor pool created.
+[LOG] --- CreateDescriptorSets() ---
+[LOG] Updated descriptor set (triangle).
+[LOG] Updated descriptor set (square).
+[LOG] --- CreateVertexBuffer() ---
+[LOG] Vertex buffer mem requirements: size=192, alignment=64, memTypeBits=0x7
+[LOG] FindMemoryTypeIndex() -> typeFilter=0x7, properties=0x6
+[LOG] Found suitable memory type at index=1
+[LOG] Vertex buffer created & data copied (9 vertices).
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- CreateSemaphores() ---
+[LOG] Semaphores created for frame index=0.
+[LOG] Semaphores created for frame index=1.
+[LOG] --- CreateFences() ---
+[LOG] Fence created for frame index=0 (signaled).
+[LOG] Fence created for frame index=1 (signaled).
+[LOG] Clear color set to (0.5, 0.5, 0.5, 1.0).
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] === initialize() completed ===
+[LOG] initialize() succeeded.
+[LOG] WM_SIZE -> Recreating swap chain for new size (1920 x 1080)
+[LOG] --- recreateSwapChain() ---
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 4 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 2 present modes.
+[LOG] Chosen present mode: FIFO (default).
+[LOG] Creating swapchain with imageCount=3, size=(1920 x 1080)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] Destroying old graphics pipeline.
+[LOG] Destroying old pipeline layout.
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] Entered Fullscreen.
+[LOG] WM_SIZE -> Recreating swap chain for new size (800 x 600)
+[LOG] --- recreateSwapChain() ---
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 4 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 2 present modes.
+[LOG] Chosen present mode: FIFO (default).
+[LOG] Creating swapchain with imageCount=3, size=(800 x 600)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] Destroying old graphics pipeline.
+[LOG] Destroying old pipeline layout.
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] WM_SIZE -> Recreating swap chain for new size (784 x 561)
+[LOG] --- recreateSwapChain() ---
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] --- CreateSwapChain() ---
+[LOG] Checking surface formats...
+[LOG] Found 4 surface formats.
+[LOG] Using surface format: 44  colorSpace: 0
+[LOG] Checking present modes...
+[LOG] Found 2 present modes.
+[LOG] Chosen present mode: FIFO (default).
+[LOG] Creating swapchain with imageCount=3, size=(784 x 561)
+[LOG] vkCreateSwapchainKHR() succeeded.
+[LOG] --- CreateImagesAndImageViews() ---
+[LOG] swapchainImageCount = 3
+[LOG] Created image view 0.
+[LOG] Created image view 1.
+[LOG] Created image view 2.
+[LOG] --- CreateRenderPass() ---
+[LOG] Render pass created.
+[LOG] --- CreateFramebuffers() ---
+[LOG] Created framebuffer 0.
+[LOG] Created framebuffer 1.
+[LOG] Created framebuffer 2.
+[LOG] --- CreateCommandPool() ---
+[LOG] Command pool created.
+[LOG] --- CreateCommandBuffers() ---
+[LOG] Command buffers allocated (3).
+[LOG] Destroying old graphics pipeline.
+[LOG] Destroying old pipeline layout.
+[LOG] --- CreateGraphicsPipeline() ---
+[LOG] Reading SPIR-V from file: vert_shader.spv
+[LOG] Loaded 1348 bytes from vert_shader.spv
+[LOG] Reading SPIR-V from file: frag_shader.spv
+[LOG] Loaded 572 bytes from frag_shader.spv
+[LOG] Shader module created (size=1348 bytes).
+[LOG] Shader module created (size=572 bytes).
+[LOG] Pipeline layout created.
+[LOG] Creating graphics pipeline...
+[LOG] Graphics pipeline created.
+[LOG] Destroyed temporary shader modules.
+[LOG] --- buildCommandBuffers() ---
+[LOG] Command buffers built with layout transitions.
+[LOG] Exited Fullscreen.
+[LOG] Entering uninitialize()...
+[LOG] Device wait idle...
+[LOG] Destroying fence (frame 0).
+[LOG] Destroying renderFinishedSemaphore (frame 0).
+[LOG] Destroying imageAvailableSemaphore (frame 0).
+[LOG] Destroying fence (frame 1).
+[LOG] Destroying renderFinishedSemaphore (frame 1).
+[LOG] Destroying imageAvailableSemaphore (frame 1).
+[LOG] --- cleanupSwapChain() ---
+[LOG] Freeing command buffers.
+[LOG] Destroying framebuffers.
+[LOG] Destroying command pool.
+[LOG] Destroying swapchain image views...
+[LOG] Destroying swapchain.
+[LOG] Destroying render pass.
+[LOG] Destroying graphics pipeline.
+[LOG] Destroying pipeline layout.
+[LOG] Destroying descriptor pool.
+[LOG] Destroying descriptor set layout.
+[LOG] Destroying triangle uniform buffer.
+[LOG] Freeing triangle uniform buffer memory.
+[LOG] Destroying square uniform buffer.
+[LOG] Freeing square uniform buffer memory.
+[LOG] Destroying vertex buffer.
+[LOG] Freeing vertex buffer memory.
+[LOG] Destroying logical device.
+[LOG] Destroying debug utils messenger.
+[LOG] Destroying surface.
+[LOG] Destroying instance.
+[LOG] Destroying window.
+uninitialize() completed. Exiting...
