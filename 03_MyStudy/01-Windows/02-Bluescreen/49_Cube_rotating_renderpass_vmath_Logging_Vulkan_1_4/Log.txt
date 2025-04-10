@@ -191,7 +191,6 @@ Available device extensions: 145
   Device extension: VK_KHR_shader_expect_assume
   Device extension: VK_KHR_shader_float_controls2
 Using device extension: VK_KHR_SWAPCHAIN_EXTENSION_NAME
-Device supports fillModeNonSolid (for wireframe)
 Logical device created successfully.
 Device queue obtained (graphicsQueueIndex=0).
 CreateSwapChain called.
@@ -238,7 +237,3 @@ Fences created.
 buildCommandBuffers called.
 Command buffers recorded successfully.
 initialize: Done
-uninitialize called.
-cleanupSwapChain called.
-cleanupDepthResources called.
-Exiting and closing log file.
