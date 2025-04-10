@@ -133,38 +133,29 @@ static std::vector<Vertex> gVertices =
 // We expand that into triangles (top + base corners):
 static std::vector<Vertex> gPyramidVertices()
 {
-    // Indices: top=0, v0=1, v1=2, v2=3, v3=4
-    // 4 side faces + base (2 triangles):
-    // side1: top(0), v0(1), v1(2)
-    // side2: top(0), v1(2), v2(3)
-    // side3: top(0), v2(3), v3(4)
-    // side4: top(0), v3(4), v0(1)
-    // base : v0(1), v1(2), v2(3) + v2(3), v3(4), v0(1)
-
     std::vector<Vertex> out;
-    // side1
+    // side1: top(0), v0(1), v1(2)
     out.push_back(gVertices[0]); // top
     out.push_back(gVertices[1]); // v0
     out.push_back(gVertices[2]); // v1
-    // side2
-    out.push_back(gVertices[0]); 
-    out.push_back(gVertices[2]); 
-    out.push_back(gVertices[3]); 
-    // side3
-    out.push_back(gVertices[0]); 
-    out.push_back(gVertices[3]); 
-    out.push_back(gVertices[4]); 
-    // side4
-    out.push_back(gVertices[0]); 
-    out.push_back(gVertices[4]); 
-    out.push_back(gVertices[1]); 
-    // base
-    out.push_back(gVertices[1]); 
-    out.push_back(gVertices[2]); 
-    out.push_back(gVertices[3]); 
-    out.push_back(gVertices[3]); 
-    out.push_back(gVertices[4]); 
-    out.push_back(gVertices[1]); 
+
+    // side2: top(0), v1(2), v2(3)
+    out.push_back(gVertices[0]);
+    out.push_back(gVertices[2]);
+    out.push_back(gVertices[3]);
+
+    // side3: top(0), v2(3), v3(4)
+    out.push_back(gVertices[0]);
+    out.push_back(gVertices[3]);
+    out.push_back(gVertices[4]);
+
+    // side4: top(0), v3(4), v0(1)
+    out.push_back(gVertices[0]);
+    out.push_back(gVertices[4]);
+    out.push_back(gVertices[1]);
+
+    // No base triangles here, so the bottom is open
+
     return out;
 }
 
