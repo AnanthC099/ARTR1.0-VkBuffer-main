@@ -587,16 +587,14 @@ static VkResult SelectPhysicalDevice()
 {
     fprintf(gFILE, "[LOG] --- SelectPhysicalDevice() ---\n");
 
-    // Query how many physical devices (GPUs) exist
+    // 1) Find how many physical devices (GPUs) are available
     VkResult vkResult = vkEnumeratePhysicalDevices(vkInstance, &physicalDeviceCount, nullptr);
     if (vkResult != VK_SUCCESS || physicalDeviceCount == 0) {
-        fprintf(gFILE, "[ERROR] No physical devices found (or vkEnumeratePhysicalDevices() failed).\n");
+        fprintf(gFILE, "[ERROR] No physical devices found (or vkEnumeratePhysicalDevices failed).\n");
         return VK_ERROR_INITIALIZATION_FAILED;
     }
 
-    fprintf(gFILE, "[LOG] Found %u physical devices:\n", physicalDeviceCount);
-
-    // Retrieve the list of physical devices
+    // 2) Allocate an array of VkPhysicalDevice objects
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     vkResult = vkEnumeratePhysicalDevices(vkInstance, &physicalDeviceCount, physicalDevices.data());
     if (vkResult != VK_SUCCESS) {
@@ -604,62 +602,75 @@ static VkResult SelectPhysicalDevice()
         return vkResult;
     }
 
-    // We will track if we found a device that supports GRAPHICS + PRESENT
+    fprintf(gFILE, "[LOG] Found %u physical device(s):\n", physicalDeviceCount);
+
+    // We track if we’ve chosen a GPU
     bool foundSuitableDevice = false;
 
-    // Go through all devices to log them and see if they support what we need
-    for (auto pd : physicalDevices) {
-        // Fetch device properties (device name, vendor ID, etc.)
+    // 3) Examine each physical device
+    for (uint32_t deviceIndex = 0; deviceIndex < physicalDeviceCount; deviceIndex++)
+    {
+        VkPhysicalDevice pd = physicalDevices[deviceIndex];
+
+        // a) Fetch device properties (device name, vendor, etc.)
         VkPhysicalDeviceProperties deviceProps{};
         vkGetPhysicalDeviceProperties(pd, &deviceProps);
 
-        // Print basic info for this device
+        // b) Print summary
         fprintf(gFILE,
-            "   [Device] Name: \"%s\"  |  DeviceID: 0x%X  |  VendorID: 0x%X  |  Type: %d\n",
+            "   [Device #%u] Name: \"%s\"  |  DeviceID: 0x%X  |  VendorID: 0x%X  |  Type: %d\n",
+            deviceIndex,
             deviceProps.deviceName,
             deviceProps.deviceID,
             deviceProps.vendorID,
             deviceProps.deviceType);
 
-        // Query queue families
+        // c) Query queue families
         uint32_t queueCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(pd, &queueCount, nullptr);
         std::vector<VkQueueFamilyProperties> qfProps(queueCount);
         vkGetPhysicalDeviceQueueFamilyProperties(pd, &queueCount, qfProps.data());
 
-        // Check if any queue family can support both GRAPHICS and PRESENT
+        // d) Check which queue families can do both GRAPHICS and PRESENT
         std::vector<VkBool32> canPresent(queueCount, VK_FALSE);
         for (uint32_t i = 0; i < queueCount; i++) {
             vkGetPhysicalDeviceSurfaceSupportKHR(pd, i, vkSurfaceKHR, &canPresent[i]);
         }
 
-        for (uint32_t i = 0; i < queueCount; i++) {
-            if ((qfProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && (canPresent[i] == VK_TRUE)) {
-                // Found our suitable GPU with a queue that supports both Graphics and Present
+        // e) Try to find a queue family that meets both needs
+        for (uint32_t i = 0; i < queueCount; i++)
+        {
+            if ((qfProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && (canPresent[i] == VK_TRUE))
+            {
+                // We found a suitable device + queue
                 vkPhysicalDevice_sel = pd;
                 graphicsQueueIndex   = i;
                 foundSuitableDevice  = true;
 
-                fprintf(gFILE, 
-                    "      --> *** SELECTED for use (queueFamilyIndex = %u) ***\n", i);
+                fprintf(gFILE,
+                    "      --> *** SELECTED for use (queueFamilyIndex = %u) ***\n",
+                    i);
 
-                // We only pick the first suitable device (typical behavior). Break out of loops.
-                break;
+                break; // Stop checking queue families
             }
         }
 
-        // If we selected a device, no need to check the others
+        // If we found a suitable device, stop checking further devices
         if (foundSuitableDevice)
             break;
+        else
+            fprintf(gFILE, "      --> This device does NOT support both graphics and present.\n");
     }
 
-    // If after checking all devices we did not find a suitable one, error out
+    // 4) If we never found a suitable GPU, report an error
     if (!foundSuitableDevice) {
-        fprintf(gFILE, "[ERROR] Failed to find a suitable GPU with Graphics+Present.\n");
+        fprintf(gFILE,
+            "[ERROR] None of the %u enumerated devices support both VK_QUEUE_GRAPHICS_BIT and Present.\n",
+            physicalDeviceCount);
         return VK_ERROR_INITIALIZATION_FAILED;
     }
 
-    // Retrieve memory properties of the chosen device
+    // 5) Retrieve memory properties of the chosen device
     vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice_sel, &vkPhysicalDeviceMemoryProperties);
 
     fprintf(gFILE, "[LOG] => Physical device chosen successfully.\n\n");
