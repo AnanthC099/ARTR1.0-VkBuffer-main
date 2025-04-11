@@ -1,0 +1,99 @@
+Log file created successfully.
+Registering window class...
+Window class registered.
+Creating window...
+Window created successfully.
+Starting initialization...
+=== initialize() start ===
+=== CreateVulkanInstance() start ===
+FillInstanceExtensionNames() called.
+Attempting to add debug utils extension.
+Added extension: VK_EXT_debug_utils
+FillInstanceLayerNames() called.
+Enabling: VK_LAYER_KHRONOS_validation
+Creating Vulkan instance...
+Vulkan instance created.
+Debug utils messenger created.
+=== CreateVulkanInstance() end ===
+Creating Win32 surface.
+Win32 surface created.
+Selecting physical device...
+Physical device count = 1
+Checking device: NVIDIA GeForce RTX 2070
+Device selected: NVIDIA GeForce RTX 2070, queueIndex = 0
+Creating logical device.
+Looking for device extensions (swapchain)...
+Swapchain extension found.
+Enabling anisotropic filtering feature.
+Logical device created.
+=== CreateSwapChain() start ===
+Querying surface formats...
+Surface format: 44, colorSpace: 0
+Swapchain extent w=784, h=561
+Querying present modes...
+Selected present mode: 1
+Swapchain created.
+=== CreateSwapChain() end ===
+Retrieving swapchain images...
+swapchainImageCount = 3
+Swapchain image views created.
+Creating depth resources.
+Depth resources created.
+Creating render pass.
+Render pass created.
+Creating framebuffers.
+Framebuffers created.
+Creating command pool.
+Command pool created.
+Allocating command buffers (one per swapchain image).
+Command buffers allocated.
+Creating descriptor set layout.
+Descriptor set layout created.
+Creating uniform buffer.
+Uniform buffer created.
+Creating texture image from stone.jpg.
+stone.jpg loaded: width=277, height=182, channels=3
+Creating staging buffer of size 201656.
+Staging buffer created.
+Transitioning image layout from 0 to 7.
+Image layout transition done.
+Copying buffer to image (277 x 182).
+Buffer copied to image.
+Transitioning image layout from 7 to 5.
+Image layout transition done.
+Texture image created successfully.
+Creating texture image view.
+Texture image view created.
+Creating texture sampler.
+Texture sampler created.
+Creating descriptor pool.
+Descriptor pool created.
+Allocating descriptor set.
+Writing to descriptor set.
+Descriptor set allocated & updated.
+Creating vertex buffer.
+Vertex buffer created & data copied.
+Creating graphics pipeline.
+Read file: vert_shader.spv (1512 bytes)
+Read file: frag_shader.spv (948 bytes)
+Shader module created.
+Shader module created.
+Graphics pipeline created.
+Creating semaphores.
+Semaphores created.
+Creating fences.
+Fences created.
+Building command buffers.
+Command buffers built.
+=== initialize() end ===
+Initialization successful.
+Entering message loop.
+Exiting message loop.
+=== uninitialize() start ===
+Cleaning up existing swapchain...
+Cleaning up depth resources...
+Logical device destroyed.
+Debug utils messenger destroyed.
+Surface destroyed.
+Vulkan instance destroyed.
+=== uninitialize() end ===
