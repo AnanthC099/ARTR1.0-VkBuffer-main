@@ -1,6 +1,0 @@
-Program started.
-[LOG] Window class registered.
-[DEPTH] Creating depth resources...
-[DEPTH] Depth resources created OK.
-[LOG] initialize() succeeded.
-uninitialize() completed. Exiting...

@@ -1,6 +1,0 @@
-Program started.
-Validation disabled, skipping instance layer checks.
-Enabling device extension: VK_KHR_swapchain.
-Present Mode: 1
-initialize() succeeded.
-uninitialize() completed. Exiting...

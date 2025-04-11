@@ -1,2 +1,0 @@
-WinMain()-> Program started successfully
-uninitialize()-> Program ended successfully.

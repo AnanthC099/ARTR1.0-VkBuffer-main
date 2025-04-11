@@ -1,1 +1,0 @@
-del VK.exe Log.txt Vk.obj Vk.pdb Vk.res vert_shader.spv frag_shader.spv

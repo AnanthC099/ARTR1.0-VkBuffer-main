@@ -1,1 +1,0 @@
-All Vulkan assignments are done in Ubuntu Linux 24.04
