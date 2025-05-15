@@ -38,8 +38,11 @@ uint32_t enabledInstanceExtensionsCount = 0;
 /*
 VK_KHR_SURFACE_EXTENSION_NAME
 VK_KHR_WIN32_SURFACE_EXTENSION_NAME
+and
+Added in 21_validation: VK_EXT_DEBUG_REPORT_EXTENSION_NAME (https://registry.khronos.org/vulkan/specs/latest/man/html/VK_EXT_debug_report.html)
 */
-const char* enabledInstanceExtensionNames_array[2];
+//const char* enabledInstanceExtensionNames_array[2];
+const char* enabledInstanceExtensionNames_array[3];
 
 //Vulkan Instance
 VkInstance vkInstance = VK_NULL_HANDLE;
@@ -174,6 +177,18 @@ VkClearColorValue vkClearColorValue;
 */
 BOOL bInitialized = FALSE;
 uint32_t currentImageIndex = UINT32_MAX; //UINT_MAX is also ok
+
+/*
+21_Validation
+*/
+BOOL bValidation = FALSE;
+uint32_t enabledValidationLayerCount = 0;
+const char* enabledValidationlayerNames_array[1]; //For VK_LAYER_KHRONOS_validation
+VkDebugReportCallbackEXT vkDebugReportCallbackEXT = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDebugReportCallbackEXT.html
+
+//https://registry.khronos.org/vulkan/specs/latest/man/html/PFN_vkDebugReportCallbackEXT.html 
+PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT_fnptr = NULL; 
+
 
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -1015,6 +1030,14 @@ void uninitialize(void)
 			fprintf(gFILE, "uninitialize(): vkDestroySurfaceKHR() sucedded\n");
 		}
 
+		//21_Validation
+		if(vkDebugReportCallbackEXT && vkDestroyDebugReportCallbackEXT_fnptr)
+		{
+			vkDestroyDebugReportCallbackEXT_fnptr(vkInstance, vkDebugReportCallbackEXT, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDebugReportCallbackEXT.html
+			vkDebugReportCallbackEXT = VK_NULL_HANDLE;
+			vkDestroyDebugReportCallbackEXT_fnptr = NULL; //Nahi kel tari chalel
+		}
+
 		/*
 		Destroy VkInstance in uninitialize()
 		*/
@@ -1044,6 +1067,10 @@ VkResult CreateVulkanInstance(void)
 	//Function declarations
 	VkResult FillInstanceExtensionNames(void);
 	
+	//Added in 21_Validation 
+	VkResult FillValidationLayerNames(void);
+	VkResult CreateValidationCallbackFunction(void);
+	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
 
@@ -1057,6 +1084,22 @@ VkResult CreateVulkanInstance(void)
 	else
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): FillInstanceExtensionNames() succedded\n");
+	}
+	
+	//21_Validation
+	if(bValidation == TRUE)
+	{
+		//21_Validation
+		vkResult = FillValidationLayerNames();
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "CreateVulkanInstance(): FillValidationLayerNames()  function failed\n");
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "CreateVulkanInstance(): FillValidationLayerNames() succedded\n");
+		}
 	}
 	
 	/*
@@ -1092,7 +1135,18 @@ VkResult CreateVulkanInstance(void)
 	//folowing 2 members important
 	vkInstanceCreateInfo.enabledExtensionCount = enabledInstanceExtensionsCount;
 	vkInstanceCreateInfo.ppEnabledExtensionNames = enabledInstanceExtensionNames_array;
-	
+	//21_Validation
+	if(bValidation == TRUE)
+	{
+		vkInstanceCreateInfo.enabledLayerCount = enabledValidationLayerCount;
+		vkInstanceCreateInfo.ppEnabledLayerNames = enabledValidationlayerNames_array;
+	}
+	else
+	{
+		vkInstanceCreateInfo.enabledLayerCount = 0;
+		vkInstanceCreateInfo.ppEnabledLayerNames = NULL;
+	}
+
 	/*
 	Call vkCreateInstance() to get VkInstance in a global variable and do error checking
 	*/
@@ -1117,6 +1171,22 @@ VkResult CreateVulkanInstance(void)
 	else
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): vkCreateInstance() succedded\n");
+	}
+	
+	//21_validation: do for validation callbacks
+	if(bValidation)
+	{
+		//21_Validation
+		vkResult = CreateValidationCallbackFunction();
+		if (vkResult != VK_SUCCESS)
+		{
+			fprintf(gFILE, "CreateVulkanInstance(): CreateValidationCallbackFunction()  function failed\n");
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "CreateVulkanInstance(): CreateValidationCallbackFunction() succedded\n");
+		}
 	}
 	
 	return vkResult;
@@ -1215,11 +1285,16 @@ VkResult FillInstanceExtensionNames(void)
 	Find whether above extension names contain our required two extensions
 	VK_KHR_SURFACE_EXTENSION_NAME
 	VK_KHR_WIN32_SURFACE_EXTENSION_NAME
+	VK_EXT_DEBUG_REPORT_EXTENSION_NAME (added for 21_Validation)
 	Accordingly set two global variables, "required extension count" and "required extension names array"
 	*/
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkBool32.html -> Vulkan cha bool
 	VkBool32 vulkanSurfaceExtensionFound = VK_FALSE;
 	VkBool32 vulkanWin32SurfaceExtensionFound = VK_FALSE;
+	
+	//21_Validation
+	VkBool32 debugReportExtensionFound = VK_FALSE;
+	
 	for (uint32_t i = 0; i < instanceExtensionCount; i++)
 	{
 		if (strcmp(instanceExtensionNames_array[i], VK_KHR_SURFACE_EXTENSION_NAME) == 0)
@@ -1232,6 +1307,20 @@ VkResult FillInstanceExtensionNames(void)
 		{
 			vulkanWin32SurfaceExtensionFound = VK_TRUE;
 			enabledInstanceExtensionNames_array[enabledInstanceExtensionsCount++] = VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
+		}
+		
+		if (strcmp(instanceExtensionNames_array[i], VK_EXT_DEBUG_REPORT_EXTENSION_NAME) == 0)
+		{
+			debugReportExtensionFound = VK_TRUE;
+			if(bValidation == TRUE)
+			{
+				enabledInstanceExtensionNames_array[enabledInstanceExtensionsCount++] = VK_EXT_DEBUG_REPORT_EXTENSION_NAME;
+			}
+			else
+			{
+				//array will not have entry so no code here
+				//enabledInstanceExtensionNames_array[enabledInstanceExtensionsCount++] = VK_EXT_DEBUG_REPORT_EXTENSION_NAME;
+			}
 		}
 	}
 
@@ -1270,6 +1359,35 @@ VkResult FillInstanceExtensionNames(void)
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): VK_KHR_WIN32_SURFACE_EXTENSION_NAME is found\n");
 	}
+	
+	if (debugReportExtensionFound == VK_FALSE)
+	{
+		if(bValidation == TRUE)
+		{
+			//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
+			vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
+			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is ON, but required VK_EXT_DEBUG_REPORT_EXTENSION_NAME is not supported\n");
+			return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is OFF, but VK_EXT_DEBUG_REPORT_EXTENSION_NAME is not supported\n");
+		}
+	}
+	else
+	{
+		if(bValidation == TRUE)
+		{
+			//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
+			//vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
+			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is ON, but required VK_EXT_DEBUG_REPORT_EXTENSION_NAME is also supported\n");
+			//return vkResult;
+		}
+		else
+		{
+			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is OFF, but VK_EXT_DEBUG_REPORT_EXTENSION_NAME is also supported\n");
+		}
+	}
 
 	/*
 	Print only enabled extension names
@@ -1282,8 +1400,212 @@ VkResult FillInstanceExtensionNames(void)
 	return vkResult;
 }
 
+VkResult FillValidationLayerNames(void)
+{
+	//Code
+	
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
+	uint32_t validationLayerCount = 0;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkEnumerateInstanceLayerProperties.html
+	vkResult = vkEnumerateInstanceLayerProperties(&validationLayerCount, NULL);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "FillValidationLayerNames(): First call to vkEnumerateInstanceLayerProperties()  function failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "FillValidationLayerNames(): First call to vkEnumerateInstanceLayerProperties() succedded\n");
+	}
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkLayerProperties.html
+	VkLayerProperties* vkLayerProperties_array = NULL;
+	vkLayerProperties_array = (VkLayerProperties*)malloc(sizeof(VkLayerProperties) * validationLayerCount);
+	if (vkLayerProperties_array != NULL)
+	{
+		//Add log here later for failure
+		//exit(-1);
+	}
+	else
+	{
+		//Add log here later for success
+	}
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkEnumerateInstanceLayerProperties.html
+	vkResult = vkEnumerateInstanceLayerProperties(&validationLayerCount, vkLayerProperties_array);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "FillValidationLayerNames(): Second call to vkEnumerateInstanceLayerProperties()  function failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "FillValidationLayerNames(): Second call to vkEnumerateInstanceLayerProperties() succedded\n");
+	}
+	
+	char** validationLayerNames_array = NULL;
+	validationLayerNames_array = (char**)malloc(sizeof(char*) * validationLayerCount);
+	if (validationLayerNames_array != NULL)
+	{
+		//Add log here later for failure
+		//exit(-1);
+	}
+	else
+	{
+		//Add log here later for success
+	}
+
+	for (uint32_t i =0; i < validationLayerCount; i++)
+	{
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkLayerProperties.html
+		validationLayerNames_array[i] = (char*)malloc( sizeof(char) * (strlen(vkLayerProperties_array[i].layerName) + 1));
+		memcpy(validationLayerNames_array[i], vkLayerProperties_array[i].layerName, (strlen(vkLayerProperties_array[i].layerName) + 1));
+		fprintf(gFILE, "FillValidationLayerNames(): Vulkan Instance Layer Name = %s\n", validationLayerNames_array[i]);
+	}
+
+	if (vkLayerProperties_array)
+	{
+		free(vkLayerProperties_array);
+		vkLayerProperties_array = NULL;
+	}
+	
+	//For required 1 validation layer VK_LAYER_KHRONOS_validation
+	VkBool32 validationLayerFound = VK_FALSE;
+	
+	for (uint32_t i = 0; i < validationLayerCount; i++)
+	{
+		if (strcmp(validationLayerNames_array[i], "VK_LAYER_KHRONOS_validation") == 0)
+		{
+			validationLayerFound = VK_TRUE;
+			enabledValidationlayerNames_array[enabledValidationLayerCount++] = "VK_LAYER_KHRONOS_validation";
+		}
+	}
+	
+	for (uint32_t i =0 ; i < validationLayerCount; i++)
+	{
+		free(validationLayerNames_array[i]);
+	}
+	free(validationLayerNames_array);
+	
+	if(validationLayerFound == VK_FALSE)
+	{
+		//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
+		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
+		fprintf(gFILE, "FillValidationLayerNames(): VK_LAYER_KHRONOS_validation not supported\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "FillValidationLayerNames(): VK_LAYER_KHRONOS_validation is supported\n");
+	}
+	
+	/*
+	Print only enabled extension names
+	*/
+	for (uint32_t i = 0; i < enabledValidationLayerCount; i++)
+	{
+		fprintf(gFILE, "FillValidationLayerNames(): Enabled Vulkan Validation Layer Name = %s\n", enabledValidationlayerNames_array[i]);
+	}
+	
+	return vkResult;
+}
+
+VkResult CreateValidationCallbackFunction(void)
+{
+	//Function declaration
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDebugReportFlagsEXT.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VKAPI_ATTR.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDebugReportObjectTypeEXT.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/PFN_vkDebugReportCallbackEXT.html
+	*/
+	VKAPI_ATTR VkBool32 VKAPI_CALL debugReportCallback(VkDebugReportFlagsEXT, VkDebugReportObjectTypeEXT, uint64_t, size_t, int32_t, const char*, const char*, void*);
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateDebugReportCallbackEXT.html
+	PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT_fnptr = NULL;
+	
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
+	
+	//Code
+	//get required function pointers
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetInstanceProcAddr.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateDebugReportCallbackEXT.html
+	*/
+	vkCreateDebugReportCallbackEXT_fnptr = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(vkInstance, "vkCreateDebugReportCallbackEXT");
+	if(vkCreateDebugReportCallbackEXT_fnptr == NULL)
+	{
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() failed to get function pointer for vkCreateDebugReportCallbackEXT\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() suceeded getting function pointer for vkCreateDebugReportCallbackEXT\n");
+	}
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDebugReportCallbackEXT.html
+	vkDestroyDebugReportCallbackEXT_fnptr = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(vkInstance, "vkDestroyDebugReportCallbackEXT");
+	if(vkDestroyDebugReportCallbackEXT_fnptr == NULL)
+	{
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() failed to get function pointer for vkDestroyDebugReportCallbackEXT\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() suceeded getting function pointer for vkDestroyDebugReportCallbackEXT\n");
+	}
+	
+	//get VulkanDebugReportCallback object
+	/*
+	VkDebugReportCallbackEXT *vkDebugReportCallbackEXT = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDebugReportCallbackEXT.html
+
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/PFN_vkDebugReportCallbackEXT.html 
+	PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT_fnptr = NULL; 
+	*/
+	VkDebugReportCallbackCreateInfoEXT vkDebugReportCallbackCreateInfoEXT ; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDebugReportCallbackCreateInfoEXT.html
+	memset((void*)&vkDebugReportCallbackCreateInfoEXT, 0, sizeof(VkDebugReportCallbackCreateInfoEXT));
+	/*
+	// Provided by VK_EXT_debug_report
+	typedef struct VkDebugReportCallbackCreateInfoEXT {
+		VkStructureType                 sType;
+		const void*                     pNext;
+		VkDebugReportFlagsEXT           flags;
+		PFN_vkDebugReportCallbackEXT    pfnCallback;
+		void*                           pUserData;
+	} VkDebugReportCallbackCreateInfoEXT;
+	*/
+	vkDebugReportCallbackCreateInfoEXT.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+	vkDebugReportCallbackCreateInfoEXT.pNext = NULL;
+	vkDebugReportCallbackCreateInfoEXT.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT|VK_DEBUG_REPORT_WARNING_BIT_EXT|VK_DEBUG_REPORT_INFORMATION_BIT_EXT|VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT|VK_DEBUG_REPORT_DEBUG_BIT_EXT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDebugReportFlagBitsEXT.html
+	vkDebugReportCallbackCreateInfoEXT.pfnCallback = debugReportCallback;
+	vkDebugReportCallbackCreateInfoEXT.pUserData = NULL;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateDebugReportCallbackEXT.html
+	vkResult = vkCreateDebugReportCallbackEXT_fnptr(vkInstance, &vkDebugReportCallbackCreateInfoEXT, NULL, &vkDebugReportCallbackEXT);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateValidationCallbackFunction(): vkCreateDebugReportCallbackEXT_fnptr()  function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateValidationCallbackFunction(): vkCreateDebugReportCallbackEXT_fnptr() succedded\n");
+	}
+	
+	return vkResult;
+}
+
 VkResult GetSupportedSurface(void)
 {
+	//Code
+	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
 	
@@ -2934,6 +3256,31 @@ VkResult buildCommandBuffers(void)
 	
 	return vkResult;
 }
+
+/*
+VKAPI_ATTR VkBOOL32 VKAPI_CALL debugReportCallback(
+	VkDebugReportFlagsEXT vkDebugReportFlagsEXT, //which flags gave this callback
+	VkDebugReportObjectTypeEXT vkDebugReportObjectTypeEXT, //jyana ha callback trigger kela , tya object cha type
+	uint64_t object, //Proper object
+	size_t location,  //warning/error kutha aali tyacha location
+	int32_t messageCode, // message cha id -> message code in hex 
+	const char* pLayerPrefix, // kontya layer na ha dila (Purvi 5 layer hote, aata ek kila. So ekach yeil atta)
+	const char* pMessage, //actual error message
+	void* pUserData) //jar tumhi callback function la kahi parameter pass kela asel tar
+{
+	//Code
+	fprintf(gFILE, "Anjaneya_VALIDATION:debugReportCallback():%s(%d) = %s\n", pLayerPrefix, messageCode, pMessage);  
+    return (VK_FALSE);
+}
+*/
+
+VKAPI_ATTR VkBool32 VKAPI_CALL debugReportCallback(VkDebugReportFlagsEXT vkDebugReportFlagsEXT, VkDebugReportObjectTypeEXT vkDebugReportObjectTypeEXT, uint64_t object, size_t location,  int32_t messageCode,const char* pLayerPrefix, const char* pMessage, void* pUserData)
+{
+	//Code
+	fprintf(gFILE, "Anjaneya_VALIDATION:debugReportCallback():%s(%d) = %s\n", pLayerPrefix, messageCode, pMessage);  
+    return (VK_FALSE);
+}
+
 
 
 
