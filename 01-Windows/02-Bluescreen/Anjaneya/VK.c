@@ -2658,7 +2658,7 @@ VkResult CreateImagesAndImageViews(void)
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
 	vkImageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	vkImageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-	vkImageViewCreateInfo.subresourceRange.levelCount = 0;
+	vkImageViewCreateInfo.subresourceRange.levelCount = 1; //0
 	vkImageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
 	vkImageViewCreateInfo.subresourceRange.layerCount = 1;
 	
@@ -2990,7 +2990,7 @@ VkResult CreateFramebuffers(void)
 	1. Declare an array of VkImageView (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageView.html) equal to number of attachments i.e in our example array of member.
 	*/
 	VkImageView vkImageView_attachment_array[1];
-	memset(vkImageView_attachment_array, 0, sizeof(VkImageView) * _ARRAYSIZE(vkImageView_attachment_array));
+	memset((void*)vkImageView_attachment_array, 0, sizeof(VkImageView) * _ARRAYSIZE(vkImageView_attachment_array)); // Change 
 	
 	/*
 	2. Declare and initialize VkFramebufferCreateInfo structure (https://registry.khronos.org/vulkan/specs/latest/man/html/VkFramebufferCreateInfo.html).
