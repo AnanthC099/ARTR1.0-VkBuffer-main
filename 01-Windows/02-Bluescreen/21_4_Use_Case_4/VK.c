@@ -226,6 +226,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	else
 	{
 		fprintf(gFILE, "WinMain()-> Program started successfully\n");
+		fflush(gFILE);
 	}
 	
 	wsprintf(szAppName, TEXT("%s"), gpszAppName);
@@ -269,12 +270,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "WinMain(): initialize()  function failed\n");
+		fflush(gFILE);
 		DestroyWindow(hwnd);
 		hwnd = NULL;
 	}
 	else
 	{
 		fprintf(gFILE, "WinMain(): initialize() succedded\n");
+		fflush(gFILE);
 	}
 
 	// Show The Window
@@ -350,6 +353,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			{
 			case VK_ESCAPE:
 				fprintf(gFILE, "WndProc() VK_ESCAPE-> Program ended successfully.\n");
+				fflush(gFILE);
 				fclose(gFILE);
 				gFILE = NULL;
 				DestroyWindow(hwnd);
@@ -367,12 +371,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					ToggleFullscreen();
 					gbFullscreen = TRUE;
 					fprintf(gFILE, "WndProc() WM_CHAR(F key)-> Program entered Fullscreen.\n");
+					fflush(gFILE);
 				}
 				else
 				{
 					ToggleFullscreen();
 					gbFullscreen = FALSE;
 					fprintf(gFILE, "WndProc() WM_CHAR(F key)-> Program ended Fullscreen.\n");
+					fflush(gFILE);
 				}
 				break;
 			}
@@ -458,11 +464,13 @@ VkResult initialize(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateVulkanInstance() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateVulkanInstance() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//Create Vulkan Presentation Surface
@@ -470,11 +478,13 @@ VkResult initialize(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): GetSupportedSurface() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): GetSupportedSurface() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//Enumerate and select physical device and its queque family index
@@ -482,11 +492,13 @@ VkResult initialize(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): GetPhysicalDevice() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): GetPhysicalDevice() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//Print Vulkan Info ;
@@ -494,11 +506,13 @@ VkResult initialize(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): PrintVulkanInfo() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): PrintVulkanInfo() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//Create Vulkan Device (Logical Device)
@@ -506,11 +520,13 @@ VkResult initialize(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateVulKanDevice() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateVulKanDevice() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//get Device Queque
@@ -525,11 +541,13 @@ VkResult initialize(void)
 		*/
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "initialize(): CreateSwapChain() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateSwapChain() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//1. Get Swapchain image count in a global variable using vkGetSwapchainImagesKHR() API (https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetSwapchainImagesKHR.html).
@@ -538,77 +556,91 @@ VkResult initialize(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateImagesAndImageViews() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateImagesAndImageViews() succedded with SwapChain Image count as %d\n", swapchainImageCount);
+		fflush(gFILE);
 	}
 	
 	vkResult = CreateCommandPool();
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateCommandPool() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateCommandPool() succedded\n");
+		fflush(gFILE);
 	}
 	
 	vkResult  = CreateCommandBuffers();
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateCommandBuffers() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateCommandBuffers() succedded\n");
+		fflush(gFILE);
 	}
 	
 	vkResult =  CreateRenderPass();
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateRenderPass() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateRenderPass() succedded\n");
+		fflush(gFILE);
 	}
 	
 	vkResult = CreateFramebuffers();
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateFramebuffers() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateFramebuffers() succedded\n");
+		fflush(gFILE);
 	}
 	
 	vkResult = CreateSemaphores();
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateSemaphores() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateSemaphores() succedded\n");
+		fflush(gFILE);
 	}
 	
 	vkResult = CreateFences();
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): CreateFences() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateFences() succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -625,11 +657,13 @@ VkResult initialize(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "initialize(): buildCommandBuffers() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "initialize(): buildCommandBuffers() succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -638,6 +672,7 @@ VkResult initialize(void)
 	bInitialized = TRUE;
 	
 	fprintf(gFILE, "************************* End of initialize ******************************\n");
+	fflush(gFILE);
 	
 	return vkResult;
 }
@@ -658,6 +693,7 @@ VkResult display(void)
 	if(bInitialized == FALSE)
 	{
 		fprintf(gFILE, "display(): initialization not completed yet\n");
+		fflush(gFILE);
 		return (VkResult)VK_FALSE;
 	}
 	
@@ -680,6 +716,7 @@ VkResult display(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "display(): vkAcquireNextImageKHR() failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	
@@ -701,6 +738,7 @@ VkResult display(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "display(): vkWaitForFences() failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	
@@ -717,6 +755,7 @@ VkResult display(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "display(): vkResetFences() failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	
@@ -746,6 +785,7 @@ VkResult display(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "display(): vkQueueSubmit() failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	
@@ -768,6 +808,7 @@ VkResult display(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "display(): vkQueuePresentKHR() failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	
@@ -873,6 +914,7 @@ void uninitialize(void)
 		{
 			vkDeviceWaitIdle(vkDevice); //First synchronization function
 			fprintf(gFILE, "uninitialize(): vkDeviceWaitIdle() is done\n");
+			fflush(gFILE);
 			
 			/*
 			18_7. In uninitialize(), first in a loop with swapchain image count as counter, destroy frnce array objects using vkDestroyFence() {https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyFence.html} and then
@@ -883,6 +925,7 @@ void uninitialize(void)
 			{
 				vkDestroyFence(vkDevice, vkFence_array[i], NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyFence.html
 				fprintf(gFILE, "uninitialize(): vkFence_array[%d] is freed\n", i);
+				fflush(gFILE);
 			}
 			
 			if(vkFence_array)
@@ -890,6 +933,7 @@ void uninitialize(void)
 				free(vkFence_array);
 				vkFence_array = NULL;
 				fprintf(gFILE, "uninitialize(): vkFence_array is freed\n");
+				fflush(gFILE);
 			}
 			
 			/*
@@ -909,7 +953,8 @@ void uninitialize(void)
 			{
 				vkDestroySemaphore(vkDevice, vkSemaphore_BackBuffer, NULL);
 				vkSemaphore_RenderComplete = VK_NULL_HANDLE;
-					fprintf(gFILE, "uninitialize(): vkSemaphore_BackBuffer is freed\n");
+				fprintf(gFILE, "uninitialize(): vkSemaphore_BackBuffer is freed\n");
+				fflush(gFILE);
 			}
 			
 			
@@ -922,6 +967,7 @@ void uninitialize(void)
 				vkDestroyFramebuffer(vkDevice, vkFramebuffer_array[i], NULL);
 				vkFramebuffer_array[i] = NULL;
 				fprintf(gFILE, "uninitialize(): vkDestroyFramebuffer() is done\n");
+				fflush(gFILE);
 			}
 			
 			if(vkFramebuffer_array)
@@ -929,6 +975,7 @@ void uninitialize(void)
 				free(vkFramebuffer_array);
 				vkFramebuffer_array = NULL;
 				fprintf(gFILE, "uninitialize(): vkFramebuffer_array is freed\n");
+				fflush(gFILE);
 			}
 			
 			//Step_16_6. In uninitialize , destroy the renderpass by using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
@@ -937,6 +984,7 @@ void uninitialize(void)
 				vkDestroyRenderPass(vkDevice, vkRenderPass, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html
 				vkRenderPass = VK_NULL_HANDLE;
 				fprintf(gFILE, "uninitialize(): vkDestroyRenderPass() is done\n");
+				fflush(gFILE);
 			}
 			
 			//Step_15_4. In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
@@ -944,6 +992,7 @@ void uninitialize(void)
 			{
 				vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_array[i]);
 				fprintf(gFILE, "uninitialize(): vkFreeCommandBuffers() is done\n");
+				fflush(gFILE);
 			}
 			
 				//Step_15_5. Free actual command buffer array.
@@ -952,6 +1001,7 @@ void uninitialize(void)
 				free(vkCommandBuffer_array);
 				vkCommandBuffer_array = NULL;
 				fprintf(gFILE, "uninitialize(): vkCommandBuffer_array is freed\n");
+				fflush(gFILE);
 			}	
 
 			//Step_14_3 In uninitialize(), destroy commandpool using VkDestroyCommandPool.
@@ -961,6 +1011,7 @@ void uninitialize(void)
 				vkDestroyCommandPool(vkDevice, vkCommandPool, NULL);
 				vkCommandPool = VK_NULL_HANDLE;
 				fprintf(gFILE, "uninitialize(): vkDestroyCommandPool() is done\n");
+				fflush(gFILE);
 			}
 			
 			/*
@@ -971,6 +1022,7 @@ void uninitialize(void)
 			{
 				vkDestroyImageView(vkDevice, swapChainImageView_array[i], NULL);
 				fprintf(gFILE, "uninitialize(): vkDestroyImageView() is done\n");
+				fflush(gFILE);
 			}
 			
 			/*
@@ -982,6 +1034,8 @@ void uninitialize(void)
 				free(swapChainImageView_array);
 				swapChainImageView_array = NULL;
 				fprintf(gFILE, "uninitialize():swapChainImageView_array is freed\n");
+				fflush(gFILE);
+				//fclose(gFILE); // Add this or use fflush after fprintf
 			}
 			
 			/*
@@ -989,13 +1043,12 @@ void uninitialize(void)
 			(https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImage.html)
 			//Free swap chain images
 			*/
-			/*
 			for(uint32_t i = 0; i < swapchainImageCount; i++)
 			{
 				vkDestroyImage(vkDevice, swapChainImage_array[i], NULL);
 				fprintf(gFILE, "uninitialize(): vkDestroyImage() is done\n");
+				fflush(gFILE); 	//fclose(gFILE); // Add this or use fflush after fprintf
 			}
-			*/
 			
 			/*
 			8. In uninitialize() , now actually free swapchain image array using free().
@@ -1005,6 +1058,7 @@ void uninitialize(void)
 				free(swapChainImage_array);
 				swapChainImage_array = NULL;
 				fprintf(gFILE, "uninitialize():swapChainImage_array is freed\n");
+				fflush(gFILE);
 			}
 			
 			/*
@@ -1014,11 +1068,13 @@ void uninitialize(void)
 			vkDestroySwapchainKHR(vkDevice, vkSwapchainKHR, NULL);
 			vkSwapchainKHR = VK_NULL_HANDLE;
 			fprintf(gFILE, "uninitialize(): vkDestroySwapchainKHR() is done\n");
+			fflush(gFILE);
 			
 			
 			vkDestroyDevice(vkDevice, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDevice.html
 			vkDevice = VK_NULL_HANDLE;
 			fprintf(gFILE, "uninitialize(): vkDestroyDevice() is done\n");
+			fflush(gFILE);
 		}
 		
 		//No need to destroy/uninitialize device queque
@@ -1033,6 +1089,7 @@ void uninitialize(void)
 			vkDestroySurfaceKHR(vkInstance, vkSurfaceKHR, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroySurfaceKHR.html
 			vkSurfaceKHR = VK_NULL_HANDLE;
 			fprintf(gFILE, "uninitialize(): vkDestroySurfaceKHR() sucedded\n");
+			fflush(gFILE);
 		}
 
 		//21_Validation
@@ -1051,12 +1108,14 @@ void uninitialize(void)
 			vkDestroyInstance(vkInstance, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyInstance.html
 			vkInstance = VK_NULL_HANDLE;
 			fprintf(gFILE, "uninitialize(): vkDestroyInstance() sucedded\n");
+			fflush(gFILE);
 		}
 
 		// Close the log file
 		if (gFILE)
 		{
 			fprintf(gFILE, "uninitialize()-> Program ended successfully.\n");
+			fflush(gFILE);
 			fclose(gFILE);
 			gFILE = NULL;
 		}
@@ -1084,11 +1143,13 @@ VkResult CreateVulkanInstance(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): FillInstanceExtensionNames()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): FillInstanceExtensionNames() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//21_Validation
@@ -1099,11 +1160,13 @@ VkResult CreateVulkanInstance(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "CreateVulkanInstance(): FillValidationLayerNames()  function failed\n");
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "CreateVulkanInstance(): FillValidationLayerNames() succedded\n");
+			fflush(gFILE);
 		}
 	}
 	
@@ -1161,21 +1224,25 @@ VkResult CreateVulkanInstance(void)
 	if (vkResult == VK_ERROR_INCOMPATIBLE_DRIVER)
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): vkCreateInstance() function failed due to incompatible driver with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else if (vkResult == VK_ERROR_EXTENSION_NOT_PRESENT)
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): vkCreateInstance() function failed due to required extension not present with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): vkCreateInstance() function failed due to unknown reason with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateVulkanInstance(): vkCreateInstance() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//21_validation: do for validation callbacks
@@ -1186,11 +1253,13 @@ VkResult CreateVulkanInstance(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "CreateVulkanInstance(): CreateValidationCallbackFunction()  function failed\n");
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "CreateVulkanInstance(): CreateValidationCallbackFunction() succedded\n");
+			fflush(gFILE);
 		}
 	}
 	
@@ -1219,11 +1288,13 @@ VkResult FillInstanceExtensionNames(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): First call to vkEnumerateInstanceExtensionProperties()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): First call to vkEnumerateInstanceExtensionProperties() succedded\n");
+		fflush(gFILE);
 	}
 
 	/*
@@ -1247,11 +1318,13 @@ VkResult FillInstanceExtensionNames(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): Second call to vkEnumerateInstanceExtensionProperties()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): Second call to vkEnumerateInstanceExtensionProperties() succedded\n");
+		fflush(gFILE);
 	}
 
 	/*
@@ -1275,6 +1348,7 @@ VkResult FillInstanceExtensionNames(void)
 		instanceExtensionNames_array[i] = (char*)malloc( sizeof(char) * (strlen(vkExtensionProperties_array[i].extensionName) + 1));
 		memcpy(instanceExtensionNames_array[i], vkExtensionProperties_array[i].extensionName, (strlen(vkExtensionProperties_array[i].extensionName) + 1));
 		fprintf(gFILE, "FillInstanceExtensionNames(): Vulkan Instance Extension Name = %s\n", instanceExtensionNames_array[i]);
+		fflush(gFILE);
 	}
 
 	/*
@@ -1346,11 +1420,13 @@ VkResult FillInstanceExtensionNames(void)
 		//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "FillInstanceExtensionNames(): VK_KHR_SURFACE_EXTENSION_NAME not found\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): VK_KHR_SURFACE_EXTENSION_NAME is found\n");
+		fflush(gFILE);
 	}
 
 	if (vulkanWin32SurfaceExtensionFound == VK_FALSE)
@@ -1358,11 +1434,13 @@ VkResult FillInstanceExtensionNames(void)
 		//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "FillInstanceExtensionNames(): VK_KHR_WIN32_SURFACE_EXTENSION_NAME not found\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): VK_KHR_WIN32_SURFACE_EXTENSION_NAME is found\n");
+		fflush(gFILE);
 	}
 	
 	if (debugReportExtensionFound == VK_FALSE)
@@ -1372,11 +1450,13 @@ VkResult FillInstanceExtensionNames(void)
 			//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
 			vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is ON, but required VK_EXT_DEBUG_REPORT_EXTENSION_NAME is not supported\n");
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is OFF, but VK_EXT_DEBUG_REPORT_EXTENSION_NAME is not supported\n");
+			fflush(gFILE);
 		}
 	}
 	else
@@ -1386,11 +1466,13 @@ VkResult FillInstanceExtensionNames(void)
 			//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
 			//vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is ON, but required VK_EXT_DEBUG_REPORT_EXTENSION_NAME is also supported\n");
+			fflush(gFILE);
 			//return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "FillInstanceExtensionNames(): Validation is OFF, but VK_EXT_DEBUG_REPORT_EXTENSION_NAME is also supported\n");
+			fflush(gFILE);
 		}
 	}
 
@@ -1400,6 +1482,7 @@ VkResult FillInstanceExtensionNames(void)
 	for (uint32_t i = 0; i < enabledInstanceExtensionsCount; i++)
 	{
 		fprintf(gFILE, "FillInstanceExtensionNames(): Enabled Vulkan Instance Extension Name = %s\n", enabledInstanceExtensionNames_array[i]);
+		fflush(gFILE);
 	}
 
 	return vkResult;
@@ -1419,11 +1502,13 @@ VkResult FillValidationLayerNames(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "FillValidationLayerNames(): First call to vkEnumerateInstanceLayerProperties()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillValidationLayerNames(): First call to vkEnumerateInstanceLayerProperties() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkLayerProperties.html
@@ -1444,11 +1529,13 @@ VkResult FillValidationLayerNames(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "FillValidationLayerNames(): Second call to vkEnumerateInstanceLayerProperties()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillValidationLayerNames(): Second call to vkEnumerateInstanceLayerProperties() succedded\n");
+		fflush(gFILE);
 	}
 	
 	char** validationLayerNames_array = NULL;
@@ -1469,6 +1556,7 @@ VkResult FillValidationLayerNames(void)
 		validationLayerNames_array[i] = (char*)malloc( sizeof(char) * (strlen(vkLayerProperties_array[i].layerName) + 1));
 		memcpy(validationLayerNames_array[i], vkLayerProperties_array[i].layerName, (strlen(vkLayerProperties_array[i].layerName) + 1));
 		fprintf(gFILE, "FillValidationLayerNames(): Vulkan Instance Layer Name = %s\n", validationLayerNames_array[i]);
+		fflush(gFILE);
 	}
 
 	if (vkLayerProperties_array)
@@ -1500,11 +1588,13 @@ VkResult FillValidationLayerNames(void)
 		//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "FillValidationLayerNames(): VK_LAYER_KHRONOS_validation not supported\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillValidationLayerNames(): VK_LAYER_KHRONOS_validation is supported\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -1513,6 +1603,7 @@ VkResult FillValidationLayerNames(void)
 	for (uint32_t i = 0; i < enabledValidationLayerCount; i++)
 	{
 		fprintf(gFILE, "FillValidationLayerNames(): Enabled Vulkan Validation Layer Name = %s\n", enabledValidationlayerNames_array[i]);
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -1547,11 +1638,13 @@ VkResult CreateValidationCallbackFunction(void)
 	{
 		vkResult = VK_ERROR_INITIALIZATION_FAILED;
 		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() failed to get function pointer for vkCreateDebugReportCallbackEXT\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() suceeded getting function pointer for vkCreateDebugReportCallbackEXT\n");
+		fflush(gFILE);
 	}
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDebugReportCallbackEXT.html
@@ -1560,11 +1653,13 @@ VkResult CreateValidationCallbackFunction(void)
 	{
 		vkResult = VK_ERROR_INITIALIZATION_FAILED;
 		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() failed to get function pointer for vkDestroyDebugReportCallbackEXT\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateValidationCallbackFunction(): vkGetInstanceProcAddr() suceeded getting function pointer for vkDestroyDebugReportCallbackEXT\n");
+		fflush(gFILE);
 	}
 	
 	//get VulkanDebugReportCallback object
@@ -1597,11 +1692,13 @@ VkResult CreateValidationCallbackFunction(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateValidationCallbackFunction(): vkCreateDebugReportCallbackEXT_fnptr()  function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateValidationCallbackFunction(): vkCreateDebugReportCallbackEXT_fnptr() succedded\n");
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -1638,11 +1735,13 @@ VkResult GetSupportedSurface(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "GetSupportedSurface(): vkCreateWin32SurfaceKHR()  function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "GetSupportedSurface(): vkCreateWin32SurfaceKHR() succedded\n");
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -1660,17 +1759,20 @@ VkResult GetPhysicalDevice(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): vkEnumeratePhysicalDevices() first call failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else if (physicalDeviceCount == 0)
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): vkEnumeratePhysicalDevices() first call resulted in 0 physical devices\n");
+		fflush(gFILE);
 		vkResult = VK_ERROR_INITIALIZATION_FAILED;
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): vkEnumeratePhysicalDevices() first call succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -1686,12 +1788,14 @@ VkResult GetPhysicalDevice(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): vkEnumeratePhysicalDevices() second call failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): vkEnumeratePhysicalDevices() second call succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -1794,6 +1898,7 @@ VkResult GetPhysicalDevice(void)
 			free(isQuequeSurfaceSupported_array);
 			isQuequeSurfaceSupported_array = NULL;
 			fprintf(gFILE, "GetPhysicalDevice(): succedded to free isQuequeSurfaceSupported_array\n");
+			fflush(gFILE);
 		}
 		
 		
@@ -1802,6 +1907,7 @@ VkResult GetPhysicalDevice(void)
 			free(vkQueueFamilyProperties_array);
 			vkQueueFamilyProperties_array = NULL;
 			fprintf(gFILE, "GetPhysicalDevice(): succedded to free vkQueueFamilyProperties_array\n");
+			fflush(gFILE);
 		}
 		
 		/*
@@ -1819,6 +1925,7 @@ VkResult GetPhysicalDevice(void)
 	if(bFound == VK_TRUE)
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): GetPhysicalDevice() suceeded to select required physical device with graphics enabled\n");
+		fflush(gFILE);
 		
 		/*
 		PrintVulkanInfo() changes
@@ -1838,6 +1945,7 @@ VkResult GetPhysicalDevice(void)
 	else
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): GetPhysicalDevice() failed to obtain graphics supported physical device\n");
+		fflush(gFILE);
 		
 		/*
 		j. free physical device array 
@@ -1847,6 +1955,7 @@ VkResult GetPhysicalDevice(void)
 			free(vkPhysicalDevice_array);
 			vkPhysicalDevice_array = NULL;
 			fprintf(gFILE, "GetPhysicalDevice(): succedded to free vkPhysicalDevice_array\n");
+			fflush(gFILE);
 		}
 		
 		vkResult = VK_ERROR_INITIALIZATION_FAILED;
@@ -1880,19 +1989,23 @@ VkResult GetPhysicalDevice(void)
 	if(vkPhysicalDeviceFeatures.tessellationShader)
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): Supported physical device supports tessellation shader\n");
+		fflush(gFILE);
 	}
 	else
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): Supported physical device does not support tessellation shader\n");
+		fflush(gFILE);
 	}
 	
 	if(vkPhysicalDeviceFeatures.geometryShader)
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): Supported physical device supports geometry shader\n");
+		fflush(gFILE);
 	}
 	else
 	{
 		fprintf(gFILE, "GetPhysicalDevice(): Supported physical device does not support geometry shader\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -1925,6 +2038,7 @@ VkResult PrintVulkanInfo(void)
 	
 	//Code
 	fprintf(gFILE, "************************* Shree Ganesha******************************\n");
+	fflush(gFILE);
 	
 	/*
 	PrintVkInfo() changes
@@ -1953,12 +2067,14 @@ VkResult PrintVulkanInfo(void)
 		
 		//API Version
 		fprintf(gFILE,"apiVersion = %d.%d.%d\n", majorVersion, minorVersion, patchVersion);
+		fflush(gFILE);
 		
 		/*
 		PrintVkInfo() changes
 		3d. Print device name by using "deviceName" member of above struct.
 		*/
 		fprintf(gFILE,"deviceName = %s\n", vkPhysicalDeviceProperties.deviceName);
+		fflush(gFILE);
 		
 		/*
 		PrintVkInfo() changes
@@ -1968,26 +2084,32 @@ VkResult PrintVulkanInfo(void)
 		{
 			case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
 				fprintf(gFILE,"deviceType = Integrated GPU (iGPU)\n");
+				fflush(gFILE);
 			break;
 			
 			case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
 				fprintf(gFILE,"deviceType = Discrete GPU (dGPU)\n");
+				fflush(gFILE);
 			break;
 			
 			case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
 				fprintf(gFILE,"deviceType = Virtual GPU (vGPU)\n");
+				fflush(gFILE);
 			break;
 			
 			case VK_PHYSICAL_DEVICE_TYPE_CPU:
 				fprintf(gFILE,"deviceType = CPU\n");
+				fflush(gFILE);
 			break;
 			
 			case VK_PHYSICAL_DEVICE_TYPE_OTHER:
 				fprintf(gFILE,"deviceType = Other\n");
+				fflush(gFILE);
 			break;
 			
 			default:
 				fprintf(gFILE, "deviceType = UNKNOWN\n");
+				fflush(gFILE);
 			break;
 		}
 		
@@ -1996,12 +2118,14 @@ VkResult PrintVulkanInfo(void)
 		3f. Print hexadecimal Vendor Id of device using "vendorId" member of above struct.
 		*/
 		fprintf(gFILE,"vendorID = 0x%04x\n", vkPhysicalDeviceProperties.vendorID);
+		fflush(gFILE);
 		
 		/*
 		PrintVkInfo() changes
 		3g. Print hexadecimal deviceID of device using "deviceId" member of struct.
 		*/
 		fprintf(gFILE,"deviceID = 0x%04x\n", vkPhysicalDeviceProperties.deviceID);
+		fflush(gFILE);
 	}
 	
 	/*
@@ -2013,6 +2137,7 @@ VkResult PrintVulkanInfo(void)
 		free(vkPhysicalDevice_array);
 		vkPhysicalDevice_array = NULL;
 		fprintf(gFILE, "PrintVkInfo(): succedded to free vkPhysicalDevice_array\n");
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -2034,11 +2159,13 @@ VkResult FillDeviceExtensionNames(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "FillDeviceExtensionNames(): First call to vkEnumerateDeviceExtensionProperties()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillDeviceExtensionNames(): First call to vkEnumerateDeviceExtensionProperties() succedded and returned %u count\n", deviceExtensionCount);
+		fflush(gFILE);
 	}
 
 	/*
@@ -2062,11 +2189,13 @@ VkResult FillDeviceExtensionNames(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "FillDeviceExtensionNames(): Second call to vkEnumerateDeviceExtensionProperties()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillDeviceExtensionNames(): Second call to vkEnumerateDeviceExtensionProperties() succedded\n");
+		fflush(gFILE);
 	}
 
 	/*
@@ -2090,6 +2219,7 @@ VkResult FillDeviceExtensionNames(void)
 		deviceExtensionNames_array[i] = (char*)malloc( sizeof(char) * (strlen(vkExtensionProperties_array[i].extensionName) + 1));
 		memcpy(deviceExtensionNames_array[i], vkExtensionProperties_array[i].extensionName, (strlen(vkExtensionProperties_array[i].extensionName) + 1));
 		fprintf(gFILE, "FillDeviceExtensionNames(): Vulkan Device Extension Name = %s\n", deviceExtensionNames_array[i]);
+		fflush(gFILE);
 	}
 
 	/*
@@ -2134,11 +2264,13 @@ VkResult FillDeviceExtensionNames(void)
 		//Type mismatch in return VkResult and VKBool32, so return hardcoded failure
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "FillDeviceExtensionNames(): VK_KHR_SWAPCHAIN_EXTENSION_NAME not found\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "FillDeviceExtensionNames(): VK_KHR_SWAPCHAIN_EXTENSION_NAME is found\n");
+		fflush(gFILE);
 	}
 
 	/*
@@ -2147,6 +2279,7 @@ VkResult FillDeviceExtensionNames(void)
 	for (uint32_t i = 0; i < enabledDeviceExtensionsCount; i++)
 	{
 		fprintf(gFILE, "FillDeviceExtensionNames(): Enabled Vulkan Device Extension Name = %s\n", enabledDeviceExtensionNames_array[i]);
+		fflush(gFILE);
 	}
 
 	return vkResult;
@@ -2168,11 +2301,13 @@ VkResult CreateVulKanDevice(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateVulKanDevice(): FillDeviceExtensionNames()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateVulKanDevice(): FillDeviceExtensionNames() succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -2218,11 +2353,13 @@ VkResult CreateVulKanDevice(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateVulKanDevice(): vkCreateDevice()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateVulKanDevice(): vkCreateDevice() succedded\n");
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -2235,11 +2372,13 @@ void GetDeviceQueque(void)
 	if(vkQueue == VK_NULL_HANDLE)
 	{
 		fprintf(gFILE, "GetDeviceQueque(): vkGetDeviceQueue() returned NULL for vkQueue\n");
+		fflush(gFILE);
 		return;
 	}
 	else
 	{
 		fprintf(gFILE, "GetDeviceQueque(): vkGetDeviceQueue() succedded\n");
+		fflush(gFILE);
 	}
 }
 
@@ -2257,17 +2396,20 @@ VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else if(FormatCount == 0)
 	{
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "vkGetPhysicalDeviceSurfaceFormatsKHR():: First call to vkGetPhysicalDeviceSurfaceFormatsKHR() returned FormatCount as 0\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//Declare and allocate VkSurfaceKHR array
@@ -2279,11 +2421,13 @@ VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): Second call to vkGetPhysicalDeviceSurfaceFormatsKHR()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//According to contents of array , we have to decide surface format and color space
@@ -2304,6 +2448,7 @@ VkResult getPhysicalDeviceSurfaceFormatAndColorSpace(void)
 	if(vkSurfaceFormatKHR_array)
 	{
 		fprintf(gFILE, "getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed\n");
+		fflush(gFILE);
 		free(vkSurfaceFormatKHR_array);
 		vkSurfaceFormatKHR_array = NULL;
 	}
@@ -2325,17 +2470,20 @@ VkResult getPhysicalDevicePresentMode(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else if(presentModeCount == 0)
 	{
 		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "getPhysicalDevicePresentMode():: First call to vkGetPhysicalDeviceSurfaceFormatsKHR() returned presentModeCount as 0\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//Declare and allocate VkPresentModeKHR array
@@ -2347,11 +2495,13 @@ VkResult getPhysicalDevicePresentMode(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "getPhysicalDevicePresentMode(): Second call to vkGetPhysicalDeviceSurfacePresentModesKHR()  function failed\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded\n");
+		fflush(gFILE);
 	}
 	
 	//According to contents of array , we have to decide presentation mode
@@ -2370,11 +2520,13 @@ VkResult getPhysicalDevicePresentMode(void)
 	}
 	
 	fprintf(gFILE, "getPhysicalDevicePresentMode(): vkPresentModeKHR is %d\n", vkPresentModeKHR);
+	fflush(gFILE);
 	
 	//free the array
 	if(vkPresentModeKHR_array)
 	{
 		fprintf(gFILE, "getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed\n");
+		fflush(gFILE);
 		free(vkPresentModeKHR_array);
 		vkPresentModeKHR_array = NULL;
 	}
@@ -2405,11 +2557,13 @@ VkResult CreateSwapChain(VkBool32 vsync)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -2422,11 +2576,13 @@ VkResult CreateSwapChain(VkBool32 vsync)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -2453,12 +2609,14 @@ VkResult CreateSwapChain(VkBool32 vsync)
 		vkExtent2D_SwapChain.width = vkSurfaceCapabilitiesKHR.currentExtent.width;
 		vkExtent2D_SwapChain.height = vkSurfaceCapabilitiesKHR.currentExtent.height;
 		fprintf(gFILE, "CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = %d X %d\n", vkExtent2D_SwapChain.width, vkExtent2D_SwapChain.height);
+		fflush(gFILE);
 	}
 	else
 	{
 		vkExtent2D_SwapChain.width = vkSurfaceCapabilitiesKHR.currentExtent.width;
 		vkExtent2D_SwapChain.height = vkSurfaceCapabilitiesKHR.currentExtent.height;
 		fprintf(gFILE, "CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = %d X %d\n", vkExtent2D_SwapChain.width, vkExtent2D_SwapChain.height);
+		fflush(gFILE);
 	
 		/*
 		If surface size is already defined, then swapchain image size must match with it.
@@ -2471,6 +2629,7 @@ VkResult CreateSwapChain(VkBool32 vsync)
 		vkExtent2D_SwapChain.width = max(vkSurfaceCapabilitiesKHR.minImageExtent.width, min(vkSurfaceCapabilitiesKHR.maxImageExtent.width, vkExtent2D.width));
 		vkExtent2D_SwapChain.height = max(vkSurfaceCapabilitiesKHR.minImageExtent.height, min(vkSurfaceCapabilitiesKHR.maxImageExtent.height, vkExtent2D.height));
 		fprintf(gFILE, "CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = %d X %d\n", vkExtent2D_SwapChain.width, vkExtent2D_SwapChain.height);
+		fflush(gFILE);
 	}
 	
 	/*
@@ -2512,11 +2671,13 @@ VkResult CreateSwapChain(VkBool32 vsync)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateSwapChain(): getPhysicalDevicePresentMode() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateSwapChain(): getPhysicalDevicePresentMode() succedded\n");
+		fflush(gFILE);
 	}
 	
 	/*
@@ -2550,11 +2711,13 @@ VkResult CreateSwapChain(VkBool32 vsync)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateSwapChain(): vkCreateSwapchainKHR() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateSwapChain(): vkCreateSwapchainKHR() succedded\n");
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -2572,17 +2735,20 @@ VkResult CreateImagesAndImageViews(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else if(swapchainImageCount == 0)
 	{
 		vkResult = vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
 		fprintf(gFILE, "CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() function returned swapchain Image Count as 0\n");
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as %d\n", swapchainImageCount);
+		fflush(gFILE);
 	}
 	
 	//2. Declare a global VkImage type array and allocate it to swapchain image count using malloc. (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImage.html)
@@ -2591,6 +2757,7 @@ VkResult CreateImagesAndImageViews(void)
 	if(swapChainImage_array == NULL)
 	{
 			fprintf(gFILE, "CreateImagesAndImageViews(): swapChainImage_array is NULL. malloc() failed\n");
+			fflush(gFILE);
 	}
 	
 	//3. Now call same function again which we called in Step 1 and fill this array.
@@ -2599,11 +2766,13 @@ VkResult CreateImagesAndImageViews(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as %d\n", swapchainImageCount);
+		fflush(gFILE);
 	}
 	
 	//4. Declare another global array of type VkImageView(https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageView.html) and allocate it to sizeof Swapchain image count.
@@ -2612,6 +2781,7 @@ VkResult CreateImagesAndImageViews(void)
 	if(swapChainImageView_array == NULL)
 	{
 			fprintf(gFILE, "CreateImagesAndImageViews(): swapChainImageView_array is NULL. malloc() failed\n");
+			fflush(gFILE);
 	}
 	
 	//5. Declare  and initialize VkImageViewCreateInfo struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewCreateInfo.html) except its ".image" member.
@@ -2680,11 +2850,13 @@ VkResult CreateImagesAndImageViews(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() function failed with error code %d at iteration %d\n", vkResult, i);
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration %d\n", i);
+			fflush(gFILE);
 		}
 	}
 	
@@ -2729,11 +2901,13 @@ VkResult CreateCommandPool()
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateCommandPool(): vkCreateCommandPool() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateCommandPool(): vkCreateCommandPool() succedded\n");
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -2787,11 +2961,13 @@ VkResult CreateCommandBuffers(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "CreateCommandBuffers(): vkAllocateCommandBuffers() function failed with error code %d at iteration %d\n", vkResult, i);
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration %d\n", i);
+			fflush(gFILE);
 		}
 	}
 	
@@ -2970,11 +3146,13 @@ VkResult CreateRenderPass(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateRenderPass(): vkCreateRenderPass() function failed with error code %d\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateRenderPass(): vkCreateRenderPass() succedded\n");
+		fflush(gFILE);
 	}
 	
 	return vkResult;
@@ -3024,11 +3202,13 @@ VkResult CreateFramebuffers(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "CreateFramebuffers(): vkCreateFramebuffer() function failed with error code %d\n", vkResult);
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "CreateFramebuffers(): vkCreateFramebuffer() succedded\n");
+			fflush(gFILE);
 		}	
 	}
 	
@@ -3063,11 +3243,13 @@ VkResult CreateSemaphores(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() function failed with error code %d for vkSemaphore_BackBuffer\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() succedded for vkSemaphore_BackBuffer\n");
+		fflush(gFILE);
 	}
 
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateSemaphore.html
@@ -3075,11 +3257,13 @@ VkResult CreateSemaphores(void)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() function failed with error code %d for vkSemaphore_RenderComplete\n", vkResult);
+		fflush(gFILE);
 		return vkResult;
 	}
 	else
 	{
 		fprintf(gFILE, "CreateSemaphores(): vkCreateSemaphore() succedded for vkSemaphore_RenderComplete\n");
+		fflush(gFILE);
 	}	
 	
 	return vkResult;
@@ -3120,11 +3304,13 @@ VkResult CreateFences(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "CreateFences(): vkCreateFence() function failed with error code %d at %d iteration\n", vkResult, i);
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "CreateFences(): vkCreateFence() succedded at %d iteration\n", i);
+			fflush(gFILE);
 		}	
 	}
 	
@@ -3154,11 +3340,13 @@ VkResult buildCommandBuffers(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "buildCommandBuffers(): vkResetCommandBuffer() function failed with error code %d at %d iteration\n", vkResult, i);
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "buildCommandBuffers(): vkResetCommandBuffer() succedded at %d iteration\n", i);
+			fflush(gFILE);
 		}	
 		
 		/*
@@ -3184,11 +3372,13 @@ VkResult buildCommandBuffers(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "buildCommandBuffers(): vkBeginCommandBuffer() function failed with error code %d at %d iteration\n", vkResult, i);
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "buildCommandBuffers(): vkBeginCommandBuffer() succedded at %d iteration\n", i);
+			fflush(gFILE);
 		}
 		
 		/*
@@ -3247,11 +3437,13 @@ VkResult buildCommandBuffers(void)
 		if (vkResult != VK_SUCCESS)
 		{
 			fprintf(gFILE, "buildCommandBuffers(): vkEndCommandBuffer() function failed with error code %d at %d iteration\n", vkResult, i);
+			fflush(gFILE);
 			return vkResult;
 		}
 		else
 		{
 			fprintf(gFILE, "buildCommandBuffers(): vkEndCommandBuffer() succedded at %d iteration\n", i);
+			fflush(gFILE);
 		}
 		
 		/*
@@ -3282,7 +3474,8 @@ VKAPI_ATTR VkBOOL32 VKAPI_CALL debugReportCallback(
 VKAPI_ATTR VkBool32 VKAPI_CALL debugReportCallback(VkDebugReportFlagsEXT vkDebugReportFlagsEXT, VkDebugReportObjectTypeEXT vkDebugReportObjectTypeEXT, uint64_t object, size_t location,  int32_t messageCode,const char* pLayerPrefix, const char* pMessage, void* pUserData)
 {
 	//Code
-	fprintf(gFILE, "Anjaneya_VALIDATION:debugReportCallback():%s(%d) = %s\n", pLayerPrefix, messageCode, pMessage);  
+	fprintf(gFILE, "Anjaneya_VALIDATION:debugReportCallback():%s(%d) = %s\n", pLayerPrefix, messageCode, pMessage);
+	fflush(gFILE);
     return (VK_FALSE);
 }
 

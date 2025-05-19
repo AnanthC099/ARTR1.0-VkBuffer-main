@@ -297,11 +297,12 @@ uninitialize(): vkDestroyCommandPool() is done
 uninitialize(): vkDestroyImageView() is done
 uninitialize(): vkDestroyImageView() is done
 uninitialize():swapChainImageView_array is freed
+Anjaneya_VALIDATION:debugReportCallback():Validation(0) = vkDestroyImage(): image VkImage 0xf56c9b0000000004 is a presentable image controlled by the implementation and must be destroyed with vkDestroySwapchainKHR.
+The Vulkan spec states: image must not have been acquired from vkGetSwapchainImagesKHR (https://vulkan.lunarg.com/doc/view/1.4.309.0/windows/antora/spec/latest/chapters/resources.html#VUID-vkDestroyImage-image-04882)
+uninitialize(): vkDestroyImage() is done
+Anjaneya_VALIDATION:debugReportCallback():Validation(0) = vkDestroyImage(): image VkImage 0xe7f79a0000000005 is a presentable image controlled by the implementation and must be destroyed with vkDestroySwapchainKHR.
+The Vulkan spec states: image must not have been acquired from vkGetSwapchainImagesKHR (https://vulkan.lunarg.com/doc/view/1.4.309.0/windows/antora/spec/latest/chapters/resources.html#VUID-vkDestroyImage-image-04882)
+uninitialize(): vkDestroyImage() is done
 uninitialize():swapChainImage_array is freed
-uninitialize(): vkDestroySwapchainKHR() is done
-Anjaneya_VALIDATION:debugReportCallback():Validation(0) = vkDestroyDevice(): Object Tracking - For VkDevice 0x1bf1aa08d88, VkSemaphore 0xcad092000000000d has not been destroyed.
-The Vulkan spec states: All child objects created on device must have been destroyed prior to destroying device (https://vulkan.lunarg.com/doc/view/1.4.309.0/windows/antora/spec/latest/chapters/devsandqueues.html#VUID-vkDestroyDevice-device-05137)
-uninitialize(): vkDestroyDevice() is done
-uninitialize(): vkDestroySurfaceKHR() sucedded
-uninitialize(): vkDestroyInstance() sucedded
-uninitialize()-> Program ended successfully.
+Anjaneya_VALIDATION:debugReportCallback():Validation(0) = vkDestroySwapchainKHR(): Couldn't find VkImage Object 0xf56c9b0000000004. This should not happen and may indicate a bug in the application.
+Anjaneya_VALIDATION:debugReportCallback():Validation(0) = vkDestroySwapchainKHR(): Couldn't find VkImage Object 0xe7f79a0000000005. This should not happen and may indicate a bug in the application.
