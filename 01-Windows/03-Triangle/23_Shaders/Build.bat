@@ -1,6 +1,10 @@
 cls
 
-del Vk.exe Log.txt
+del Vk.exe Log.txt Shader.vert.spv
+
+glslangValidator.exe -V -H -o Shader.vert.spv Shader.vert
+
+glslangValidator.exe -V -H -o Shader.frag.spv Shader.frag
 
 cl /I"C:\VulkanSDK\1.4.309.0\Include" /c Vk.c /Fo"Vk.obj"
 
