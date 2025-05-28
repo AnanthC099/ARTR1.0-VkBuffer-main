@@ -391,6 +391,17 @@ CreateVertexBuffer(): vkAllocateMemory() succedded
 CreateVertexBuffer(): vkBindBufferMemory() succedded
 CreateVertexBuffer(): vkMapMemory() succedded
 initialize(): CreateVertexBuffer() succedded
+CreateShaders(): sucedded to open Vertex Shader SPIRV file
+CreateShaders(): malloc for Vertex Shader SPIRV file done
+CreateShaders(): sucedded to read Vertex Shader SPIRV file
+CreateShaders(): vkCreateShaderModule() for vertex SPIRV shader file succedded
+CreateShaders(): vertex Shader module successfully created
+CreateShaders(): sucedded to open Fragment Shader SPIRV file
+CreateShaders(): malloc for Fragment Shader SPIRV file done
+CreateShaders(): sucedded to read Fragment Shader SPIRV file
+CreateShaders(): vkCreateShaderModule() function for fragment SPIRV shader file succedded
+CreateShaders(): fragment Shader module successfully created
+initialize(): CreateShaders() succedded
 CreateRenderPass(): vkCreateRenderPass() succedded
 initialize(): CreateRenderPass() succedded
 CreateFramebuffers(): vkCreateFramebuffer() succedded
@@ -421,6 +432,8 @@ uninitialize(): vkDestroyFramebuffer() is done
 uninitialize(): vkDestroyFramebuffer() is done
 uninitialize(): vkFramebuffer_array is freed
 uninitialize(): vkDestroyRenderPass() is done
+uninitialize(): VkShaderMoudule for fragment shader is done
+uninitialize(): VkShaderMoudule for vertex shader is done
 uninitialize(): vertexdata_position.vkDeviceMemory is freed
 uninitialize(): vertexdata_position.vkBuffer is freed
 uninitialize(): vkFreeCommandBuffers() is done

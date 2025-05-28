@@ -1,6 +1,6 @@
 cls
 
-del Vk.exe Log.txt Shader.vert.spv
+del Vk.exe Log.txt Shader.vert.spv Shader.frag.spv
 
 glslangValidator.exe -V -H -o Shader.vert.spv Shader.vert
 

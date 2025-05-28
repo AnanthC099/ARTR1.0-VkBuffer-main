@@ -205,6 +205,14 @@ typedef struct
 //22. Position
 VertexData vertexdata_position;
 
+//23. Shader related variables
+/*
+1. Write Shaders  and compile them to SPIRV using shader compilation tools that we receive in Vulkan SDK.
+2. Globally declate 2 shader object module variables of VkShaderModule type to hold Vulkan compatible vertex shader module object and fragment shader module object respectively.
+*/
+VkShaderModule vkShaderMoudule_vertex_shader = VK_NULL_HANDLE; 
+VkShaderModule vkShaderMoudule_fragment_shader = VK_NULL_HANDLE; 
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -466,6 +474,11 @@ VkResult initialize(void)
 	*/
 	VkResult CreateVertexBuffer(void);
 	
+	/*
+	23.3 Declare prototype of UDF say CreateShaders() in initialize(), following a convention i.e after CreateVertexBuffer() and before CreateRenderPass().
+	*/
+	VkResult CreateShaders(void);
+	
 	VkResult CreateRenderPass(void);
 	VkResult CreateFramebuffers(void);
 	VkResult CreateSemaphores(void);
@@ -602,6 +615,20 @@ VkResult initialize(void)
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateVertexBuffer() succedded\n");
+	}
+	
+	/*
+	23.4. Using same above convention, call CreateShaders() between calls of above two.
+	*/
+	vkResult = CreateShaders();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreateShaders() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreateShaders() succedded\n");
 	}
 	
 	vkResult =  CreateRenderPass();
@@ -970,6 +997,29 @@ void uninitialize(void)
 				vkDestroyRenderPass(vkDevice, vkRenderPass, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html
 				vkRenderPass = VK_NULL_HANDLE;
 				fprintf(gFILE, "uninitialize(): vkDestroyRenderPass() is done\n");
+			}
+			
+			/*
+			23.11. In uninitialize , destroy both global shader objects using vkDestroyShaderModule() Vulkan API.
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyShaderModule.html
+			// Provided by VK_VERSION_1_0
+			void vkDestroyShaderModule(
+			VkDevice device,
+			VkShaderModule shaderModule,
+			const VkAllocationCallbacks* pAllocator);
+			*/
+			if(vkShaderMoudule_fragment_shader)
+			{
+				vkDestroyShaderModule(vkDevice, vkShaderMoudule_fragment_shader, NULL);
+				vkShaderMoudule_fragment_shader = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): VkShaderMoudule for fragment shader is done\n");
+			}
+			
+			if(vkShaderMoudule_vertex_shader)
+			{
+				vkDestroyShaderModule(vkDevice, vkShaderMoudule_vertex_shader, NULL);
+				vkShaderMoudule_vertex_shader = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): VkShaderMoudule for vertex shader is done\n");
 			}
 			
 			/*
@@ -3112,6 +3162,251 @@ VkResult CreateVertexBuffer(void)
 	return vkResult;
 }
 
+/*
+23.5. Maintaining the same baove convention while defining CreateShaders() between definition of above two.
+*/
+VkResult CreateShaders(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code for Vertex Shader
+	*/
+	
+	/*
+	6. Inside our function, 
+	first open shader file, 
+	set the file pointer at end of file,
+	find the byte size of shader file data,
+	reset the file pointer at begining of the file,
+	allocate a character buffer of file size and read Shader file data into it,
+	and finally close the file.
+	Do all these things using conventional fileIO.
+	*/
+	const char* szFileName = "Shader.vert.spv";
+	FILE* fp = NULL;
+	size_t size;
+	
+	fp = fopen(szFileName, "rb");
+	if(fp == NULL)
+	{
+		fprintf(gFILE, "CreateShaders(): failed to open Vertex Shader SPIRV file\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): sucedded to open Vertex Shader SPIRV file\n");
+	}
+	
+	fseek(fp, 0L, SEEK_END);
+	
+	size = ftell(fp);
+	if(size == 0)
+	{
+		fprintf(gFILE, "CreateShaders(): Vertex Shader SPIRV file size is 0\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
+	}
+	
+	fseek(fp, 0L, SEEK_SET);
+	
+	char* shaderData = (char*)malloc(sizeof(char) * size);
+	if(shaderData == NULL)
+	{
+		fprintf(gFILE, "CreateShaders(): malloc for Vertex Shader SPIRV file failed\n");
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): malloc for Vertex Shader SPIRV file done\n");
+	}
+	
+	size_t retVal = fread(shaderData, size, 1, fp);
+	if(retVal != 1)
+	{
+		fprintf(gFILE, "CreateShaders(): failed to read Vertex Shader SPIRV file\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): sucedded to read Vertex Shader SPIRV file\n");
+	}
+	
+	fclose(fp);
+	
+	/*
+	23.7. Declare and memset struct VkShaderModuleCreateInfo and specify above file size and buffer while initializing it.
+	// Provided by VK_VERSION_1_0
+	typedef struct VkShaderModuleCreateInfo {
+		VkStructureType              sType;
+		const void*                  pNext;
+		VkShaderModuleCreateFlags    flags;
+		size_t                       codeSize;
+		const uint32_t*              pCode;
+	} VkShaderModuleCreateInfo;
+	*/
+	VkShaderModuleCreateInfo vkShaderModuleCreateInfo; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderModuleCreateInfo.html
+	memset((void*)&vkShaderModuleCreateInfo, 0, sizeof(VkShaderModuleCreateInfo));
+	vkShaderModuleCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	vkShaderModuleCreateInfo.pNext = NULL;
+	vkShaderModuleCreateInfo.flags = 0; //Reserved for future use. Hence must be 0
+	vkShaderModuleCreateInfo.codeSize = size;
+	vkShaderModuleCreateInfo.pCode = (uint32_t*)shaderData;
+	
+	/*
+	8. Call vkCreateShaderModule() Vulkan API, pass above struct's pointer to it as parameter and obtain shader module object in global variable, that we declared in Step 2.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateShaderModule.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateShaderModule(
+    VkDevice                                    device,
+    const VkShaderModuleCreateInfo*             pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkShaderModule*                             pShaderModule);
+	*/
+	vkResult = vkCreateShaderModule(vkDevice, &vkShaderModuleCreateInfo, NULL, &vkShaderMoudule_vertex_shader);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateShaders(): vkCreateShaderModule() function for vertex SPIRV shader file failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): vkCreateShaderModule() for vertex SPIRV shader file succedded\n");
+	}
+	
+	/*
+	9. Free the ShaderCode buffer which we allocated in Step 6.
+	*/
+	if(shaderData)
+	{
+		free(shaderData);
+		shaderData = NULL;
+	}
+	fprintf(gFILE, "CreateShaders(): vertex Shader module successfully created\n");
+	
+	/*
+	23.10. Assuming we did above 4 steps 6 to 9 for Vertex Shader, Repeat them all for fragment shader too.
+	Code for Fragment Shader
+	*/
+	
+	/*
+	6. Inside our function, 
+	first open shader file, 
+	set the file pointer at end of file,
+	find the byte size of shader file data,
+	reset the file pointer at begining of the file,
+	allocate a character buffer of file size and read Shader file data into it,
+	and finally close the file.
+	Do all these things using conventional fileIO.
+	*/
+	szFileName = "Shader.frag.spv";
+	size = 0;
+	fp = NULL;
+	
+	fp = fopen(szFileName, "rb");
+	if(fp == NULL)
+	{
+		fprintf(gFILE, "CreateShaders(): failed to open Fragment Shader SPIRV file\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): sucedded to open Fragment Shader SPIRV file\n");
+	}
+	
+	fseek(fp, 0L, SEEK_END);
+	
+	size = ftell(fp);
+	if(size == 0)
+	{
+		fprintf(gFILE, "CreateShaders(): Fragment Shader SPIRV file size is 0\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
+	}
+	
+	fseek(fp, 0L, SEEK_SET);
+	
+	shaderData = (char*)malloc(sizeof(char) * size);
+	if(shaderData == NULL)
+	{
+		fprintf(gFILE, "CreateShaders(): malloc for Fragment Shader SPIRV file failed\n");
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): malloc for Fragment Shader SPIRV file done\n");
+	}
+	
+	retVal = fread(shaderData, size, 1, fp);
+	if(retVal != 1)
+	{
+		fprintf(gFILE, "CreateShaders(): failed to read Fragment Shader SPIRV file\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): sucedded to read Fragment Shader SPIRV file\n");
+	}
+	
+	fclose(fp);
+	
+	/*
+	23.7. Declare and memset struct VkShaderModuleCreateInfo and specify above file size and buffer while initializing it.
+	// Provided by VK_VERSION_1_0
+	typedef struct VkShaderModuleCreateInfo {
+		VkStructureType              sType;
+		const void*                  pNext;
+		VkShaderModuleCreateFlags    flags;
+		size_t                       codeSize;
+		const uint32_t*              pCode;
+	} VkShaderModuleCreateInfo;
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderModuleCreateInfo.html
+	memset((void*)&vkShaderModuleCreateInfo, 0, sizeof(VkShaderModuleCreateInfo));
+	vkShaderModuleCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	vkShaderModuleCreateInfo.pNext = NULL;
+	vkShaderModuleCreateInfo.flags = 0; //Reserved for future use. Hence must be 0
+	vkShaderModuleCreateInfo.codeSize = size;
+	vkShaderModuleCreateInfo.pCode = (uint32_t*)shaderData;
+	
+	/*
+	8. Call vkCreateShaderModule() Vulkan API, pass above struct's pointer to it as parameter and obtain shader module object in global variable, that we declared in Step 2.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateShaderModule.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateShaderModule(
+    VkDevice                                    device,
+    const VkShaderModuleCreateInfo*             pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkShaderModule*                             pShaderModule);
+	*/
+	vkResult = vkCreateShaderModule(vkDevice, &vkShaderModuleCreateInfo, NULL, &vkShaderMoudule_fragment_shader);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateShaders(): vkCreateShaderModule() function for fragment SPIRV shader file failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateShaders(): vkCreateShaderModule() function for fragment SPIRV shader file succedded\n");
+	}
+	
+	/*
+	9. Free the ShaderCode buffer which we allocated in Step 6.
+	*/
+	if(shaderData)
+	{
+		free(shaderData);
+		shaderData = NULL;
+	}
+	fprintf(gFILE, "CreateShaders(): fragment Shader module successfully created\n");
+
+	
+	return vkResult;
+}
+
 VkResult CreateRenderPass(void)
 {
 	//Variable declarations	
@@ -3123,7 +3418,7 @@ VkResult CreateRenderPass(void)
 	
 	/*
 	1. Declare and initialize VkAttachmentDescription Struct array. (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentDescription.html)
-   Number of elements in Array depends on number of attachments.
+    Number of elements in Array depends on number of attachments.
    (Although we have only 1 attachment i.e color attachment in this example, we will consider it as array)
    
    typedef struct VkAttachmentDescription {
