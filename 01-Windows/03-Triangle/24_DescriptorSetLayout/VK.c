@@ -1016,6 +1016,22 @@ void uninitialize(void)
 				fprintf(gFILE, "uninitialize(): vkFramebuffer_array is freed\n");
 			}
 			
+			/*
+			24.5. In uninitialize, call vkDestroyDescriptorSetlayout() Vulkan API to destroy this Vulkan object.
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDescriptorSetLayout.html
+			// Provided by VK_VERSION_1_0
+			void vkDestroyDescriptorSetLayout(
+			VkDevice                                    device,
+			VkDescriptorSetLayout                       descriptorSetLayout,
+			const VkAllocationCallbacks*                pAllocator);
+			*/
+			if(vkDescriptorSetLayout)
+			{
+				vkDestroyDescriptorSetLayout(vkDevice, vkDescriptorSetLayout, NULL);
+				vkDescriptorSetLayout = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkDescriptorSetLayout is freed\n");
+			}
+			
 			//Step_16_6. In uninitialize , destroy the renderpass by using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
 			if(vkRenderPass)
 			{
@@ -3479,6 +3495,29 @@ VkResult CreateDescriptorSetLayout()
 	
 	vkDescriptorSetLayoutCreateInfo.bindingCount = 0;
 	vkDescriptorSetLayoutCreateInfo.pBindings = NULL;
+	
+	/*
+	24.4. Then call vkCreateDescriptorSetLayout() Vulkan API with adress of above initialized structure and get the required global Vulkan object vkDescriptorSetLayout in its last parameter.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateDescriptorSetLayout.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateDescriptorSetLayout(
+    VkDevice                                    device,
+    const VkDescriptorSetLayoutCreateInfo*      pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDescriptorSetLayout*                      pSetLayout);
+	*/
+	vkResult = vkCreateDescriptorSetLayout(vkDevice, &vkDescriptorSetLayoutCreateInfo, NULL, &vkDescriptorSetLayout);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateDescriptorSetLayout(): vkCreateDescriptorSetLayout() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateDescriptorSetLayout(): vkCreateDescriptorSetLayout() function succedded\n");
+	}
+	
+	return vkResult;
 }
 
 VkResult CreateRenderPass(void)

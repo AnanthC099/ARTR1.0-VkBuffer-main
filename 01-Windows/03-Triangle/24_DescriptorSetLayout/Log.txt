@@ -360,6 +360,7 @@ Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    <Device>
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =        Using "NVIDIA GeForce RTX 2070" with driver: "C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_2c61c4d89b199ea8\.\nvoglv64.dll"
+Anjaneya_VALIDATION:debugReportCallback():Validation(0) = vkCreateDevice(): Cannot open shader validation cache at C:\Users\anant\AppData\Local\Temp/shader_validation_cache.bin for reading (it may not exist yet)
 CreateVulKanDevice(): vkCreateDevice() succedded
 initialize(): CreateVulKanDevice() succedded
 GetDeviceQueque(): vkGetDeviceQueue() succedded
@@ -402,6 +403,8 @@ CreateShaders(): sucedded to read Fragment Shader SPIRV file
 CreateShaders(): vkCreateShaderModule() function for fragment SPIRV shader file succedded
 CreateShaders(): fragment Shader module successfully created
 initialize(): CreateShaders() succedded
+CreateDescriptorSetLayout(): vkCreateDescriptorSetLayout() function succedded
+initialize(): CreateDescriptorSetLayout() succedded
 CreateRenderPass(): vkCreateRenderPass() succedded
 initialize(): CreateRenderPass() succedded
 CreateFramebuffers(): vkCreateFramebuffer() succedded
@@ -431,6 +434,7 @@ uninitialize(): vkSemaphore_BackBuffer is freed
 uninitialize(): vkDestroyFramebuffer() is done
 uninitialize(): vkDestroyFramebuffer() is done
 uninitialize(): vkFramebuffer_array is freed
+uninitialize(): vkDescriptorSetLayout is freed
 uninitialize(): vkDestroyRenderPass() is done
 uninitialize(): VkShaderMoudule for fragment shader is done
 uninitialize(): VkShaderMoudule for vertex shader is done
