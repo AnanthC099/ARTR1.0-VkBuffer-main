@@ -213,6 +213,12 @@ VertexData vertexdata_position;
 VkShaderModule vkShaderMoudule_vertex_shader = VK_NULL_HANDLE; 
 VkShaderModule vkShaderMoudule_fragment_shader = VK_NULL_HANDLE; 
 
+/*24. Descriptor Set Layout
+https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorSetLayout.html
+24.1. Globally declare Vulkan object of type VkDescriptorSetLayout and initialize it to VK_NULL_HANDLE.
+*/
+VkDescriptorSetLayout vkDescriptorSetLayout = VK_NULL_HANDLE;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -479,6 +485,11 @@ VkResult initialize(void)
 	*/
 	VkResult CreateShaders(void);
 	
+	/*
+	24.2. In initialize(), declare and call UDF CreateDescriptorSetLayout() maintaining the convention of declaring and calling it after CreateShaders() and before CreateRenderPass().
+	*/
+	VkResult CreateDescriptorSetLayout(void);
+	
 	VkResult CreateRenderPass(void);
 	VkResult CreateFramebuffers(void);
 	VkResult CreateSemaphores(void);
@@ -629,6 +640,20 @@ VkResult initialize(void)
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateShaders() succedded\n");
+	}
+	
+	/*
+	24.2. In initialize(), declare and call UDF CreateDescriptorSetLayout() maintaining the convention of declaring and calling it after CreateShaders() and before CreateRenderPass().
+	*/
+	vkResult = CreateDescriptorSetLayout();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreateDescriptorSetLayout() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreateDescriptorSetLayout() succedded\n");
 	}
 	
 	vkResult =  CreateRenderPass();
@@ -989,6 +1014,22 @@ void uninitialize(void)
 				free(vkFramebuffer_array);
 				vkFramebuffer_array = NULL;
 				fprintf(gFILE, "uninitialize(): vkFramebuffer_array is freed\n");
+			}
+			
+			/*
+			24.5. In uninitialize, call vkDestroyDescriptorSetlayout() Vulkan API to destroy this Vulkan object.
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDescriptorSetLayout.html
+			// Provided by VK_VERSION_1_0
+			void vkDestroyDescriptorSetLayout(
+			VkDevice                                    device,
+			VkDescriptorSetLayout                       descriptorSetLayout,
+			const VkAllocationCallbacks*                pAllocator);
+			*/
+			if(vkDescriptorSetLayout)
+			{
+				vkDestroyDescriptorSetLayout(vkDevice, vkDescriptorSetLayout, NULL);
+				vkDescriptorSetLayout = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkDescriptorSetLayout is freed\n");
 			}
 			
 			//Step_16_6. In uninitialize , destroy the renderpass by using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
@@ -3403,6 +3444,78 @@ VkResult CreateShaders(void)
 	}
 	fprintf(gFILE, "CreateShaders(): fragment Shader module successfully created\n");
 
+	
+	return vkResult;
+}
+
+/*
+24.2. In initialize(), declare and call UDF CreateDescriptorSetLayout() maintaining the convention of declaring and calling it after CreateShaders() and before CreateRenderPass().
+*/
+VkResult CreateDescriptorSetLayout()
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	24.3. While writing this UDF, declare, memset and initialize struct VkDescriptorSetLayoutCreateInfo, particularly its two members 
+	   1. bindingCount
+	   2. pBindings array
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorSetLayoutCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorSetLayoutCreateInfo {
+    VkStructureType                        sType;
+    const void*                            pNext;
+    VkDescriptorSetLayoutCreateFlags       flags;
+    uint32_t                               bindingCount;
+    const VkDescriptorSetLayoutBinding*    pBindings;
+	} VkDescriptorSetLayoutCreateInfo;
+	*/
+	VkDescriptorSetLayoutCreateInfo vkDescriptorSetLayoutCreateInfo;
+	memset((void*)&vkDescriptorSetLayoutCreateInfo, 0, sizeof(VkDescriptorSetLayoutCreateInfo));
+	vkDescriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	vkDescriptorSetLayoutCreateInfo.pNext = NULL;
+	vkDescriptorSetLayoutCreateInfo.flags = 0; /*Since reserved*/
+	
+	/*
+	pBindings is actually array of struct VkDescriptorSetLayoutBinding having 5 members
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorSetLayoutBinding.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorSetLayoutBinding {
+    uint32_t              binding; //RTR madhe glGenBuffers(); glBindBuffer(binding point(1st parameter), ); //An interger value where you want to bind descriptor/descriptor set. (descriptor set expected)
+    VkDescriptorType      descriptorType; 
+    uint32_t              descriptorCount;
+    VkShaderStageFlags    stageFlags;
+    const VkSampler*      pImmutableSamplers;
+	} VkDescriptorSetLayoutBinding;
+	*/
+	
+	vkDescriptorSetLayoutCreateInfo.bindingCount = 0;
+	vkDescriptorSetLayoutCreateInfo.pBindings = NULL;
+	
+	/*
+	24.4. Then call vkCreateDescriptorSetLayout() Vulkan API with adress of above initialized structure and get the required global Vulkan object vkDescriptorSetLayout in its last parameter.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateDescriptorSetLayout.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateDescriptorSetLayout(
+    VkDevice                                    device,
+    const VkDescriptorSetLayoutCreateInfo*      pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDescriptorSetLayout*                      pSetLayout);
+	*/
+	vkResult = vkCreateDescriptorSetLayout(vkDevice, &vkDescriptorSetLayoutCreateInfo, NULL, &vkDescriptorSetLayout);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateDescriptorSetLayout(): vkCreateDescriptorSetLayout() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateDescriptorSetLayout(): vkCreateDescriptorSetLayout() function succedded\n");
+	}
 	
 	return vkResult;
 }
