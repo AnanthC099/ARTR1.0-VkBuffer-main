@@ -219,6 +219,11 @@ https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorSetLayout.
 */
 VkDescriptorSetLayout vkDescriptorSetLayout = VK_NULL_HANDLE;
 
+/* 25. Pipeline layout
+25.1. Globally declare Vulkan object of type VkPipelineLayout and initialize it to VK_NULL_HANDLE.
+*/
+VkPipelineLayout vkPipelineLayout = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineLayout.html
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -490,6 +495,11 @@ VkResult initialize(void)
 	*/
 	VkResult CreateDescriptorSetLayout(void);
 	
+	/*
+	25.2. In initialize(), declare and call UDF CreatePipelineLayout() maintaining the convention of declaring and calling it after CreatDescriptorSetLayout() and before CreateRenderPass().
+	*/
+	VkResult CreatePipelineLayout(void);
+	
 	VkResult CreateRenderPass(void);
 	VkResult CreateFramebuffers(void);
 	VkResult CreateSemaphores(void);
@@ -654,6 +664,17 @@ VkResult initialize(void)
 	else
 	{
 		fprintf(gFILE, "initialize(): CreateDescriptorSetLayout() succedded\n");
+	}
+	
+	vkResult = CreatePipelineLayout();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreatePipelineLayout() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreatePipelineLayout() succedded\n");
 	}
 	
 	vkResult =  CreateRenderPass();
@@ -1030,6 +1051,22 @@ void uninitialize(void)
 				vkDestroyDescriptorSetLayout(vkDevice, vkDescriptorSetLayout, NULL);
 				vkDescriptorSetLayout = VK_NULL_HANDLE;
 				fprintf(gFILE, "uninitialize(): vkDescriptorSetLayout is freed\n");
+			}
+			
+			/*
+			25.5. In uninitialize, call vkDestroyPipelineLayout() Vulkan API to destroy this vkPipelineLayout Vulkan object.
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyPipelineLayout.html
+			// Provided by VK_VERSION_1_0
+			void vkDestroyPipelineLayout(
+				VkDevice                                    device,
+				VkPipelineLayout                            pipelineLayout,
+				const VkAllocationCallbacks*                pAllocator);
+			*/
+			if(vkPipelineLayout)
+			{
+				vkDestroyPipelineLayout(vkDevice, vkPipelineLayout, NULL);
+				vkPipelineLayout = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkPipelineLayout is freed\n");
 			}
 			
 			//Step_16_6. In uninitialize , destroy the renderpass by using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
@@ -3515,6 +3552,70 @@ VkResult CreateDescriptorSetLayout()
 	else
 	{
 		fprintf(gFILE, "CreateDescriptorSetLayout(): vkCreateDescriptorSetLayout() function succedded\n");
+	}
+	
+	return vkResult;
+}
+
+/*
+25.2. In initialize(), declare and call UDF CreatePipelineLayout() maintaining the convention of declaring and calling it after CreatDescriptorSetLayout() and before CreateRenderPass().
+*/
+VkResult CreatePipelineLayout(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	
+	/*
+	25.3. While writing the definition of UDF, declare, memset and initialize struct VkPipelineLayoutCreateInfo , particularly its 4 important members 
+	   1. .setLayoutCount
+	   2. .pSetLayouts array
+	   3. .pushConstantRangeCount
+	   4. .pPushConstantRanges array
+	//https://registry.khronos.org/VulkanSC/specs/1.0-extensions/man/html/VkPipelineLayoutCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineLayoutCreateInfo {
+		VkStructureType                 sType;
+		const void*                     pNext;
+		VkPipelineLayoutCreateFlags     flags;
+		uint32_t                        setLayoutCount;
+		const VkDescriptorSetLayout*    pSetLayouts;
+		uint32_t                        pushConstantRangeCount;
+		const VkPushConstantRange*      pPushConstantRanges;
+	} VkPipelineLayoutCreateInfo;
+	*/
+	VkPipelineLayoutCreateInfo vkPipelineLayoutCreateInfo;
+	memset((void*)&vkPipelineLayoutCreateInfo, 0, sizeof(VkPipelineLayoutCreateInfo));
+	vkPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	vkPipelineLayoutCreateInfo.pNext = NULL;
+	vkPipelineLayoutCreateInfo.flags = 0; /* Reserved*/
+	vkPipelineLayoutCreateInfo.setLayoutCount = 1;
+	vkPipelineLayoutCreateInfo.pSetLayouts = &vkDescriptorSetLayout;
+	vkPipelineLayoutCreateInfo.pushConstantRangeCount = 0;
+	vkPipelineLayoutCreateInfo.pPushConstantRanges = NULL;
+	
+	/*
+	25.4. Then call vkCreatePipelineLayout() Vulkan API with adress of above initialized structure and get the required global Vulkan object vkPipelineLayout in its last parameter.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreatePipelineLayout.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreatePipelineLayout(
+    VkDevice                                    device,
+    const VkPipelineLayoutCreateInfo*           pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkPipelineLayout*                           pPipelineLayout);
+	*/
+	vkResult = vkCreatePipelineLayout(vkDevice, &vkPipelineLayoutCreateInfo, NULL, &vkPipelineLayout);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreatePipelineLayout(): vkCreatePipelineLayout() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreatePipelineLayout(): vkCreatePipelineLayout() function succedded\n");
 	}
 	
 	return vkResult;
