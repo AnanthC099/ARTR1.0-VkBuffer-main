@@ -224,6 +224,13 @@ VkDescriptorSetLayout vkDescriptorSetLayout = VK_NULL_HANDLE;
 */
 VkPipelineLayout vkPipelineLayout = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineLayout.html
 
+/*
+26 Pipeline
+*/
+VkViewPort vkViewPort;
+VkRect2D vkRect2D_scissor;
+VkPipeline vkPipeline = VK_NULL_HANDLE;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -501,6 +508,9 @@ VkResult initialize(void)
 	VkResult CreatePipelineLayout(void);
 	
 	VkResult CreateRenderPass(void);
+	
+	VkResult CreatePipeline(void);
+	
 	VkResult CreateFramebuffers(void);
 	VkResult CreateSemaphores(void);
 	VkResult CreateFences(void);
@@ -688,6 +698,17 @@ VkResult initialize(void)
 		fprintf(gFILE, "initialize(): CreateRenderPass() succedded\n");
 	}
 	
+	vkResult = CreatePipeline();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreatePipeline() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreatePipeline() succedded\n");
+	}
+		
 	vkResult = CreateFramebuffers();
 	if (vkResult != VK_SUCCESS)
 	{
@@ -3799,6 +3820,18 @@ VkResult CreateRenderPass(void)
 	{
 		fprintf(gFILE, "CreateRenderPass(): vkCreateRenderPass() succedded\n");
 	}
+	
+	return vkResult;
+}
+
+VkResult CreatePipeline(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
 	
 	return vkResult;
 }
