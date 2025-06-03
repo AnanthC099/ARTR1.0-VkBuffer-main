@@ -227,9 +227,43 @@ VkPipelineLayout vkPipelineLayout = VK_NULL_HANDLE; //https://registry.khronos.o
 /*
 26 Pipeline
 */
+
+/*
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkViewport.html
+typedef struct VkViewport {
+    float    x;
+    float    y;
+    float    width;
+    float    height;
+    float    minDepth;
+    float    maxDepth;
+} VkViewport;
+*/
 VkViewPort vkViewPort;
+
+/*
+https://registry.khronos.org/vulkan/specs/latest/man/html/VkRect2D.html
+// Provided by VK_VERSION_1_0
+typedef struct VkRect2D {
+    VkOffset2D    offset; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkOffset2D.html
+    VkExtent2D    extent; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent2D.html
+} VkRect2D;
+
+// Provided by VK_VERSION_1_0
+typedef struct VkOffset2D {
+    int32_t    x;
+    int32_t    y;
+} VkOffset2D;
+
+// Provided by VK_VERSION_1_0
+typedef struct VkExtent2D {
+    uint32_t    width;
+    uint32_t    height;
+} VkExtent2D;
+*/
 VkRect2D vkRect2D_scissor;
-VkPipeline vkPipeline = VK_NULL_HANDLE;
+
+VkPipeline vkPipeline = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipeline.html
 
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -509,6 +543,9 @@ VkResult initialize(void)
 	
 	VkResult CreateRenderPass(void);
 	
+	/*
+	26. Pipeline
+	*/
 	VkResult CreatePipeline(void);
 	
 	VkResult CreateFramebuffers(void);
@@ -3832,6 +3869,27 @@ VkResult CreatePipeline(void)
 	/*
 	Code
 	*/
+	/*
+	Vertex Input State PSO
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkVertexInputBindingDescription.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkVertexInputBindingDescription {
+		uint32_t             binding;
+		uint32_t             stride;
+		VkVertexInputRate    inputRate; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkVertexInputRate.html
+	} VkVertexInputBindingDescription;
+	
+	// Provided by VK_VERSION_1_0
+	typedef enum VkVertexInputRate {
+		VK_VERTEX_INPUT_RATE_VERTEX = 0,
+		VK_VERTEX_INPUT_RATE_INSTANCE = 1,
+	} VkVertexInputRate;
+	*/
+	VkVertexInputBindingDescription vkVertexInputBindingDescription_array[1];
+	memset((void*)vkVertexInputBindingDescription_array, 0, sizeof(VkVertexInputBindingDescription));
+	vkVertexInputBindingDescription_array[0].binding =;
+	vkVertexInputBindingDescription[0].stride = 0;
+	vkVertexInputBindingDescription[0].inputRate =;
 	
 	return vkResult;
 }
