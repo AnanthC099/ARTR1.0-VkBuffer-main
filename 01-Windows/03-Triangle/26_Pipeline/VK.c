@@ -4028,12 +4028,12 @@ VkResult CreatePipeline(void)
 	vkPipelineRasterizationStateCreateInfo.rasterizerDiscardEnable =;
 	vkPipelineRasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
 	vkPipelineRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
-	vkPipelineRasterizationStateCreateInfo.frontFace =;
+	vkPipelineRasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_CLOCKWISE; //Triangle winding order 
 	//vkPipelineRasterizationStateCreateInfo.depthBiasEnable =;
 	//vkPipelineRasterizationStateCreateInfo.depthBiasConstantFactor =;
 	//vkPipelineRasterizationStateCreateInfo.depthBiasClamp =;
 	//vkPipelineRasterizationStateCreateInfo.depthBiasSlopeFactor =;
-	vkPipelineRasterizationStateCreateInfo.lineWidth =;
+	vkPipelineRasterizationStateCreateInfo.lineWidth = 1.0f; //This is implementation dependant. So giving it is compulsary. Atleast give it 1.0
 	
 	return vkResult;
 }
