@@ -3870,7 +3870,6 @@ VkResult CreatePipeline(void)
 	Code
 	*/
 	/*
-	Vertex Input State PSO
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkVertexInputBindingDescription.html
 	// Provided by VK_VERSION_1_0
 	typedef struct VkVertexInputBindingDescription {
@@ -3886,10 +3885,155 @@ VkResult CreatePipeline(void)
 	} VkVertexInputRate;
 	*/
 	VkVertexInputBindingDescription vkVertexInputBindingDescription_array[1];
-	memset((void*)vkVertexInputBindingDescription_array, 0, sizeof(VkVertexInputBindingDescription));
-	vkVertexInputBindingDescription_array[0].binding =;
-	vkVertexInputBindingDescription[0].stride = 0;
-	vkVertexInputBindingDescription[0].inputRate =;
+	memset((void*)vkVertexInputBindingDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(VkVertexInputBindingDescription_array));
+	vkVertexInputBindingDescription_array[0].binding = 0; //Equivalent to GL_ARRAY_BUFFER
+	vkVertexInputBindingDescription[0].stride = sizeof(float) * 3;
+	vkVertexInputBindingDescription[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //vertices maan, indices nako
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkVertexInputAttributeDescription.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkVertexInputAttributeDescription {
+		uint32_t    location;
+		uint32_t    binding;
+		VkFormat    format; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+		uint32_t    offset;
+	} VkVertexInputAttributeDescription;
+	*/
+	VkVertexInputAttributeDescription vkVertexInputAttributeDescription_array[1];
+	memset((void*)vkVertexInputAttributeDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(vkVertexInputAttributeDescription_array));
+	vkVertexInputAttributeDescription_array[0].location = 0;
+	vkVertexInputAttributeDescription_array[0].binding = 0;
+	vkVertexInputAttributeDescription_array[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+	vkVertexInputAttributeDescription_array[0].offset = 0;
+	
+	/*
+	Vertex Input State PSO
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineVertexInputStateCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineVertexInputStateCreateInfo {
+		VkStructureType                             sType;
+		const void*                                 pNext;
+		VkPipelineVertexInputStateCreateFlags       flags;
+		uint32_t                                    vertexBindingDescriptionCount;
+		const VkVertexInputBindingDescription*      pVertexBindingDescriptions;
+		uint32_t                                    vertexAttributeDescriptionCount;
+		const VkVertexInputAttributeDescription*    pVertexAttributeDescriptions;
+	} VkPipelineVertexInputStateCreateInfo;
+	*/
+	VkPipelineVertexInputStateCreateInfo vkPipelineVertexInputStateCreateInfo;
+	memset((void*)&vkPipelineVertexInputStateCreateInfo, 0,  sizeof(VkPipelineVertexInputStateCreateInfo));
+	vkPipelineVertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	vkPipelineVertexInputStateCreateInfo.pNext = NULL;
+	vkPipelineVertexInputStateCreateInfo.flags = 0;
+	vkPipelineVertexInputStateCreateInfo.vertexBindingDescriptionCount = _ARRAYSIZE(vkVertexInputBindingDescription_array);
+	vkPipelineVertexInputStateCreateInfo.pVertexBindingDescriptions = vkVertexInputBindingDescription_array;
+	vkPipelineVertexInputStateCreateInfo.vertexAttributeDescriptionCount = _ARRAYSIZE(vkVertexInputAttributeDescription_array);
+	vkPipelineVertexInputStateCreateInfo.pVertexAttributeDescriptions = vkVertexInputAttributeDescription_array;
+	
+	/*
+	Input Assembly State
+	https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineInputAssemblyStateCreateInfo.html/
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineInputAssemblyStateCreateInfo {
+		VkStructureType                            sType;
+		const void*                                pNext;
+		VkPipelineInputAssemblyStateCreateFlags    flags; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineInputAssemblyStateCreateFlags.html
+		VkPrimitiveTopology                        topology;
+		VkBool32                                   primitiveRestartEnable;
+	} VkPipelineInputAssemblyStateCreateInfo;
+	
+	https://registry.khronos.org/vulkan/specs/latest/man/html/VkPrimitiveTopology.html
+	// Provided by VK_VERSION_1_0
+	typedef enum VkPrimitiveTopology {
+		VK_PRIMITIVE_TOPOLOGY_POINT_LIST = 0,
+		VK_PRIMITIVE_TOPOLOGY_LINE_LIST = 1,
+		VK_PRIMITIVE_TOPOLOGY_LINE_STRIP = 2,
+		VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST = 3,
+		VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP = 4,
+		VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN = 5,
+		
+		//For Geometry Shader
+		VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY = 6,
+		VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY = 7,
+		VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY = 8,
+		VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY = 9,
+		
+		//For Tescellation Shader
+		VK_PRIMITIVE_TOPOLOGY_PATCH_LIST = 10,
+	} VkPrimitiveTopology;
+	
+	*/
+	VkPipelineInputAssemblyStateCreateInfo vkPipelineInputAssemblyStateCreateInfo;
+	memset((void*)&vkPipelineInputAssemblyStateCreateInfo, 0,  sizeof(VkPipelineInputAssemblyStateCreateInfo));
+	vkPipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+	vkPipelineInputAssemblyStateCreateInfo.pNext = NULL;
+	vkPipelineInputAssemblyStateCreateInfo.flags = 0;
+	vkPipelineInputAssemblyStateCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	vkPipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = VK_FALSE; //Not needed here. Only for geometry shader and for indexed drawing for strip and fan
+	
+	/*
+	//Rasterizer State
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineRasterizationStateCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineRasterizationStateCreateInfo {
+		VkStructureType                            sType;
+		const void*                                pNext;
+		VkPipelineRasterizationStateCreateFlags    flags; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineRasterizationStateCreateFlags.html
+		VkBool32                                   depthClampEnable;
+		VkBool32                                   rasterizerDiscardEnable;
+		VkPolygonMode                              polygonMode;
+		VkCullModeFlags                            cullMode; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkCullModeFlags.html
+		VkFrontFace                                frontFace;
+		VkBool32                                   depthBiasEnable;
+		float                                      depthBiasConstantFactor;
+		float                                      depthBiasClamp;
+		float                                      depthBiasSlopeFactor;
+		float                                      lineWidth;
+	} VkPipelineRasterizationStateCreateInfo;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPolygonMode.html
+	// Provided by VK_VERSION_1_0
+	typedef enum VkPolygonMode {
+		VK_POLYGON_MODE_FILL = 0,
+		VK_POLYGON_MODE_LINE = 1,
+		VK_POLYGON_MODE_POINT = 2,
+	  // Provided by VK_NV_fill_rectangle
+		VK_POLYGON_MODE_FILL_RECTANGLE_NV = 1000153000,
+	} VkPolygonMode;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFrontFace.html
+	// Provided by VK_VERSION_1_0
+	typedef enum VkFrontFace {
+		VK_FRONT_FACE_COUNTER_CLOCKWISE = 0,
+		VK_FRONT_FACE_CLOCKWISE = 1,
+	} VkFrontFace;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCullModeFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCullModeFlagBits.html
+	// Provided by VK_VERSION_1_0
+	typedef enum VkCullModeFlagBits {
+		VK_CULL_MODE_NONE = 0,
+		VK_CULL_MODE_FRONT_BIT = 0x00000001,
+		VK_CULL_MODE_BACK_BIT = 0x00000002,
+		VK_CULL_MODE_FRONT_AND_BACK = 0x00000003,
+	} VkCullModeFlagBits;
+	*/
+	VkPipelineRasterizationStateCreateInfo vkPipelineRasterizationStateCreateInfo;
+	memset((void*)&vkPipelineRasterizationStateCreateInfo, 0,  sizeof(VkPipelineRasterizationStateCreateInfo));
+	vkPipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	vkPipelineRasterizationStateCreateInfo.pNext = NULL;
+	vkPipelineRasterizationStateCreateInfo.flags = 0;
+	//vkPipelineRasterizationStateCreateInfo.depthClampEnable =;
+	vkPipelineRasterizationStateCreateInfo.rasterizerDiscardEnable =;
+	vkPipelineRasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
+	vkPipelineRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
+	vkPipelineRasterizationStateCreateInfo.frontFace =;
+	//vkPipelineRasterizationStateCreateInfo.depthBiasEnable =;
+	//vkPipelineRasterizationStateCreateInfo.depthBiasConstantFactor =;
+	//vkPipelineRasterizationStateCreateInfo.depthBiasClamp =;
+	//vkPipelineRasterizationStateCreateInfo.depthBiasSlopeFactor =;
+	vkPipelineRasterizationStateCreateInfo.lineWidth =;
 	
 	return vkResult;
 }
