@@ -4041,25 +4041,27 @@ VkResult CreatePipeline(void)
 	// Provided by VK_VERSION_1_0
 	typedef struct VkPipelineColorBlendAttachmentState {
 		VkBool32                 blendEnable;
-		VkBlendFactor            srcColorBlendFactor;
-		VkBlendFactor            dstColorBlendFactor;
-		VkBlendOp                colorBlendOp;
+		VkBlendFactor            srcColorBlendFactor; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBlendFactor.html
+		VkBlendFactor            dstColorBlendFactor; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBlendFactor.html
+		VkBlendOp                colorBlendOp; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBlendOp.html
 		VkBlendFactor            srcAlphaBlendFactor;
 		VkBlendFactor            dstAlphaBlendFactor;
 		VkBlendOp                alphaBlendOp;
-		VkColorComponentFlags    colorWriteMask;
+		VkColorComponentFlags    colorWriteMask; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkColorComponentFlags.html
 	} VkPipelineColorBlendAttachmentState;
 	*/
-	VkPipelineColorBlendAttachmentState vkPipelineColorBlendAttachmentState;
-	memset((void*)&vkPipelineColorBlendAttachmentState, 0, sizeof(VkPipelineColorBlendAttachmentState));
-	vkPipelineColorBlendAttachmentState.blendEnable =;
-	vkPipelineColorBlendAttachmentState.srcColorBlendFactor =;
-	vkPipelineColorBlendAttachmentState.dstColorBlendFactor =;
-	vkPipelineColorBlendAttachmentState.colorBlendOp =;
-	vkPipelineColorBlendAttachmentState.srcAlphaBlendFactor =;
-	vkPipelineColorBlendAttachmentState.dstAlphaBlendFactor =;
-	vkPipelineColorBlendAttachmentState.alphaBlendOp=;
-	vkPipelineColorBlendAttachmentState.colorWriteMask =;
+	VkPipelineColorBlendAttachmentState vkPipelineColorBlendAttachmentState_array[1];
+	memset((void*)vkPipelineColorBlendAttachmentState, 0, _ARRAYSIZE(vkPipelineColorBlendAttachmentState));
+	vkPipelineColorBlendAttachmentState[0].blendEnable = VK_FALSE;
+	/*
+	vkPipelineColorBlendAttachmentState[0].srcColorBlendFactor =;
+	vkPipelineColorBlendAttachmentState[0].dstColorBlendFactor =;
+	vkPipelineColorBlendAttachmentState[0].colorBlendOp =;
+	vkPipelineColorBlendAttachmentState[0].srcAlphaBlendFactor =;
+	vkPipelineColorBlendAttachmentState[0].dstAlphaBlendFactor =;
+	vkPipelineColorBlendAttachmentState[0].alphaBlendOp=;
+	vkPipelineColorBlendAttachmentState[0].colorWriteMask =;
+	*/
 	
 	/*
 	//Color Blend state
@@ -4081,11 +4083,298 @@ VkResult CreatePipeline(void)
 	vkPipelineColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
 	vkPipelineColorBlendStateCreateInfo.pNext = NULL;
 	vkPipelineColorBlendStateCreateInfo.flags = 0;
-	vkPipelineColorBlendStateCreateInfo.logicOpEnable =;
-	vkPipelineColorBlendStateCreateInfo.logicOp =;
-	vkPipelineColorBlendStateCreateInfo.attachmentCount =;
-	vkPipelineColorBlendStateCreateInfo.pAttachments =;
-	vkPipelineColorBlendStateCreateInfo.blendConstants =;
+	//vkPipelineColorBlendStateCreateInfo.logicOpEnable =;
+	//vkPipelineColorBlendStateCreateInfo.logicOp = ;
+	vkPipelineColorBlendStateCreateInfo.attachmentCount = _ARRAYSIZE(vkPipelineColorBlendAttachmentState_array);
+	vkPipelineColorBlendStateCreateInfo.pAttachments = vkPipelineColorBlendAttachmentState_array;
+	//vkPipelineColorBlendStateCreateInfo.blendConstants =;
+	
+	/*Viewport Scissor State
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineViewportStateCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineViewportStateCreateInfo {
+		VkStructureType                       sType;
+		const void*                           pNext;
+		VkPipelineViewportStateCreateFlags    flags;
+		uint32_t                              viewportCount;
+		const VkViewport*                     pViewports;
+		uint32_t                              scissorCount;
+		const VkRect2D*                       pScissors;
+	} VkPipelineViewportStateCreateInfo;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkViewport.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkViewport {
+		float    x;
+		float    y;
+		float    width;
+		float    height;
+		float    minDepth;
+		float    maxDepth;
+	} VkViewport;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkRect2D.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkRect2D {
+		VkOffset2D    offset;
+		VkExtent2D    extent;
+	} VkRect2D;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkOffset2D.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkOffset2D {
+		int32_t    x;
+		int32_t    y;
+	} VkOffset2D;
+
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent2D.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkExtent2D {
+		uint32_t    width;
+		uint32_t    height;
+	} VkExtent2D;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateGraphicsPipelines.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateGraphicsPipelines(
+    VkDevice                                    device,
+    VkPipelineCache                             pipelineCache,
+    uint32_t                                    createInfoCount,
+    const VkGraphicsPipelineCreateInfo*         pCreateInfos,
+    const VkAllocationCallbacks*                pAllocator,
+    VkPipeline*                                 pPipelines);
+	
+	We can create multiple pipelines.
+	The viewport and scissor count members of this structure must be same.
+	*/
+	VkPipelineViewportStateCreateInfo vkPipelineViewportStateCreateInfo;
+	memset((void*)&vkPipelineViewportStateCreateInfo, 0, sizeof(VkPipelineViewportStateCreateInfo));
+	vkPipelineViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	vkPipelineViewportStateCreateInfo.pNext = NULL;
+	vkPipelineViewportStateCreateInfo.flags = 0;
+	
+	////////////////
+	vkPipelineViewportStateCreateInfo.viewportCount = 1;q //We can specify multiple viewport as array;
+	memset((void*)&vkViewPort, 0 , sizeof(VkViewPort));
+	vkViewPort.x = 0;
+	vkViewPort.y = 0;
+	vkViewPort.width = (float)vkExtent2D_SwapChain.width;
+	vkViewPort.height = (float)vkExtent2D_SwapChain.height;
+	
+	//done link following parameters with glClearDepth()
+	//viewport cha depth max kiti asu shakto deto ithe
+	//depth buffer ani viewport cha depth cha sambandh nahi
+	vkViewPort.minDepth = 0.0f;
+	vkViewPort.maxDepth = 1.0f;
+	
+	vkPipelineViewportStateCreateInfo.pViewports = &vkViewPort;
+	////////////////
+	
+	////////////////
+	vkPipelineViewportStateCreateInfo.scissorCount = 1;
+	memset((void*)&vkRect2D_scissor, 0 , sizeof(VkRect2D));
+	vkRect2D_scissor.offset.x = 0;
+	vkRect2D_scissor.offset.y = 0;
+	vkRect2D_scissor.extent.width = vkExtent2D_SwapChain.width;
+	vkRect2D_scissor.extent.height = vkExtent2D_SwapChain.height;
+	
+	vkPipelineViewportStateCreateInfo.pScissors = &vkRect2D_scissor;
+	////////////////
+	
+	/* Depth Stencil State
+	As we dont have depth yet, we can omit this step.
+	*/
+	
+	/* Dynamic State
+	Those states of PSO, which can be changed dynamically without recreating pipeline.
+	ViewPort, Scissor, Depth Bias, Blend constants, Stencil Mask, LineWidth etc are some states which can be changed dynamically.
+	We dont have any dynamic state in this code.
+	*/
+	
+	/*
+	MultiSampling State
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineMultisampleStateCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineMultisampleStateCreateInfo {
+		VkStructureType                          sType;
+		const void*                              pNext;
+		VkPipelineMultisampleStateCreateFlags    flags;
+		VkSampleCountFlagBits                    rasterizationSamples;
+		VkBool32                                 sampleShadingEnable;
+		float                                    minSampleShading;
+		const VkSampleMask*                      pSampleMask;
+		VkBool32                                 alphaToCoverageEnable;
+		VkBool32                                 alphaToOneEnable;
+	} VkPipelineMultisampleStateCreateInfo;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSampleCountFlagBits.html
+	// Provided by VK_VERSION_1_0
+	typedef enum VkSampleCountFlagBits {
+		VK_SAMPLE_COUNT_1_BIT = 0x00000001,
+		VK_SAMPLE_COUNT_2_BIT = 0x00000002,
+		VK_SAMPLE_COUNT_4_BIT = 0x00000004,
+		VK_SAMPLE_COUNT_8_BIT = 0x00000008,
+		VK_SAMPLE_COUNT_16_BIT = 0x00000010,
+		VK_SAMPLE_COUNT_32_BIT = 0x00000020,
+		VK_SAMPLE_COUNT_64_BIT = 0x00000040,
+	} VkSampleCountFlagBits;
+	*/
+	VkPipelineMultisampleStateCreateInfo vkPipelineMultisampleStateCreateInfo;
+	memset((void*)&vkPipelineMultisampleStateCreateInfo, 0, sizeof(VkPipelineMultisampleStateCreateInfo));
+	vkPipelineMultisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+	vkPipelineMultisampleStateCreateInfo.pNext = NULL;
+	vkPipelineMultisampleStateCreateInfo.flags = 0; //Reserved and kept for future use, so 0
+	vkPipelineMultisampleStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT; // Need to give or validation error will come
+	/*
+	vkPipelineMultisampleStateCreateInfo.sampleShadingEnable =;
+	vkPipelineMultisampleStateCreateInfo.minSampleShading =;
+	vkPipelineMultisampleStateCreateInfo.pSampleMask =;
+	vkPipelineMultisampleStateCreateInfo.alphaToCoverageEnable =;
+	vkPipelineMultisampleStateCreateInfo.alphaToOneEnable =;
+	*/
+	
+	/*
+	Shader Stage
+	Ithe array karava lagto (2/5 count cha)
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineShaderStageCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineShaderStageCreateInfo {
+		VkStructureType                     sType;
+		const void*                         pNext;
+		VkPipelineShaderStageCreateFlags    flags;
+		VkShaderStageFlagBits               stage; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderStageFlagBits.html
+		VkShaderModule                      module; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderModule.html
+		const char*                         pName;
+		const VkSpecializationInfo*         pSpecializationInfo;
+	} VkPipelineShaderStageCreateInfo;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSpecializationInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkSpecializationInfo {
+		uint32_t                           mapEntryCount;
+		const VkSpecializationMapEntry*    pMapEntries;
+		size_t                             dataSize;
+		const void*                        pData;
+	} VkSpecializationInfo;
+	*/
+	VkPipelineShaderStageCreateInfo vkPipelineShaderStageCreateInfo_array[2];
+	memset((void*)vkPipelineShaderStageCreateInfo_array, 0, _ARRAYSIZE(vkPipelineShaderStageCreateInfo_array));
+	//Vertex Shader
+	vkPipelineShaderStageCreateInfo_array[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	vkPipelineShaderStageCreateInfo_array[0].pNext = NULL; //validation error is not given (If any structure(shader stage in this case) having extensions is not given pNext as NULL, then validation error comes)
+	vkPipelineShaderStageCreateInfo_array[0].flags = 0;
+	vkPipelineShaderStageCreateInfo_array[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+	vkPipelineShaderStageCreateInfo_array[0].module = vkShaderMoudule_vertex_shader;
+	vkPipelineShaderStageCreateInfo_array[0].pName = "main"; //entry point cha address
+	vkPipelineShaderStageCreateInfo_array[0].pSpecializationInfo = NULL; //If any constants, precompile in SPIRV inline fashion.
+	
+	//Fragment Shader
+	vkPipelineShaderStageCreateInfo_array[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	vkPipelineShaderStageCreateInfo_array[1].pNext = NULL; //validation error is not given (If any structure(shader stage in this case) having extensions is not given pNext as NULL, then validation error comes)
+	vkPipelineShaderStageCreateInfo_array[1].flags = 0;
+	vkPipelineShaderStageCreateInfo_array[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+	vkPipelineShaderStageCreateInfo_array[1].module = vkShaderMoudule_fragment_shader;
+	vkPipelineShaderStageCreateInfo_array[1].pName = "main"; //entry point cha address;
+	vkPipelineShaderStageCreateInfo_array[1].pSpecializationInfo = NULL; //If any constants, precompile in SPIRV inline fashion.
+	
+	/*
+	Tescellation State
+	We dont have tescellation shaders. So we can omit this state.
+	*/
+	
+	/*
+	As pipelines are created from pipeline cache, we will now create pipeline cache object.
+	Not in red book. But in spec.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineCacheCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineCacheCreateInfo {
+		VkStructureType               sType;
+		const void*                   pNext;
+		VkPipelineCacheCreateFlags    flags;
+		size_t                        initialDataSize;
+		const void*                   pInitialData;
+	} VkPipelineCacheCreateInfo;
+	*/
+	VkPipelineCacheCreateInfo vkPipelineCacheCreateInfo;
+	memset((void*)&vkPipelineCacheCreateInfo, 0, sizeof(VkPipelineCacheCreateInfo));
+	vkPipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+	vkPipelineCacheCreateInfo.pNext = NULL;
+	vkPipelineCacheCreateInfo.flags = 0;
+	/*
+	vkPipelineCacheCreateInfo.initialDataSize =;
+	vkPipelineCacheCreateInfo.pInitialData =;
+	*/
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreatePipelineCache.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreatePipelineCache(
+    VkDevice                                    device,
+    const VkPipelineCacheCreateInfo*            pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkPipelineCache*                            pPipelineCache);
+	*/
+	VkPipelineCache vkPipelineCache = VK_NULL_HANDLE;
+	vkResult = vkCreatePipelineCache(vkDevice, &vkPipelineCacheCreateInfo, NULL, &vkPipelineCache);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreatePipeline(): vkCreatePipelineCache() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreatePipeline(): vkCreatePipelineCache() succedded\n");
+	}
+	
+	/*
+	Create actual graphics pipeline
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkGraphicsPipelineCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkGraphicsPipelineCreateInfo {
+		VkStructureType                                  sType;
+		const void*                                      pNext;
+		VkPipelineCreateFlags                            flags;
+		uint32_t                                         stageCount;
+		const VkPipelineShaderStageCreateInfo*           pStages;
+		const VkPipelineVertexInputStateCreateInfo*      pVertexInputState;
+		const VkPipelineInputAssemblyStateCreateInfo*    pInputAssemblyState;
+		const VkPipelineTessellationStateCreateInfo*     pTessellationState;
+		const VkPipelineViewportStateCreateInfo*         pViewportState;
+		const VkPipelineRasterizationStateCreateInfo*    pRasterizationState;
+		const VkPipelineMultisampleStateCreateInfo*      pMultisampleState;
+		const VkPipelineDepthStencilStateCreateInfo*     pDepthStencilState;
+		const VkPipelineColorBlendStateCreateInfo*       pColorBlendState;
+		const VkPipelineDynamicStateCreateInfo*          pDynamicState;
+		VkPipelineLayout                                 layout;
+		VkRenderPass                                     renderPass;
+		uint32_t                                         subpass;
+		VkPipeline                                       basePipelineHandle;
+		int32_t                                          basePipelineIndex;
+	} VkGraphicsPipelineCreateInfo;
+	*/
+	VkGraphicsPipelineCreateInfo vkGraphicsPipelineCreateInfo;
+	memset((void*)&vkGraphicsPipelineCreateInfo, 0, sizeof(VkGraphicsPipelineCreateInfo));
+	vkGraphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	vkGraphicsPipelineCreateInfo.pNext = NULL;
+	vkGraphicsPipelineCreateInfo.flags = 0;
+	vkGraphicsPipelineCreateInfo.stageCount =;
+	vkGraphicsPipelineCreateInfo.pStages =;
+	vkGraphicsPipelineCreateInfo.pVertexInputState =;
+	vkGraphicsPipelineCreateInfo.pInputAssemblyState =;
+	vkGraphicsPipelineCreateInfo.pTessellationState =;
+	vkGraphicsPipelineCreateInfo.pViewportState =;
+	vkGraphicsPipelineCreateInfo.pRasterizationState =;
+	vkGraphicsPipelineCreateInfo.pMultisampleState =;
+	vkGraphicsPipelineCreateInfo.pDepthStencilState =;
+	vkGraphicsPipelineCreateInfo.pColorBlendState =;
+	vkGraphicsPipelineCreateInfo.pDynamicState =;
+	vkGraphicsPipelineCreateInfo.layout =;
+	vkGraphicsPipelineCreateInfo.renderPass =;
+	vkGraphicsPipelineCreateInfo.subpass =;
+	vkGraphicsPipelineCreateInfo.basePipelineHandle =;
+	vkGraphicsPipelineCreateInfo.basePipelineIndex =;
+	
+	
 	
 	
 	return vkResult;
