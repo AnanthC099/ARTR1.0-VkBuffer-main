@@ -4035,6 +4035,59 @@ VkResult CreatePipeline(void)
 	//vkPipelineRasterizationStateCreateInfo.depthBiasSlopeFactor =;
 	vkPipelineRasterizationStateCreateInfo.lineWidth = 1.0f; //This is implementation dependant. So giving it is compulsary. Atleast give it 1.0
 	
+	/*
+	//Color Blend state
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineColorBlendAttachmentState.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineColorBlendAttachmentState {
+		VkBool32                 blendEnable;
+		VkBlendFactor            srcColorBlendFactor;
+		VkBlendFactor            dstColorBlendFactor;
+		VkBlendOp                colorBlendOp;
+		VkBlendFactor            srcAlphaBlendFactor;
+		VkBlendFactor            dstAlphaBlendFactor;
+		VkBlendOp                alphaBlendOp;
+		VkColorComponentFlags    colorWriteMask;
+	} VkPipelineColorBlendAttachmentState;
+	*/
+	VkPipelineColorBlendAttachmentState vkPipelineColorBlendAttachmentState;
+	memset((void*)&vkPipelineColorBlendAttachmentState, 0, sizeof(VkPipelineColorBlendAttachmentState));
+	vkPipelineColorBlendAttachmentState.blendEnable =;
+	vkPipelineColorBlendAttachmentState.srcColorBlendFactor =;
+	vkPipelineColorBlendAttachmentState.dstColorBlendFactor =;
+	vkPipelineColorBlendAttachmentState.colorBlendOp =;
+	vkPipelineColorBlendAttachmentState.srcAlphaBlendFactor =;
+	vkPipelineColorBlendAttachmentState.dstAlphaBlendFactor =;
+	vkPipelineColorBlendAttachmentState.alphaBlendOp=;
+	vkPipelineColorBlendAttachmentState.colorWriteMask =;
+	
+	/*
+	//Color Blend state
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineColorBlendStateCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineColorBlendStateCreateInfo {
+		VkStructureType                               sType;
+		const void*                                   pNext;
+		VkPipelineColorBlendStateCreateFlags          flags; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineColorBlendStateCreateFlags.html
+		VkBool32                                      logicOpEnable;
+		VkLogicOp                                     logicOp;
+		uint32_t                                      attachmentCount;
+		const VkPipelineColorBlendAttachmentState*    pAttachments;
+		float                                         blendConstants[4];
+	} VkPipelineColorBlendStateCreateInfo;
+	*/
+	VkPipelineColorBlendStateCreateInfo vkPipelineColorBlendStateCreateInfo;
+	memset((void*)&vkPipelineColorBlendStateCreateInfo, 0, sizeof(VkPipelineColorBlendStateCreateInfo));
+	vkPipelineColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	vkPipelineColorBlendStateCreateInfo.pNext = NULL;
+	vkPipelineColorBlendStateCreateInfo.flags = 0;
+	vkPipelineColorBlendStateCreateInfo.logicOpEnable =;
+	vkPipelineColorBlendStateCreateInfo.logicOp =;
+	vkPipelineColorBlendStateCreateInfo.attachmentCount =;
+	vkPipelineColorBlendStateCreateInfo.pAttachments =;
+	vkPipelineColorBlendStateCreateInfo.blendConstants =;
+	
+	
 	return vkResult;
 }
 
