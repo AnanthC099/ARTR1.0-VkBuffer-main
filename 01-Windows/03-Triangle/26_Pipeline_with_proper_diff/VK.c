@@ -4067,8 +4067,8 @@ VkResult CreatePipeline(void)
 	vkPipelineColorBlendAttachmentState[0].srcAlphaBlendFactor =;
 	vkPipelineColorBlendAttachmentState[0].dstAlphaBlendFactor =;
 	vkPipelineColorBlendAttachmentState[0].alphaBlendOp=;
-	vkPipelineColorBlendAttachmentState[0].colorWriteMask =;
 	*/
+	vkPipelineColorBlendAttachmentState_array[0].colorWriteMask = 0xF;
 	
 	/*
 	//Color Blend state
