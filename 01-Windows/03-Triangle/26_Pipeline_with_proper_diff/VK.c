@@ -3908,7 +3908,7 @@ VkResult CreatePipeline(void)
 	} VkVertexInputAttributeDescription;
 	*/
 	VkVertexInputAttributeDescription vkVertexInputAttributeDescription_array[1];
-	memset((void*)vkVertexInputAttributeDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(vkVertexInputAttributeDescription_array));
+	memset((void*)vkVertexInputAttributeDescription_array, 0,  sizeof(VkVertexInputAttributeDescription) * _ARRAYSIZE(vkVertexInputAttributeDescription_array));
 	vkVertexInputAttributeDescription_array[0].location = 0;
 	vkVertexInputAttributeDescription_array[0].binding = 0;
 	vkVertexInputAttributeDescription_array[0].format = VK_FORMAT_R32G32B32_SFLOAT;
