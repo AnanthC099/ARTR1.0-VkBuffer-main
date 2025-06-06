@@ -4056,19 +4056,29 @@ VkResult CreatePipeline(void)
 		VkBlendOp                alphaBlendOp;
 		VkColorComponentFlags    colorWriteMask; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkColorComponentFlags.html
 	} VkPipelineColorBlendAttachmentState;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkColorComponentFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkColorComponentFlagBits.html
+	// Provided by VK_VERSION_1_0
+	typedef enum VkColorComponentFlagBits {
+		VK_COLOR_COMPONENT_R_BIT = 0x00000001,
+		VK_COLOR_COMPONENT_G_BIT = 0x00000002,
+		VK_COLOR_COMPONENT_B_BIT = 0x00000004,
+		VK_COLOR_COMPONENT_A_BIT = 0x00000008,
+	} VkColorComponentFlagBits;
 	*/
 	VkPipelineColorBlendAttachmentState vkPipelineColorBlendAttachmentState_array[1];
 	memset((void*)vkPipelineColorBlendAttachmentState_array, 0, sizeof(VkPipelineColorBlendAttachmentState) * _ARRAYSIZE(vkPipelineColorBlendAttachmentState_array));
 	vkPipelineColorBlendAttachmentState_array[0].blendEnable = VK_FALSE;
 	/*
-	vkPipelineColorBlendAttachmentState[0].srcColorBlendFactor =;
-	vkPipelineColorBlendAttachmentState[0].dstColorBlendFactor =;
-	vkPipelineColorBlendAttachmentState[0].colorBlendOp =;
-	vkPipelineColorBlendAttachmentState[0].srcAlphaBlendFactor =;
-	vkPipelineColorBlendAttachmentState[0].dstAlphaBlendFactor =;
-	vkPipelineColorBlendAttachmentState[0].alphaBlendOp=;
-	vkPipelineColorBlendAttachmentState[0].colorWriteMask =;
+	vkPipelineColorBlendAttachmentState_array[0].srcColorBlendFactor =;
+	vkPipelineColorBlendAttachmentState_array[0].dstColorBlendFactor =;
+	vkPipelineColorBlendAttachmentState_array[0].colorBlendOp =;
+	vkPipelineColorBlendAttachmentState_array[0].srcAlphaBlendFactor =;
+	vkPipelineColorBlendAttachmentState_array[0].dstAlphaBlendFactor =;
+	vkPipelineColorBlendAttachmentState_array[0].alphaBlendOp=;
 	*/
+	vkPipelineColorBlendAttachmentState_array[0].colorWriteMask = 0xF;
 	
 	/*
 	//Color Blend state
@@ -4675,8 +4685,64 @@ VkResult buildCommandBuffers(void)
 		vkCmdBeginRenderPass(vkCommandBuffer_array[i], &vkRenderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE); 
 		
 		/*
+		Bind with the pipeline
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdBindPipeline.html
+		// Provided by VK_VERSION_1_0
+		void vkCmdBindPipeline(
+			VkCommandBuffer                             commandBuffer,
+			VkPipelineBindPoint                         pipelineBindPoint,
+			VkPipeline                                  pipeline);
+			
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineBindPoint.html
+		// Provided by VK_VERSION_1_0
+		typedef enum VkPipelineBindPoint {
+			VK_PIPELINE_BIND_POINT_GRAPHICS = 0,
+			VK_PIPELINE_BIND_POINT_COMPUTE = 1,
+		#ifdef VK_ENABLE_BETA_EXTENSIONS
+		  // Provided by VK_AMDX_shader_enqueue
+			VK_PIPELINE_BIND_POINT_EXECUTION_GRAPH_AMDX = 1000134000,
+		#endif
+		  // Provided by VK_KHR_ray_tracing_pipeline
+			VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR = 1000165000,
+		  // Provided by VK_HUAWEI_subpass_shading
+			VK_PIPELINE_BIND_POINT_SUBPASS_SHADING_HUAWEI = 1000369003,
+		  // Provided by VK_NV_ray_tracing
+			VK_PIPELINE_BIND_POINT_RAY_TRACING_NV = VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR,
+		} VkPipelineBindPoint;
+		*/
+		vkCmdBindPipeline(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipeline);
+		
+		/*
+		Bind with vertex buffer
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDeviceSize.html
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdBindVertexBuffers.html
+		// Provided by VK_VERSION_1_0
+		void vkCmdBindVertexBuffers(
+			VkCommandBuffer                             commandBuffer,
+			uint32_t                                    firstBinding,
+			uint32_t                                    bindingCount,
+			const VkBuffer*                             pBuffers,
+			const VkDeviceSize*                         pOffsets);
+		*/
+		VkDeviceSize vkDeviceSize_offset_array[1];
+		memset((void*)vkDeviceSize_offset_array, 0, sizeof(VkDeviceSize) * _ARRAYSIZE(vkDeviceSize_offset_array));
+		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, &vertexdata_position.vkBuffer, vkDeviceSize_offset_array); //Here recording
+		
+		/*
 		Here we should call Vulkan drawing functions.
 		*/
+		
+		/*
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdDraw.html
+		void vkCmdDraw(
+		VkCommandBuffer                             commandBuffer,
+		uint32_t                                    vertexCount,
+		uint32_t                                    instanceCount,
+		uint32_t                                    firstVertex,
+		uint32_t                                    firstInstance); //0th index cha instance
+		*/
+		vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0);
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
