@@ -239,7 +239,7 @@ typedef struct VkViewport {
     float    maxDepth;
 } VkViewport;
 */
-VkViewPort vkViewPort;
+VkViewport vkViewPort;
 
 /*
 https://registry.khronos.org/vulkan/specs/latest/man/html/VkRect2D.html
@@ -3892,10 +3892,10 @@ VkResult CreatePipeline(void)
 	} VkVertexInputRate;
 	*/
 	VkVertexInputBindingDescription vkVertexInputBindingDescription_array[1];
-	memset((void*)vkVertexInputBindingDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(VkVertexInputBindingDescription_array));
+	memset((void*)vkVertexInputBindingDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(vkVertexInputBindingDescription_array));
 	vkVertexInputBindingDescription_array[0].binding = 0; //Equivalent to GL_ARRAY_BUFFER
-	vkVertexInputBindingDescription[0].stride = sizeof(float) * 3;
-	vkVertexInputBindingDescription[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //vertices maan, indices nako
+	vkVertexInputBindingDescription_array[0].stride = sizeof(float) * 3;
+	vkVertexInputBindingDescription_array[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //vertices maan, indices nako
 	
 	/*
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkVertexInputAttributeDescription.html
@@ -4032,7 +4032,7 @@ VkResult CreatePipeline(void)
 	vkPipelineRasterizationStateCreateInfo.pNext = NULL;
 	vkPipelineRasterizationStateCreateInfo.flags = 0;
 	//vkPipelineRasterizationStateCreateInfo.depthClampEnable =;
-	vkPipelineRasterizationStateCreateInfo.rasterizerDiscardEnable =;
+	//vkPipelineRasterizationStateCreateInfo.rasterizerDiscardEnable =;
 	vkPipelineRasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
 	vkPipelineRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
 	vkPipelineRasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_CLOCKWISE; //Triangle winding order 
@@ -4058,8 +4058,8 @@ VkResult CreatePipeline(void)
 	} VkPipelineColorBlendAttachmentState;
 	*/
 	VkPipelineColorBlendAttachmentState vkPipelineColorBlendAttachmentState_array[1];
-	memset((void*)vkPipelineColorBlendAttachmentState, 0, _ARRAYSIZE(vkPipelineColorBlendAttachmentState));
-	vkPipelineColorBlendAttachmentState[0].blendEnable = VK_FALSE;
+	memset((void*)vkPipelineColorBlendAttachmentState_array, 0, sizeof(VkPipelineColorBlendAttachmentState) * _ARRAYSIZE(vkPipelineColorBlendAttachmentState_array));
+	vkPipelineColorBlendAttachmentState_array[0].blendEnable = VK_FALSE;
 	/*
 	vkPipelineColorBlendAttachmentState[0].srcColorBlendFactor =;
 	vkPipelineColorBlendAttachmentState[0].dstColorBlendFactor =;
@@ -4161,8 +4161,8 @@ VkResult CreatePipeline(void)
 	vkPipelineViewportStateCreateInfo.flags = 0;
 	
 	////////////////
-	vkPipelineViewportStateCreateInfo.viewportCount = 1;q //We can specify multiple viewport as array;
-	memset((void*)&vkViewPort, 0 , sizeof(VkViewPort));
+	vkPipelineViewportStateCreateInfo.viewportCount = 1; //We can specify multiple viewport as array;
+	memset((void*)&vkViewPort, 0 , sizeof(VkViewport));
 	vkViewPort.x = 0;
 	vkViewPort.y = 0;
 	vkViewPort.width = (float)vkExtent2D_SwapChain.width;
