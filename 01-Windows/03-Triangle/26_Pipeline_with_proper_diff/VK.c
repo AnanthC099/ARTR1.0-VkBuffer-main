@@ -4265,7 +4265,7 @@ VkResult CreatePipeline(void)
 	} VkSpecializationInfo;
 	*/
 	VkPipelineShaderStageCreateInfo vkPipelineShaderStageCreateInfo_array[2];
-	memset((void*)vkPipelineShaderStageCreateInfo_array, 0, _ARRAYSIZE(vkPipelineShaderStageCreateInfo_array));
+	memset((void*)vkPipelineShaderStageCreateInfo_array, 0, sizeof(VkPipelineShaderStageCreateInfo) * _ARRAYSIZE(vkPipelineShaderStageCreateInfo_array));
 	//Vertex Shader
 	vkPipelineShaderStageCreateInfo_array[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	vkPipelineShaderStageCreateInfo_array[0].pNext = NULL; //validation error is not given (If any structure(shader stage in this case) having extensions is not given pNext as NULL, then validation error comes)
