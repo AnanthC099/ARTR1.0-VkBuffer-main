@@ -3290,7 +3290,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(&data, triangle_Position, sizeof(triangle_Position));
+	memcpy(data, triangle_Position, sizeof(triangle_Position));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
