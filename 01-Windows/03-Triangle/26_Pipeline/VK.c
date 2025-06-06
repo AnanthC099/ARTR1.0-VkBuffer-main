@@ -1095,6 +1095,13 @@ void uninitialize(void)
 				fprintf(gFILE, "uninitialize(): vkFramebuffer_array is freed\n");
 			}
 			
+			if(vkPipeline)
+			{
+				vkDestroyPipeline(vkDevice, vkPipeline, NULL);
+				vkPipeline = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkPipeline is freed\n");
+			}
+			
 			/*
 			24.5. In uninitialize, call vkDestroyDescriptorSetlayout() Vulkan API to destroy this Vulkan object.
 			//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDescriptorSetLayout.html
@@ -4368,14 +4375,50 @@ VkResult CreatePipeline(void)
 	vkGraphicsPipelineCreateInfo.pDepthStencilState = NULL; //6
 	vkGraphicsPipelineCreateInfo.pColorBlendState = &vkPipelineColorBlendStateCreateInfo; //4
 	vkGraphicsPipelineCreateInfo.pDynamicState = NULL; //7
-	vkGraphicsPipelineCreateInfo.layout =;
-	vkGraphicsPipelineCreateInfo.renderPass =;
-	vkGraphicsPipelineCreateInfo.subpass =;
-	vkGraphicsPipelineCreateInfo.basePipelineHandle =;
-	vkGraphicsPipelineCreateInfo.basePipelineIndex =;
+	vkGraphicsPipelineCreateInfo.layout = vkPipelineLayout; //11
+	vkGraphicsPipelineCreateInfo.renderPass = vkRenderPass; //12
+	vkGraphicsPipelineCreateInfo.subpass = 0; //13. 0 as no subpass as wehave only 1 renderpass and its default subpass(In Redbook)
+	vkGraphicsPipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
+	vkGraphicsPipelineCreateInfo.basePipelineIndex = 0;
 	
+	/*
+	Now create the pipeline
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateGraphicsPipelines.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateGraphicsPipelines(
+    VkDevice                                    device,
+    VkPipelineCache                             pipelineCache,
+    uint32_t                                    createInfoCount,
+    const VkGraphicsPipelineCreateInfo*         pCreateInfos,
+    const VkAllocationCallbacks*                pAllocator,
+    VkPipeline*                                 pPipelines);
+	*/
+	vkResult = vkCreateGraphicsPipelines(vkDevice, vkPipelineCache, 1, &vkGraphicsPipelineCreateInfo, NULL, &vkPipeline);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "vkCreateGraphicsPipelines(): vkCreatePipelineCache() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded\n");
+	}
 	
-	
+	/*
+	We are done with pipeline cache . So destroy it
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyPipelineCache.html
+	// Provided by VK_VERSION_1_0
+	void vkDestroyPipelineCache(
+    VkDevice                                    device,
+    VkPipelineCache                             pipelineCache,
+    const VkAllocationCallbacks*                pAllocator);
+	*/
+	if(vkPipelineCache != VK_NULL_HANDLE)
+	{
+		vkDestroyPipelineCache(vkDevice, vkPipelineCache, NULL);
+		vkPipelineCache = VK_NULL_HANDLE;
+		fprintf(gFILE, "vkCreateGraphicsPipelines(): vkPipelineCache is freed\n");
+	}
 	
 	return vkResult;
 }
