@@ -3908,7 +3908,7 @@ VkResult CreatePipeline(void)
 	} VkVertexInputAttributeDescription;
 	*/
 	VkVertexInputAttributeDescription vkVertexInputAttributeDescription_array[1];
-	memset((void*)vkVertexInputAttributeDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(vkVertexInputAttributeDescription_array));
+	memset((void*)vkVertexInputAttributeDescription_array, 0,  sizeof(VkVertexInputAttributeDescription) * _ARRAYSIZE(vkVertexInputAttributeDescription_array));
 	vkVertexInputAttributeDescription_array[0].location = 0;
 	vkVertexInputAttributeDescription_array[0].binding = 0;
 	vkVertexInputAttributeDescription_array[0].format = VK_FORMAT_R32G32B32_SFLOAT;
@@ -4265,7 +4265,7 @@ VkResult CreatePipeline(void)
 	} VkSpecializationInfo;
 	*/
 	VkPipelineShaderStageCreateInfo vkPipelineShaderStageCreateInfo_array[2];
-	memset((void*)vkPipelineShaderStageCreateInfo_array, 0, _ARRAYSIZE(vkPipelineShaderStageCreateInfo_array));
+	memset((void*)vkPipelineShaderStageCreateInfo_array, 0, sizeof(VkPipelineShaderStageCreateInfo) * _ARRAYSIZE(vkPipelineShaderStageCreateInfo_array));
 	//Vertex Shader
 	vkPipelineShaderStageCreateInfo_array[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	vkPipelineShaderStageCreateInfo_array[0].pNext = NULL; //validation error is not given (If any structure(shader stage in this case) having extensions is not given pNext as NULL, then validation error comes)
