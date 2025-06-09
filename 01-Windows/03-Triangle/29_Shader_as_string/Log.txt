@@ -391,14 +391,14 @@ CreateVertexBuffer(): vkAllocateMemory() succedded
 CreateVertexBuffer(): vkBindBufferMemory() succedded
 CreateVertexBuffer(): vkMapMemory() succedded
 initialize(): CreateVertexBuffer() succedded
-CreateShaders(): sucedded to open Vertex Shader SPIRV file
-CreateShaders(): malloc for Vertex Shader SPIRV file done
-CreateShaders(): sucedded to read Vertex Shader SPIRV file
+glsl2SPV(): parse() method succeeded
+glsl2SPV(): link() method succeeded
+CreateShaders(): glsl2SPV() suceeded for vertex shader
 CreateShaders(): vkCreateShaderModule() for vertex SPIRV shader file succedded
 CreateShaders(): vertex Shader module successfully created
-CreateShaders(): sucedded to open Fragment Shader SPIRV file
-CreateShaders(): malloc for Fragment Shader SPIRV file done
-CreateShaders(): sucedded to read Fragment Shader SPIRV file
+glsl2SPV(): parse() method succeeded
+glsl2SPV(): link() method succeeded
+CreateShaders(): glsl2SPV() suceeded for fragment shader
 CreateShaders(): vkCreateShaderModule() function for fragment SPIRV shader file succedded
 CreateShaders(): fragment Shader module successfully created
 initialize(): CreateShaders() succedded
