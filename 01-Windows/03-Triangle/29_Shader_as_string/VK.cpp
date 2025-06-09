@@ -3227,7 +3227,7 @@ VkResult CreateVertexBuffer(void)
 	vkMemoryAllocateInfo.memoryTypeIndex = 0; //Initial value before entering into the loop
 	for(uint32_t i =0; i < vkPhysicalDeviceMemoryProperties.memoryTypeCount; i++) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPhysicalDeviceMemoryProperties.html
 	{
-		if(vkMemoryRequirements.memoryTypeBits & 1 == 1) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryRequirements.html
+		if((vkMemoryRequirements.memoryTypeBits & 1) == 1) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryRequirements.html
 		{
 			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryType.html
 			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryPropertyFlagBits.html
