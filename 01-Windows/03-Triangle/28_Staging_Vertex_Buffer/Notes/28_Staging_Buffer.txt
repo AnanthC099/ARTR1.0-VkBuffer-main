@@ -1,0 +1,16 @@
+1. Create local vertex buffer, just like previously created vertex buffer.
+   But with different usage and different sharing mode.
+   Identify it as staging buffer.
+   This buffer will be visible to host and can be mapped to device memory.
+   
+2. Then create the usual vertex buffer, visible only to device.
+	
+3. Create 1 special command buffer.
+   Build above command buffer by Vulkan's bufferCopy command and copy the data in the staging buffer from Step 1 to the destination buffer from Step 2.
+   While doing this, use our command queque and the command buffer to submit the work of buffercopy.
+   
+4. After done free the command buffer.
+
+5. Destroy the local staging vertex buffer as its job is done.
+
+Note: Only CreateVertexBuffer() is changed from usual Vertex Buffer to Staging Vertex Buffer.
