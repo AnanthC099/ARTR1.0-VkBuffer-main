@@ -3645,6 +3645,32 @@ VkResult CreateVertexBuffer(void)
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateVertexBuffer(): vkQueueWaitIdle()  for buffer copy failed\n");
+		
+		if(vkCommandBuffer)
+		{
+			vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer);
+			vkCommandBuffer = VK_NULL_HANDLE;
+			fprintf(gFILE, "CreateVertexBuffer(): vkCommandBuffer for buffer copy is freed\n");
+		}
+
+		/*
+		5. Destroy the local staging vertex buffer as its job is done.
+		*/
+		if(vertexData_staging_Buffer_position.vkDeviceMemory)
+		{
+			vkFreeMemory(vkDevice, vertexData_staging_Buffer_position.vkDeviceMemory, NULL);
+			vertexData_staging_Buffer_position.vkDeviceMemory = VK_NULL_HANDLE;
+			fprintf(gFILE, "CreateVertexBuffer(): vertexData_staging_Buffer_position.vkDeviceMemory is freed\n");
+			
+		}
+		
+		if(vertexData_staging_Buffer_position.vkBuffer)
+		{
+			vkDestroyBuffer(vkDevice, vertexData_staging_Buffer_position.vkBuffer, NULL);
+			vertexData_staging_Buffer_position.vkBuffer = VK_NULL_HANDLE;
+			fprintf(gFILE, "CreateVertexBuffer(): vertexData_staging_Buffer_position.vkBuffer is freed\n");
+		}
+		
 		return vkResult;
 	}
 	else
@@ -3677,6 +3703,7 @@ VkResult CreateVertexBuffer(void)
 		vkFreeMemory(vkDevice, vertexData_staging_Buffer_position.vkDeviceMemory, NULL);
 		vertexData_staging_Buffer_position.vkDeviceMemory = VK_NULL_HANDLE;
 		fprintf(gFILE, "CreateVertexBuffer(): vertexData_staging_Buffer_position.vkDeviceMemory is freed\n");
+		
 	}
 	
 	if(vertexData_staging_Buffer_position.vkBuffer)
