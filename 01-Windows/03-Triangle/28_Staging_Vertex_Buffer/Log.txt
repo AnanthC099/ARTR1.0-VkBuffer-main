@@ -322,7 +322,7 @@ FillDeviceExtensionNames(): Vulkan Device Extension Name = VK_GOOGLE_user_type
 FillDeviceExtensionNames(): VK_KHR_SWAPCHAIN_EXTENSION_NAME is found
 FillDeviceExtensionNames(): Enabled Vulkan Device Extension Name = VK_KHR_swapchain
 CreateVulKanDevice(): FillDeviceExtensionNames() succedded
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_KHRONOS_validation" (C:\VulkanSDK\Vulkan\Bin\.\VkLayer_khronos_validation.dll)
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_KHRONOS_validation" (C:\VulkanSDK\Anjaneya\Bin\.\VkLayer_khronos_validation.dll)
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_OBS_HOOK" (C:\ProgramData\obs-studio-hook\.\graphics-hook64.dll)
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_NV_present" (C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_2c61c4d89b199ea8\.\nvoglv64.dll)
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_NV_optimus" (C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_2c61c4d89b199ea8\.\nvoglv64.dll)
@@ -355,8 +355,8 @@ Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    VK_LAYER_KHRONOS_validation
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Type: Explicit
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Enabled By: By the Application
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Manifest: C:\VulkanSDK\Vulkan\Bin\VkLayer_khronos_validation.json
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library:  C:\VulkanSDK\Vulkan\Bin\.\VkLayer_khronos_validation.dll
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Manifest: C:\VulkanSDK\Anjaneya\Bin\VkLayer_khronos_validation.json
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library:  C:\VulkanSDK\Anjaneya\Bin\.\VkLayer_khronos_validation.dll
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    <Device>
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =        Using "NVIDIA GeForce RTX 2070" with driver: "C:\WINDOWS\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_2c61c4d89b199ea8\.\nvoglv64.dll"
@@ -386,10 +386,21 @@ initialize(): CreateCommandPool() succedded
 CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
 CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
 initialize(): CreateCommandBuffers() succedded
-CreateVertexBuffer(): vkCreateBuffer() succedded
-CreateVertexBuffer(): vkAllocateMemory() succedded
-CreateVertexBuffer(): vkBindBufferMemory() succedded
-CreateVertexBuffer(): vkMapMemory() succedded
+CreateVertexBuffer(): vkCreateBuffer() for creating staging Buffer succedded
+CreateVertexBuffer(): vkAllocateMemory() for allocating staging Buffer device memory succedded
+CreateVertexBuffer(): vkBindBufferMemory() for staging buffer succedded
+CreateVertexBuffer(): vkMapMemory() for staging buffer succedded
+CreateVertexBuffer(): vkCreateBuffer() for destination vertex buffer succedded
+CreateVertexBuffer(): vkAllocateMemory() for destination vertex buffer succedded
+CreateVertexBuffer(): vkBindBufferMemory() for destination vertex buffer succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() for buffer copy succedded
+CreateVertexBuffer(): vkBeginCommandBuffer() for buffer copy succedded
+CreateVertexBuffer(): vkEndCommandBuffer() for buffer copy succedded
+CreateVertexBuffer(): vkQueueSubmit()  for buffer copy suceeded
+CreateVertexBuffer(): vkQueueWaitIdle()  for buffer copy suceeded
+CreateVertexBuffer(): vkCommandBuffer for buffer copy is freed
+CreateVertexBuffer(): vertexData_staging_Buffer_position.vkDeviceMemory is freed
+CreateVertexBuffer(): vertexData_staging_Buffer_position.vkBuffer is freed
 initialize(): CreateVertexBuffer() succedded
 CreateShaders(): sucedded to open Vertex Shader SPIRV file
 CreateShaders(): malloc for Vertex Shader SPIRV file done

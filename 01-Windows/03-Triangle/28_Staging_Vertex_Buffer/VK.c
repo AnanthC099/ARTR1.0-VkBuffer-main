@@ -3065,13 +3065,6 @@ VkResult CreateVertexBuffer(void)
 	//Variable declarations	
 	VkResult vkResult = VK_SUCCESS;
 	
-	/*
-	Code
-	*/
-
-	/*
-	22.3. Implement CreateVertexBuffer() and inside it first declare our triangle's position array.
-	*/
 	float triangle_Position[] =
 	{
 		0.0f, 1.0f, 0.0f,
@@ -3080,7 +3073,234 @@ VkResult CreateVertexBuffer(void)
 	};
 	
 	/*
-	22.4. memset our global vertexData_position.
+	28.1
+	1. Create local vertex buffer, just like previously created vertex buffer.
+	But with different usage and different sharing mode.
+	Identify it as staging buffer.
+	This buffer will be visible to host and can be mapped to device memory.
+	*/
+	VertexData vertexData_staging_Buffer_position;
+	memset((void*)&vertexData_staging_Buffer_position, 0, sizeof(VertexData));
+	
+	/*
+	22.5. Declare and memset VkBufferCreateInfo struct.
+	It has 8 members, we will use 5
+	Out of them, 2 are very important (Usage and Size)
+	*/
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferCreateInfo.html
+	VkBufferCreateInfo vkBufferCreateInfo_stagingBuffer;
+	memset((void*)&vkBufferCreateInfo_stagingBuffer, 0, sizeof(VkBufferCreateInfo));
+	
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkBufferCreateInfo {
+		VkStructureType        sType;
+		const void*            pNext;
+		VkBufferCreateFlags    flags;
+		VkDeviceSize           size;
+		VkBufferUsageFlags     usage;
+		VkSharingMode          sharingMode;
+		uint32_t               queueFamilyIndexCount;
+		const uint32_t*        pQueueFamilyIndices;
+	} VkBufferCreateInfo;
+	*/
+	vkBufferCreateInfo_stagingBuffer.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	vkBufferCreateInfo_stagingBuffer.pNext = NULL;
+	vkBufferCreateInfo_stagingBuffer.flags = 0; //Valid flags are used in scattered(sparse) buffer
+	vkBufferCreateInfo_stagingBuffer.size = sizeof(triangle_Position);
+	vkBufferCreateInfo_stagingBuffer.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html
+	vkBufferCreateInfo_stagingBuffer.sharingMode = VK_SHARING_MODE_EXCLUSIVE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSharingMode.html
+	//vkBufferCreateInfo_stagingBuffer.queueFamilyIndexCount = 0;
+	//vkBufferCreateInfo_stagingBuffer.pQueueFamilyIndices = NULL; 
+	
+	/*
+	22.6. Call vkCreateBuffer() vulkan API in the ".vkBuffer" member of our global struct
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateBuffer(
+    VkDevice                                    device,
+    const VkBufferCreateInfo*                   pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkBuffer*                                   pBuffer);
+	*/
+	vkResult = vkCreateBuffer(vkDevice, &vkBufferCreateInfo_stagingBuffer, NULL, &vertexData_staging_Buffer_position.vkBuffer); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateBuffer.html
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() function for creating Staging Buffer failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() for creating staging Buffer succedded\n");
+	}
+	
+	/*
+	22.7. Declare and member memset struct VkMemoryRequirements and then call vkGetBufferMemoryRequirements() API to get the memory requirements.
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryRequirements {
+		VkDeviceSize    size;
+		VkDeviceSize    alignment;
+		uint32_t        memoryTypeBits;
+	} VkMemoryRequirements;
+	*/
+	VkMemoryRequirements vkMemoryRequirements_stagingBuffer;
+	memset((void*)&vkMemoryRequirements_stagingBuffer, 0, sizeof(VkMemoryRequirements));
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetBufferMemoryRequirements.html
+	/*
+	// Provided by VK_VERSION_1_0
+	void vkGetBufferMemoryRequirements(
+    VkDevice                                    device,
+    VkBuffer                                    buffer,
+    VkMemoryRequirements*                       pMemoryRequirements);
+	*/
+	vkGetBufferMemoryRequirements(vkDevice, vertexData_staging_Buffer_position.vkBuffer, &vkMemoryRequirements_stagingBuffer);
+	
+	/*
+	   22.8. To actually allocate the required memory, we need to call vkAllocateMemory().
+	   But before that we need to declare and memset VkMemoryAllocateInfo structure.
+	   Important members of this structure are ".memoryTypeIndex" and ".allocationSize".
+	   For ".allocationSize", use the size obtained from vkGetBufferMemoryRequirements().
+	   For ".memoryTypeIndex" : 
+	   a. Start a loop with count as vkPkysicalDeviceMemoryProperties.memoryTypeCount.
+	   b. Inside the loop check vkMemoryRequiremts.memoryTypeBits contain 1 or not.
+	   c. If yes, Check vkPhysicalDeviceMemoryProperties.memeoryTypes[i].propertyFlags member contains enum VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT.
+	   d. Then this ith index will be our ".memoryTypeIndex".
+		  If found, break out of the loop.
+	   e. If not continue the loop by right shifting VkMemoryRequirements.memoryTypeBits by 1, over each iteration.
+	*/
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryAllocateInfo {
+		VkStructureType    sType;
+		const void*        pNext;
+		VkDeviceSize       allocationSize;
+		uint32_t           memoryTypeIndex;
+	} VkMemoryAllocateInfo;
+	*/
+	VkMemoryAllocateInfo vkMemoryAllocateInfo_stagingBuffer;
+	memset((void*)&vkMemoryAllocateInfo_stagingBuffer, 0, sizeof(VkMemoryAllocateInfo));
+	vkMemoryAllocateInfo_stagingBuffer.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	vkMemoryAllocateInfo_stagingBuffer.pNext = NULL;
+	vkMemoryAllocateInfo_stagingBuffer.allocationSize = vkMemoryRequirements_stagingBuffer.size; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDeviceSize.html (vkMemoryRequirements allocates memory in regions.)
+
+	
+	/*
+	   22.8. To actually allocate the required memory, we need to call vkAllocateMemory().
+	   But before that we need to declare and memset VkMemoryAllocateInfo structure.
+	   Important members of this structure are ".memoryTypeIndex" and ".allocationSize".
+	   For ".allocationSize", use the size obtained from vkGetBufferMemoryRequirements().
+	   For ".memoryTypeIndex" : 
+	   a. Start a loop with count as vkPhysicalDeviceMemoryProperties.memoryTypeCount.
+	   b. Inside the loop check vkMemoryRequiremts.memoryTypeBits contain 1 or not.
+	   c. If yes, Check vkPhysicalDeviceMemoryProperties.memeoryTypes[i].propertyFlags member contains enum VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT.
+	   d. Then this ith index will be our ".memoryTypeIndex".
+		  If found, break out of the loop.
+	   e. If not continue the loop by right shifting VkMemoryRequirements.memoryTypeBits by 1, over each iteration.
+	*/
+	vkMemoryAllocateInfo_stagingBuffer.memoryTypeIndex = 0; //Initial value before entering into the loop
+	for(uint32_t i =0; i < vkPhysicalDeviceMemoryProperties.memoryTypeCount; i++) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPhysicalDeviceMemoryProperties.html
+	{
+		if((vkMemoryRequirements_stagingBuffer.memoryTypeBits & 1) == 1) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryRequirements.html
+		{
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryType.html
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryPropertyFlagBits.html
+			//VK_MEMORY_PROPERTY_HOST_COHERENT_BIT -> No need to manage Vulkan cache mechanism of flushing and mapping as we order Vulkan to maintain the coherency
+			if(vkPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT|VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
+			{
+				vkMemoryAllocateInfo_stagingBuffer.memoryTypeIndex = i;
+				break;
+			}			
+		}
+		vkMemoryRequirements_stagingBuffer.memoryTypeBits >>= 1;
+	}
+	
+	/*
+	22.9. Now call vkAllocateMemory()  and get the required Vulkan memory objects handle into the ".vkDeviceMemory" member of put global structure.
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateMemory(
+    VkDevice                                    device,
+    const VkMemoryAllocateInfo*                 pAllocateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDeviceMemory*                             pMemory);
+	*/
+	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo_stagingBuffer, NULL, &vertexData_staging_Buffer_position.vkDeviceMemory); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() for allocating staging Buffer device memory failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() for allocating staging Buffer device memory succedded\n");
+	}
+	
+	/*
+	22.10. Now we have our required deviceMemory handle as well as VkBuffer Handle.
+	Bind this device memory handle to VkBuffer Handle by using vkBindBufferMemory().
+	Declare a void* buffer say "data" and call vkMapMemory() to map our device memory object handle to this void* buffer data.
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBindBufferMemory.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkBindBufferMemory(
+    VkDevice                                    device,
+    VkBuffer                                    buffer, //whom to bind
+    VkDeviceMemory                              memory, //what to bind
+    VkDeviceSize                                memoryOffset);
+	*/
+	vkResult = vkBindBufferMemory(vkDevice, vertexData_staging_Buffer_position.vkBuffer, vertexData_staging_Buffer_position.vkDeviceMemory, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() for staging buffer failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() for staging buffer succedded\n");
+	}
+	
+	/*
+	22.11. This will allow us to do memory mapped IO means when we write on void* buffer data, it will get automatically written/copied on to device memory represented by device memory object handle.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkMapMemory.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkMapMemory(
+    VkDevice                                    device,
+    VkDeviceMemory                              memory,
+    VkDeviceSize                                offset,
+    VkDeviceSize                                size,
+    VkMemoryMapFlags                            flags,
+    void**                                      ppData);
+	*/
+	void* data = NULL;
+	vkResult = vkMapMemory(vkDevice, vertexData_staging_Buffer_position.vkDeviceMemory, 0, vkMemoryAllocateInfo_stagingBuffer.allocationSize, 0, &data);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() for staging buffer failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() for staging buffer succedded\n");
+	}
+	
+	/*
+	22.12. Now to do actual memory mapped IO, call memcpy.
+	*/
+	memcpy(data, triangle_Position, sizeof(triangle_Position));
+	
+	/*
+	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkUnmapMemory.html
+	// Provided by VK_VERSION_1_0
+	void vkUnmapMemory(
+    VkDevice                                    device,
+    VkDeviceMemory                              memory);
+	*/
+	vkUnmapMemory(vkDevice, vertexData_staging_Buffer_position.vkDeviceMemory);
+	
+	/*
+	28.2. Then create the usual vertex buffer, visible only to device.
 	*/
 	memset((void*)&vertexdata_position, 0, sizeof(VertexData));
 	
@@ -3110,13 +3330,10 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
 	vkBufferCreateInfo.size = sizeof(triangle_Position);
-	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
-	/* //when one buffer shared in multiple queque's
-	vkBufferCreateInfo.sharingMode =;
-	vkBufferCreateInfo.queueFamilyIndexCount =;
-	vkBufferCreateInfo.pQueueFamilyIndices =; 
-	*/
-	
+	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT|VK_BUFFER_USAGE_TRANSFER_DST_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
+	vkBufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSharingMode.html
+	//vkBufferCreateInfo.queueFamilyIndexCount = 0;
+	//vkBufferCreateInfo.pQueueFamilyIndices = NULL; 
 	
 	/*
 	22.6. Call vkCreateBuffer() vulkan API in the ".vkBuffer" member of our global struct
@@ -3130,12 +3347,12 @@ VkResult CreateVertexBuffer(void)
 	vkResult = vkCreateBuffer(vkDevice, &vkBufferCreateInfo, NULL, &vertexdata_position.vkBuffer); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateBuffer.html
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() function for destination vertex buffer failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() succedded\n");
+		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() for destination vertex buffer succedded\n");
 	}
 	
 	/*
@@ -3210,7 +3427,7 @@ VkResult CreateVertexBuffer(void)
 		{
 			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryType.html
 			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryPropertyFlagBits.html
-			if(vkPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+			if(vkPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
 			{
 				vkMemoryAllocateInfo.memoryTypeIndex = i;
 				break;
@@ -3231,12 +3448,12 @@ VkResult CreateVertexBuffer(void)
 	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo, NULL, &vertexdata_position.vkDeviceMemory); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() function for destination vertex buffer failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() succedded\n");
+		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() for destination vertex buffer succedded\n");
 	}
 	
 	/*
@@ -3255,52 +3472,219 @@ VkResult CreateVertexBuffer(void)
 	vkResult = vkBindBufferMemory(vkDevice, vertexdata_position.vkBuffer, vertexdata_position.vkDeviceMemory, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() for destination vertex buffer failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() succedded\n");
+		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() for destination vertex buffer succedded\n");
 	}
 	
+	//No need for vkMapMemory, memcpy and vkUnMapMemory for this device visible buffer
+	
 	/*
-	22.11. This will allow us to do memory mapped IO means when we write on void* buffer data, it will get automatically written/copied on to device memory represented by device memory object handle.
-	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkMapMemory.html
-	// Provided by VK_VERSION_1_0
-	VkResult vkMapMemory(
-    VkDevice                                    device,
-    VkDeviceMemory                              memory,
-    VkDeviceSize                                offset,
-    VkDeviceSize                                size,
-    VkMemoryMapFlags                            flags,
-    void**                                      ppData);
+	28.3
+	3. Create 1 special command buffer.
+	Build above command buffer by Vulkan's bufferCopy command and copy the data in the staging buffer from Step 1 to the destination buffer from Step 2.
+	While doing this, use our command queque and the command buffer to submit the work of buffercopy.
 	*/
-	void* data = NULL;
-	vkResult = vkMapMemory(vkDevice, vertexdata_position.vkDeviceMemory, 0, vkMemoryAllocateInfo.allocationSize, 0, &data);
+	
+	/*
+	1. Declare and initialize struct VkCommandBufferAllocateInfo (https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferAllocateInfo.html)
+	The number of command buffers are coventionally equal to number of swapchain images.
+	
+	typedef struct VkCommandBufferAllocateInfo {
+    VkStructureType         sType;
+    const void*             pNext;
+    VkCommandPool           commandPool;
+    VkCommandBufferLevel    level;
+    uint32_t                commandBufferCount;
+	} VkCommandBufferAllocateInfo;
+	*/
+	VkCommandBufferAllocateInfo vkCommandBufferAllocateInfo;
+	memset((void*)&vkCommandBufferAllocateInfo, 0, sizeof(VkCommandBufferAllocateInfo));
+	vkCommandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	vkCommandBufferAllocateInfo.pNext = NULL;
+	//vkCommandBufferAllocateInfo.flags = 0;
+	vkCommandBufferAllocateInfo.commandPool = vkCommandPool;
+	vkCommandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY; //https://docs.vulkan.org/spec/latest/chapters/cmdbuffers.html#VkCommandBufferAllocateInfo
+	vkCommandBufferAllocateInfo.commandBufferCount = 1;
+	
+	VkCommandBuffer vkCommandBuffer = VK_NULL_HANDLE;
+	vkResult = vkAllocateCommandBuffers(vkDevice, &vkCommandBufferAllocateInfo, &vkCommandBuffer);
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateCommandBuffers(): vkAllocateCommandBuffers() for buffer copy failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() succedded\n");
+		fprintf(gFILE, "CreateCommandBuffers(): vkAllocateCommandBuffers() for buffer copy succedded\n");
 	}
 	
 	/*
-	22.12. Now to do actual memory mapped IO, call memcpy.
+	No need to reset the command buffer
 	*/
-	memcpy(data, triangle_Position, sizeof(triangle_Position));
 	
 	/*
-	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
-	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkUnmapMemory.html
-	// Provided by VK_VERSION_1_0
-	void vkUnmapMemory(
-    VkDevice                                    device,
-    VkDeviceMemory                              memory);
+	Then declare, memset and initialize VkCommandBufferBeginInfo struct.
 	*/
-	vkUnmapMemory(vkDevice, vertexdata_position.vkDeviceMemory);
+	VkCommandBufferBeginInfo vkCommandBufferBeginInfo;
+	memset((void*)&vkCommandBufferBeginInfo, 0, sizeof(VkCommandBufferBeginInfo));
+	vkCommandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	vkCommandBufferBeginInfo.pNext = NULL;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferBeginInfo.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferUsageFlagBits.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkCommandBufferUsageFlagBits {
+    VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT = 0x00000001,
+    VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT = 0x00000002,
+    VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT = 0x00000004,
+	} VkCommandBufferUsageFlagBits;
+	*/
+	vkCommandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;  //Due to this we dont need to reset command buffer
+	vkCommandBufferBeginInfo.pInheritanceInfo = NULL;
+	
+	/*
+	Call vkBeginCommandBuffer() to record different Vulkan drawing related commands.
+	Do Error Checking.
+	*/
+	vkResult = vkBeginCommandBuffer(vkCommandBuffer, &vkCommandBufferBeginInfo);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkBeginCommandBuffer() for buffer copy failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkBeginCommandBuffer() for buffer copy succedded\n");
+	}
+	
+	//https://registry.khronos.org/VulkanSC/specs/1.0-extensions/man/html/VkBufferCopy.html
+	// Provided by VK_VERSION_1_0
+	/*
+	typedef struct VkBufferCopy {
+		VkDeviceSize    srcOffset;
+		VkDeviceSize    dstOffset;
+		VkDeviceSize    size;
+	} VkBufferCopy;
+	*/
+	VkBufferCopy vkBufferCopy;
+	memset((void*)&vkBufferCopy, 0, sizeof(VkBufferCopy));
+	vkBufferCopy.srcOffset = 0;
+	vkBufferCopy.dstOffset = 0;
+	vkBufferCopy.size = sizeof(triangle_Position); //buffer related data structure, not related to memory
+	
+	/*
+	https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdCopyBuffer.html
+	// Provided by VK_VERSION_1_0
+	void vkCmdCopyBuffer(
+    VkCommandBuffer                             commandBuffer,
+    VkBuffer                                    srcBuffer,
+    VkBuffer                                    dstBuffer,
+    uint32_t                                    regionCount,
+    const VkBufferCopy*                         pRegions);
+	*/
+	vkCmdCopyBuffer(vkCommandBuffer, vertexData_staging_Buffer_position.vkBuffer, vertexdata_position.vkBuffer, 1, &vkBufferCopy);
+	
+	/*
+	End the recording of commandbuffer by calling vkEndCommandBuffer() API.
+	*/
+	vkResult = vkEndCommandBuffer(vkCommandBuffer);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkEndCommandBuffer() for buffer copy failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkEndCommandBuffer() for buffer copy succedded\n");
+	}
+	
+	/*
+	Submit the above command buffer to the queque
+	*/
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSubmitInfo.html
+	// Declare, memset and initialize VkSubmitInfo structure
+	VkSubmitInfo vkSubmitInfo;
+	memset((void*)&vkSubmitInfo, 0, sizeof(VkSubmitInfo));
+	vkSubmitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	vkSubmitInfo.pNext = NULL;
+	
+	// No synchronization required . So these members not required
+	//vkSubmitInfo.pWaitDstStageMask = &waitDstStageMask;
+	//vkSubmitInfo.waitSemaphoreCount = 1;
+	//vkSubmitInfo.pWaitSemaphores = &vkSemaphore_BackBuffer;
+	vkSubmitInfo.commandBufferCount = 1;
+	vkSubmitInfo.pCommandBuffers = &vkCommandBuffer;
+	//Only 1 buffer, so no synchronization required
+	//vkSubmitInfo.signalSemaphoreCount = 1;
+	//vkSubmitInfo.pSignalSemaphores = &vkSemaphore_RenderComplete;
+	
+	//Now submit above work to the queque
+	vkResult = vkQueueSubmit(vkQueue, 1, &vkSubmitInfo, VK_NULL_HANDLE); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueSubmit.html
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkQueueSubmit()  for buffer copy failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkQueueSubmit()  for buffer copy suceeded\n");
+	}
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueWaitIdle.html
+	//You need to wait for above operation as we are in initialize, and this operation needs to be done now  and not in display()
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkQueueWaitIdle(VkQueue queue);
+	*/
+	vkResult = vkQueueWaitIdle(vkQueue);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkQueueWaitIdle()  for buffer copy failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateVertexBuffer(): vkQueueWaitIdle()  for buffer copy suceeded\n");
+	}
+	
+	/*
+	4. After done free the command buffer.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html
+	// Provided by VK_VERSION_1_0
+	void vkFreeCommandBuffers(
+    VkDevice                                    device,
+    VkCommandPool                               commandPool,
+    uint32_t                                    commandBufferCount,
+    const VkCommandBuffer*                      pCommandBuffers);
+	*/
+	if(vkCommandBuffer)
+	{
+		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer);
+		vkCommandBuffer = VK_NULL_HANDLE;
+		fprintf(gFILE, "CreateVertexBuffer(): vkCommandBuffer for buffer copy is freed\n");
+	}
+
+	/*
+	5. Destroy the local staging vertex buffer as its job is done.
+	*/
+	if(vertexData_staging_Buffer_position.vkDeviceMemory)
+	{
+		vkFreeMemory(vkDevice, vertexData_staging_Buffer_position.vkDeviceMemory, NULL);
+		vertexData_staging_Buffer_position.vkDeviceMemory = VK_NULL_HANDLE;
+		fprintf(gFILE, "CreateVertexBuffer(): vertexData_staging_Buffer_position.vkDeviceMemory is freed\n");
+	}
+	
+	if(vertexData_staging_Buffer_position.vkBuffer)
+	{
+		vkDestroyBuffer(vkDevice, vertexData_staging_Buffer_position.vkBuffer, NULL);
+		vertexData_staging_Buffer_position.vkBuffer = VK_NULL_HANDLE;
+		fprintf(gFILE, "CreateVertexBuffer(): vertexData_staging_Buffer_position.vkBuffer is freed\n");
+	}
 	
 	return vkResult;
 }
