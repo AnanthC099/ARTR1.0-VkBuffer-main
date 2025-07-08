@@ -895,14 +895,20 @@ VkResult resize(int width, int height)
 		fprintf(gFILE, "resize(): vkFramebuffer_array is freed\n");
 	}
 	
-	//30.8
-	//Destroy Renderpass : In uninitialize , destroy the renderpass by 
-	//using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
-	if(vkRenderPass)
+	//30.11
+	//Destroy Commandbuffer: In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
+	for(uint32_t i =0; i < swapchainImageCount; i++)
 	{
-		vkDestroyRenderPass(vkDevice, vkRenderPass, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html
-		vkRenderPass = VK_NULL_HANDLE;
-		fprintf(gFILE, "resize(): vkDestroyRenderPass() is done\n");
+		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_array[i]);
+		fprintf(gFILE, "resize(): vkFreeCommandBuffers() is done\n");
+	}
+			
+	//Free actual command buffer array.
+	if(vkCommandBuffer_array)
+	{
+		free(vkCommandBuffer_array);
+		vkCommandBuffer_array = NULL;
+		fprintf(gFILE, "resize(): vkCommandBuffer_array is freed\n");
 	}
 	
 	//30.9
@@ -923,20 +929,14 @@ VkResult resize(int width, int height)
 		fprintf(gFILE, "resize(): vkPipelineLayout is freed\n");
 	}
 	
-	//30.11
-	//Destroy Commandbuffer: In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
-	for(uint32_t i =0; i < swapchainImageCount; i++)
+	//30.8
+	//Destroy Renderpass : In uninitialize , destroy the renderpass by 
+	//using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
+	if(vkRenderPass)
 	{
-		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_array[i]);
-		fprintf(gFILE, "resize(): vkFreeCommandBuffers() is done\n");
-	}
-			
-	//Free actual command buffer array.
-	if(vkCommandBuffer_array)
-	{
-		free(vkCommandBuffer_array);
-		vkCommandBuffer_array = NULL;
-		fprintf(gFILE, "resize(): vkCommandBuffer_array is freed\n");
+		vkDestroyRenderPass(vkDevice, vkRenderPass, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html
+		vkRenderPass = VK_NULL_HANDLE;
+		fprintf(gFILE, "resize(): vkDestroyRenderPass() is done\n");
 	}
 	
 	//30.12
@@ -998,11 +998,11 @@ VkResult resize(int width, int height)
 		return vkResult;
 	}
 	
-	//30.16 Create CommandBuffers
-	vkResult  = CreateCommandBuffers();
+	//30.18 Create renderPass
+	vkResult =  CreateRenderPass();
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "resize(): CreateCommandBuffers() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "resize(): CreateRenderPass() function failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
@@ -1011,14 +1011,6 @@ VkResult resize(int width, int height)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "resize(): CreatePipelineLayout() function failed with error code %d\n", vkResult);
-		return vkResult;
-	}
-	
-	//30.18 Create renderPass
-	vkResult =  CreateRenderPass();
-	if (vkResult != VK_SUCCESS)
-	{
-		fprintf(gFILE, "resize(): CreateRenderPass() function failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
@@ -1035,6 +1027,15 @@ VkResult resize(int width, int height)
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "resize(): CreateFramebuffers() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	
+	//30.16 Create CommandBuffers
+	vkResult  = CreateCommandBuffers();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreateCommandBuffers() function failed with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
