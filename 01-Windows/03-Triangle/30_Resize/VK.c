@@ -375,7 +375,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 		{
 			if (gbActive == TRUE)
 			{
-				display();
+				vkResult = display();
+				if ((vkResult != VK_FALSE) && (vkResult != VK_SUCCESS))
+				{
+					fprintf(gFILE, "WinMain(): display() function failed\n");
+					bDone = TRUE;
+				}
 				update();
 			}
 		}
@@ -805,7 +810,7 @@ VkResult initialize(void)
 	*/
 	bInitialized = TRUE;
 	
-	fprintf(gFILE, "************************* End of initialize ******************************\n");
+	fprintf(gFILE, "initialize(): initialize() completed sucessfully");
 	
 	return vkResult;
 }
@@ -813,6 +818,15 @@ VkResult initialize(void)
 void resize(int width, int height)
 {
 	// Code
+	if(bInitialized == FALSE)
+	{
+		//throw error
+	}
+	bInitialized = FALSE;
+	
+	//call can go to display() and code for resize() here
+	
+	bInitialized = TRUE;
 }
 
 VkResult display(void)
