@@ -392,13 +392,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	return((int)msg.wParam);
 }
 
-
 // CALLBACK Function
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	// Function Declarations
 	void ToggleFullscreen( void );
-	void resize(int, int);
+	VkResult resize(int, int);
 
 	// Code
 	switch (iMsg)
@@ -417,7 +416,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_SIZE:
-			resize(LOWORD(lParam), HIWORD(lParam));
+			resize(LOWORD(lParam), HIWORD(lParam)); //No need of error checking
 			break;
 
 		/*
@@ -815,18 +814,243 @@ VkResult initialize(void)
 	return vkResult;
 }
 
-void resize(int width, int height)
+VkResult resize(int width, int height)
 {
+	//Function declarations
+	VkResult CreateSwapChain(VkBool32);
+	VkResult CreateImagesAndImageViews(void);
+	VkResult CreateCommandBuffers(void);
+	VkResult CreatePipelineLayout(void);
+	VkResult CreatePipeline(void);
+	VkResult CreateRenderPass(void);
+	VkResult CreateFramebuffers(void);
+	VkResult buildCommandBuffers(void);
+	
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
 	// Code
+	if(height <= 0)
+	{
+		height = 1;
+	}
+	
+	//30.1
+	//Check the bInitialized variable
 	if(bInitialized == FALSE)
 	{
 		//throw error
+		fprintf(gFILE, "resize(): initialization yet not completed or failed\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
 	}
+	
+	//30.2 
+	//As recreation of swapchain is needed, we are going to repeat many steps of initialize() again.
+	//Hence set bInitialized = FALSE again.
 	bInitialized = FALSE;
 	
-	//call can go to display() and code for resize() here
+	/*
+	call can go to display() and code for resize() here
+	*/
 	
+	//30.4 
+	//Set global WIN_WIDTH and WIN_HEIGHT variables
+	winWidth = width;
+	winHeight = height;
+	
+	//30.5
+	//Wait for device to complete in-hand tasks
+	if(vkDevice)
+	{
+		vkDeviceWaitIdle(vkDevice);
+		fprintf(gFILE, "resize(): vkDeviceWaitIdle() is done\n");
+	}
+	
+	//Destroy and recreate Swapchain, Swapchain image and image views functions, Swapchain count functions, Renderpass, Framebuffer, Pipeline, Pipeline Layout, CommandBuffer
+	
+	//30.6
+	//Check presence of swapchain
+	if(vkSwapchainKHR == VK_NULL_HANDLE)
+	{
+		fprintf(gFILE, "resize(): vkSwapchainKHR is already NULL, cannot proceed\n");
+		vkResult = VK_ERROR_INITIALIZATION_FAILED;
+		return vkResult;
+	}
+	
+	//30.7
+	//Destroy framebuffer: destroy framebuffers in a loop for swapchainImageCount
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyFramebuffer.html
+	for(uint32_t i =0; i < swapchainImageCount; i++)
+	{
+		vkDestroyFramebuffer(vkDevice, vkFramebuffer_array[i], NULL);
+		vkFramebuffer_array[i] = NULL;
+		fprintf(gFILE, "resize(): vkDestroyFramebuffer() is done\n");
+	}
+	
+	if(vkFramebuffer_array)
+	{
+		free(vkFramebuffer_array);
+		vkFramebuffer_array = NULL;
+		fprintf(gFILE, "resize(): vkFramebuffer_array is freed\n");
+	}
+	
+	//30.8
+	//Destroy Renderpass : In uninitialize , destroy the renderpass by 
+	//using vkDestrorRenderPass() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html).
+	if(vkRenderPass)
+	{
+		vkDestroyRenderPass(vkDevice, vkRenderPass, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html
+		vkRenderPass = VK_NULL_HANDLE;
+		fprintf(gFILE, "resize(): vkDestroyRenderPass() is done\n");
+	}
+	
+	//30.9
+	//Destroy Pipeline
+	if(vkPipeline)
+	{
+		vkDestroyPipeline(vkDevice, vkPipeline, NULL);
+		vkPipeline = VK_NULL_HANDLE;
+		fprintf(gFILE, "resize(): vkPipeline is freed\n");
+	}
+	
+	//30.10
+	//Destroy PipelineLayout
+	if(vkPipelineLayout)
+	{
+		vkDestroyPipelineLayout(vkDevice, vkPipelineLayout, NULL);
+		vkPipelineLayout = VK_NULL_HANDLE;
+		fprintf(gFILE, "resize(): vkPipelineLayout is freed\n");
+	}
+	
+	//30.11
+	//Destroy Commandbuffer: In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
+	for(uint32_t i =0; i < swapchainImageCount; i++)
+	{
+		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_array[i]);
+		fprintf(gFILE, "resize(): vkFreeCommandBuffers() is done\n");
+	}
+			
+	//Free actual command buffer array.
+	if(vkCommandBuffer_array)
+	{
+		free(vkCommandBuffer_array);
+		vkCommandBuffer_array = NULL;
+		fprintf(gFILE, "resize(): vkCommandBuffer_array is freed\n");
+	}
+	
+	//30.12
+	//Destroy Swapchain image and image view: Keeping the "destructor logic aside" for a while , first destroy image views from imagesViews array in a loop using vkDestroyImageViews() api.
+	//(https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImageView.html)
+	for(uint32_t i =0; i < swapchainImageCount; i++)
+	{
+		vkDestroyImageView(vkDevice, swapChainImageView_array[i], NULL);
+		fprintf(gFILE, "resize(): vkDestroyImageView() is done\n");
+	}
+	
+	//Now actually free imageView array using free().
+	//free imageView array
+	if(swapChainImageView_array)
+	{
+		free(swapChainImageView_array);
+		swapChainImageView_array = NULL;
+		fprintf(gFILE, "resize(): swapChainImageView_array is freed\n");
+	}
+	
+	//Now actually free swapchain image array using free().
+	/*
+	for(uint32_t i = 0; i < swapchainImageCount; i++)
+	{
+		vkDestroyImage(vkDevice, swapChainImage_array[i], NULL);
+		fprintf(gFILE, "resize(): vkDestroyImage() is done\n");
+	}
+	*/
+	
+	if(swapChainImage_array)
+	{
+		free(swapChainImage_array);
+		swapChainImage_array = NULL;
+		fprintf(gFILE, "resize(): swapChainImage_array is freed\n");
+	}
+	
+	//30.13
+	//Destroy swapchain : destroy it uninitilialize() by using vkDestroySwapchainKHR() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroySwapchainKHR.html) Vulkan API.
+	vkDestroySwapchainKHR(vkDevice, vkSwapchainKHR, NULL);
+	vkSwapchainKHR = VK_NULL_HANDLE;
+	fprintf(gFILE, "resize(): vkDestroySwapchainKHR() is done\n");
+	
+	//RECREATE FOR RESIZE
+	
+	//30.14 Create Swapchain
+	vkResult = CreateSwapChain(VK_FALSE); //https://registry.khronos.org/vulkan/specs/latest/man/html/VK_FALSE.html
+	if (vkResult != VK_SUCCESS)
+	{
+		vkResult = VK_ERROR_INITIALIZATION_FAILED; //return hardcoded failure
+		fprintf(gFILE, "resize(): CreateSwapChain() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.15 Create Swapchain image and Image Views
+	vkResult =  CreateImagesAndImageViews();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreateImagesAndImageViews() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.16 Create CommandBuffers
+	vkResult  = CreateCommandBuffers();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreateCommandBuffers() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.16 Create PipelineLayout
+	vkResult = CreatePipelineLayout();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreatePipelineLayout() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.18 Create renderPass
+	vkResult =  CreateRenderPass();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreateRenderPass() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.17 Create Pipeline
+	vkResult = CreatePipeline();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreatePipeline() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.19 Create framebuffers
+	vkResult = CreateFramebuffers();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreateFramebuffers() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.20 Build Commandbuffers
+	vkResult = buildCommandBuffers();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): buildCommandBuffers() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//30.3
+	//Do this
 	bInitialized = TRUE;
+	
+	return vkResult;
 }
 
 VkResult display(void)
