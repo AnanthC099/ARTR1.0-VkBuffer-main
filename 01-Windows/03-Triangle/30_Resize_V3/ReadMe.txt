@@ -17,4 +17,4 @@ Framebuffers
 CommandBuffers
 buildCommandBuffer
 
-Prototype sequence as above
+Prototype sequence as above in  resize

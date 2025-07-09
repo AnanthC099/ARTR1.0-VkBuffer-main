@@ -819,11 +819,11 @@ VkResult resize(int width, int height)
 	//Function declarations
 	VkResult CreateSwapChain(VkBool32);
 	VkResult CreateImagesAndImageViews(void);
-	VkResult CreateCommandBuffers(void);
+	VkResult CreateRenderPass(void);
 	VkResult CreatePipelineLayout(void);
 	VkResult CreatePipeline(void);
-	VkResult CreateRenderPass(void);
 	VkResult CreateFramebuffers(void);
+	VkResult CreateCommandBuffers(void);
 	VkResult buildCommandBuffers(void);
 	
 	//Variable declarations
