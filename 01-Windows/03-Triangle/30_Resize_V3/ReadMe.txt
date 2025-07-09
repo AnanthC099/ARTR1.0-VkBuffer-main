@@ -7,14 +7,17 @@ RenderPass
 Swapchain Images and Views
 Swapchain
 
-Recreate
+Recreate -> Size dependant resources (In initialize we do both size dependant and size independent resources. In case of size dependant resources indicatyed below, there is interdepenendency also.)
 Swapchain
 Swapchain Images and Views
 RenderPass
+
 PipelineLayout
 Pipeline
+
 Framebuffers
-CommandBuffers
+
+CommandBuffers (SwapchainImageCount lagto)
 buildCommandBuffer
 
-Prototype sequence as above in  resize
+Prototype sequence as above in resize()
