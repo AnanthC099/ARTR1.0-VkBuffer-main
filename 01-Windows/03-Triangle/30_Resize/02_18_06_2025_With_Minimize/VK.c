@@ -27,6 +27,7 @@ DWORD dwStyle = 0;
 //WINDOWPLACEMENT wpPrev = { sizeof(WINDOWPLACEMENT) }; //dont do this as cpp style
 WINDOWPLACEMENT wpPrev;
 BOOL gbFullscreen = FALSE;
+BOOL bWindowMinimize = FALSE;
 
 // Global Variable Declarations
 FILE* gFILE = NULL;
@@ -376,7 +377,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 			if (gbActive == TRUE)
 			{
 				vkResult = display();
-				if ((vkResult != VK_FALSE) && (vkResult != VK_SUCCESS))
+				if ((vkResult != VK_FALSE) && (vkResult != VK_SUCCESS) && (vkResult != VK_ERROR_OUT_OF_DATE_KHR) && ((vkResult != VK_ERROR_SUBOPTIMAL_KHR)))
 				{
 					fprintf(gFILE, "WinMain(): display() function failed\n");
 					bDone = TRUE;
@@ -416,7 +417,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_SIZE:
-			resize(LOWORD(lParam), HIWORD(lParam)); //No need of error checking
+			if(WPARAM == SIZE_MINIMIZED)
+			{
+				bWindowMinimize = TRUE;
+			}
+			else
+			{
+				bWindowMinimize = FALSE; //Any sequence is OK
+				resize(LOWORD(lParam), HIWORD(lParam)); //No need of error checking
+			}
 			break;
 
 		/*
@@ -1056,6 +1065,9 @@ VkResult resize(int width, int height)
 
 VkResult display(void)
 {
+	//Function declarations
+	VkResult resize(int, int);
+	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
 	
@@ -1084,10 +1096,17 @@ VkResult display(void)
 	4th paramater is waiting for another queque to release the image held by another queque demanded by swapchain
 	*/
 	vkResult = vkAcquireNextImageKHR(vkDevice, vkSwapchainKHR, UINT64_MAX, vkSemaphore_BackBuffer, VK_NULL_HANDLE, &currentImageIndex);
-	if(vkResult != VK_SUCCESS)
+	if(vkResult != VK_SUCCESS) 
 	{
-		fprintf(gFILE, "display(): vkAcquireNextImageKHR() failed\n");
-		return vkResult;
+		if((vkResult == VK_ERROR_OUT_OF_DATE_KHR) || (vkResult == VK_ERROR_SUBOPTIMAL_KHR))
+		{
+			resize(winWidth, winHeight);
+		}
+		else
+		{
+			fprintf(gFILE, "display(): vkAcquireNextImageKHR() failed\n");
+			return vkResult;
+		}
 	}
 	
 	/*
@@ -1174,8 +1193,15 @@ VkResult display(void)
 	vkResult =  vkQueuePresentKHR(vkQueue, &vkPresentInfoKHR);
 	if(vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "display(): vkQueuePresentKHR() failed\n");
-		return vkResult;
+		if((vkResult == VK_ERROR_OUT_OF_DATE_KHR) || (vkResult == VK_ERROR_SUBOPTIMAL_KHR))
+		{
+			resize(winWidth, winHeight);
+		}
+		else
+		{
+			fprintf(gFILE, "display(): vkQueuePresentKHR() failed\n");
+			return vkResult;
+		}
 	}
 	
 	vkDeviceWaitIdle(vkDevice);
