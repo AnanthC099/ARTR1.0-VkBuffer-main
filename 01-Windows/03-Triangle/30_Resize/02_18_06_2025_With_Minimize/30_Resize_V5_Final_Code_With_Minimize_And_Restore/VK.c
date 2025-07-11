@@ -377,7 +377,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 			if (gbActive == TRUE)
 			{
 				vkResult = display();
-				if ((vkResult != VK_FALSE) && (vkResult != VK_SUCCESS) && (vkResult != VK_ERROR_OUT_OF_DATE_KHR) && ((vkResult != VK_ERROR_SUBOPTIMAL_KHR)))
+				if ((vkResult != VK_FALSE) && (vkResult != VK_SUCCESS) && (vkResult != VK_ERROR_OUT_OF_DATE_KHR) && ((vkResult != VK_SUBOPTIMAL_KHR))) //VK_ERROR_OUT_OF_DATE_KHR and VK_SUBOPTIMAL_KHR are meant for future issues.You can remove them.
 				{
 					fprintf(gFILE, "WinMain(): display() function failed\n");
 					bDone = TRUE;
@@ -417,7 +417,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case WM_SIZE:
-			if(WPARAM == SIZE_MINIMIZED)
+			if(wParam == SIZE_MINIMIZED)
 			{
 				bWindowMinimize = TRUE;
 			}
@@ -1098,7 +1098,7 @@ VkResult display(void)
 	vkResult = vkAcquireNextImageKHR(vkDevice, vkSwapchainKHR, UINT64_MAX, vkSemaphore_BackBuffer, VK_NULL_HANDLE, &currentImageIndex);
 	if(vkResult != VK_SUCCESS) 
 	{
-		if((vkResult == VK_ERROR_OUT_OF_DATE_KHR) || (vkResult == VK_ERROR_SUBOPTIMAL_KHR))
+		if((vkResult == VK_ERROR_OUT_OF_DATE_KHR) || (vkResult == VK_SUBOPTIMAL_KHR))
 		{
 			resize(winWidth, winHeight);
 		}
@@ -1193,7 +1193,7 @@ VkResult display(void)
 	vkResult =  vkQueuePresentKHR(vkQueue, &vkPresentInfoKHR);
 	if(vkResult != VK_SUCCESS)
 	{
-		if((vkResult == VK_ERROR_OUT_OF_DATE_KHR) || (vkResult == VK_ERROR_SUBOPTIMAL_KHR))
+		if((vkResult == VK_ERROR_OUT_OF_DATE_KHR) || (vkResult == VK_SUBOPTIMAL_KHR))
 		{
 			resize(winWidth, winHeight);
 		}
