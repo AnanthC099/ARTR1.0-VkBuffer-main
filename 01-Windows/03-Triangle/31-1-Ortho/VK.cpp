@@ -1170,7 +1170,7 @@ VkResult UpdateUniformBuffer(void)
 	//Update matrices
 	myUniformData.modelMatrix = glm::mat4(1.0f);
 	myUniformData.viewMatrix = glm::mat4(1.0f);
-	myUniformData.projectionMatrix = = glm::mat4(1.0f); //Not Required
+	myUniformData.projectionMatrix = glm::mat4(1.0f); //Not Required
 	
 	glm::mat4 orthographicProjectionMatrix = glm::mat4(1.0f);
 	if(winWidth <= winHeight)
@@ -3912,6 +3912,7 @@ VkResult CreateUniformBuffer()
 		fprintf(gFILE, "CreateUniformBuffer(): vkAllocateMemory() succedded\n");
 	}
 	
+	/*
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBindBufferMemory.html
 	// Provided by VK_VERSION_1_0
 	VkResult vkBindBufferMemory(
@@ -3932,7 +3933,7 @@ VkResult CreateUniformBuffer()
 	}
 	
 	//Call updateUniformBuffer() here
-	vkResult = updateUniformBuffer();
+	vkResult = UpdateUniformBuffer();
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateUniformBuffer(): updateUniformBuffer() function failed with error code %d\n", vkResult);
@@ -4203,6 +4204,25 @@ VkResult CreateDescriptorSetLayout()
 	Code
 	*/
 	
+	//Initialize descriptor set binding : //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorSetLayoutBinding.html
+	VkDescriptorSetLayoutBinding vkDescriptorSetLayoutBinding; 
+	memset((void*)&vkDescriptorSetLayoutBinding, 0, sizeof(VkDescriptorSetLayoutBinding));
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorSetLayoutBinding {
+		uint32_t              binding;
+		VkDescriptorType      descriptorType;
+		uint32_t              descriptorCount;
+		VkShaderStageFlags    stageFlags;
+		const VkSampler*      pImmutableSamplers;
+	} VkDescriptorSetLayoutBinding;
+	*/
+	vkDescriptorSetLayoutBinding.binding = 0; //binding point kay aahe shader madhe. This 0 is related to binding =0 in vertex shader
+	vkDescriptorSetLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
+	vkDescriptorSetLayoutBinding.descriptorCount = 1;
+	vkDescriptorSetLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderStageFlagBits.html
+	vkDescriptorSetLayoutBinding.pImmutableSamplers = NULL;
+	
 	/*
 	24.3. While writing this UDF, declare, memset and initialize struct VkDescriptorSetLayoutCreateInfo, particularly its two members 
 	   1. bindingCount
@@ -4236,8 +4256,8 @@ VkResult CreateDescriptorSetLayout()
 	} VkDescriptorSetLayoutBinding;
 	*/
 	
-	vkDescriptorSetLayoutCreateInfo.bindingCount = 0; //binding aahe ka
-	vkDescriptorSetLayoutCreateInfo.pBindings = NULL;
+	vkDescriptorSetLayoutCreateInfo.bindingCount = 1; //binding aahe ka
+	vkDescriptorSetLayoutCreateInfo.pBindings = &vkDescriptorSetLayoutBinding;
 	
 	/*
 	24.4. Then call vkCreateDescriptorSetLayout() Vulkan API with adress of above initialized structure and get the required global Vulkan object vkDescriptorSetLayout in its last parameter.
@@ -4322,6 +4342,74 @@ VkResult CreatePipelineLayout(void)
 	else
 	{
 		fprintf(gFILE, "CreatePipelineLayout(): vkCreatePipelineLayout() function succedded\n");
+	}
+	
+	return vkResult;
+}
+
+//31.13
+VkResult CreateDescriptorPool(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	/*
+	//Before creating actual descriptor pool, Vulkan expects descriptor pool size
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorPoolSize.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorPoolSize {
+		VkDescriptorType    type;
+		uint32_t            descriptorCount;
+	} VkDescriptorPoolSize;
+	*/
+	VkDescriptorPoolSize vkDescriptorPoolSize;
+	memset((void*)&vkDescriptorPoolSize, 0, sizeof(VkDescriptorPoolSize));
+	vkDescriptorPoolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
+	vkDescriptorPoolSize.descriptorCount = 1;
+	
+	/*
+	//Create the pool
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorPoolCreateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorPoolCreateInfo {
+		VkStructureType                sType;
+		const void*                    pNext;
+		VkDescriptorPoolCreateFlags    flags;
+		uint32_t                       maxSets;
+		uint32_t                       poolSizeCount;
+		const VkDescriptorPoolSize*    pPoolSizes;
+	} VkDescriptorPoolCreateInfo;
+	*/
+	VkDescriptorPoolCreateInfo vkDescriptorPoolCreateInfo;
+	memset((void*)&vkDescriptorPoolCreateInfo, 0, sizeof(VkDescriptorPoolCreateInfo));
+	vkDescriptorPoolCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkStructureType.html
+	vkDescriptorPoolCreateInfo.pNext = NULL;
+	vkDescriptorPoolCreateInfo.flags = 0;
+	vkDescriptorPoolCreateInfo.maxSets = 1; //kiti sets pahije tumhala
+	vkDescriptorPoolCreateInfo.poolSizeCount =  1;
+	vkDescriptorPoolCreateInfo.pPoolSizes = &vkDescriptorPoolSize;
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateDescriptorPool.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateDescriptorPool(
+    VkDevice                                    device,
+    const VkDescriptorPoolCreateInfo*           pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDescriptorPool*                           pDescriptorPool);
+	*/
+	vkResult = vkCreateDescriptorPool(vkDevice, &vkDescriptorPoolCreateInfo, NULL, &vkDescriptorPool);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateDescriptorPool(): vkCreateDescriptorPool() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateDescriptorPool(): vkCreateDescriptorPool() succedded\n");
 	}
 	
 	return vkResult;
