@@ -1243,7 +1243,7 @@ VkResult display(void)
 	//Function declarations
 	VkResult resize(int, int);
 	//31.6
-	VkResult updateUniformBuffer(void);
+	VkResult UpdateUniformBuffer(void);
 	
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
@@ -1382,7 +1382,7 @@ VkResult display(void)
 	}
 	
 	//31.7
-	vkResult = updateUniformBuffer();
+	vkResult = UpdateUniformBuffer();
 	if(vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "display(): updateUniformBuffer() function failed with error code %d\n", vkResult);
@@ -4415,6 +4415,133 @@ VkResult CreateDescriptorPool(void)
 	return vkResult;
 }
 
+//31.14
+VkResult CreateDescriptorSet(void)
+{
+	//Variable declarations	
+	VkResult vkResult = VK_SUCCESS;
+	
+	/*
+	Code
+	*/
+	/*
+	//Initialize descriptor set allocation info
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorSetAllocateInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorSetAllocateInfo {
+		VkStructureType                 sType;
+		const void*                     pNext;
+		VkDescriptorPool                descriptorPool;
+		uint32_t                        descriptorSetCount;
+		const VkDescriptorSetLayout*    pSetLayouts;
+	} VkDescriptorSetAllocateInfo;
+	*/
+	VkDescriptorSetAllocateInfo vkDescriptorSetAllocateInfo;
+	memset((void*)&vkDescriptorSetAllocateInfo, 0, sizeof(VkDescriptorSetAllocateInfo));
+	vkDescriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	vkDescriptorSetAllocateInfo.pNext = NULL;
+	vkDescriptorSetAllocateInfo.descriptorPool = vkDescriptorPool;
+	
+	vkDescriptorSetAllocateInfo.descriptorSetCount = 1; //We are passing only 1 struct so put 1 here
+	//we are giving descriptor setlayout's here for first time after Pipeline
+	//Now plate is not empty, it has 1 descriptor
+	//to bharnyasathi allocate karun de , 1 descriptor set bharnya sathi
+	vkDescriptorSetAllocateInfo.pSetLayouts = &vkDescriptorSetLayout; 
+	
+	/*
+	//Jitha structure madhe point ani counter ekatra astat, tithe array expected astoch
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateDescriptorSets.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateDescriptorSets(
+    VkDevice                                    device,
+    const VkDescriptorSetAllocateInfo*          pAllocateInfo,
+    VkDescriptorSet*                            pDescriptorSets);
+	*/
+	vkResult = vkAllocateDescriptorSets(vkDevice, &vkDescriptorSetAllocateInfo, &vkDescriptorSet);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() succedded\n");
+	}
+
+	/*
+	//Describe whether we want buffer as uniform /or image as uniform
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorBufferInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorBufferInfo {
+		VkBuffer        buffer;
+		VkDeviceSize    offset;
+		VkDeviceSize    range;
+	} VkDescriptorBufferInfo;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorImageInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorImageInfo {
+		VkSampler        sampler;
+		VkImageView      imageView;
+		VkImageLayout    imageLayout;
+	} VkDescriptorImageInfo;
+	*/
+	VkDescriptorBufferInfo vkDescriptorBufferInfo;
+	memset((void*)&vkDescriptorBufferInfo, 0, sizeof(VkDescriptorBufferInfo));
+	vkDescriptorBufferInfo.buffer = uniformData.vkBuffer;
+	vkDescriptorBufferInfo.offset = 0;
+	vkDescriptorBufferInfo.range = sizeof(struct MyUniformData);
+	
+	/*
+	//Now update the above descriptor set directly to the shader
+	//There are two ways to update 1. Writing directly to shader 2.Copying from one shader to another shader
+	//We will prepare directly writing to the shader
+	//This requires initialization of following structure
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkWriteDescriptorSet.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkWriteDescriptorSet {
+		VkStructureType                  sType;
+		const void*                      pNext;
+		VkDescriptorSet                  dstSet;
+		uint32_t                         dstBinding;
+		uint32_t                         dstArrayElement;
+		uint32_t                         descriptorCount;
+		VkDescriptorType                 descriptorType;
+		const VkDescriptorImageInfo*     pImageInfo;
+		const VkDescriptorBufferInfo*    pBufferInfo;
+		const VkBufferView*              pTexelBufferView; //Used for Texture tiling
+	} VkWriteDescriptorSet;
+	*/
+	VkWriteDescriptorSet vkWriteDescriptorSet;
+	memset((void*)&vkWriteDescriptorSet, 0, sizeof(VkWriteDescriptorSet));
+	vkWriteDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	vkWriteDescriptorSet.pNext = NULL;
+	vkWriteDescriptorSet.dstSet = vkDescriptorSet;
+	vkWriteDescriptorSet.dstBinding = 0; //because our uniform is at binding 0 index in shader
+	vkWriteDescriptorSet.dstArrayElement = 0;
+	vkWriteDescriptorSet.descriptorCount = 1;
+	vkWriteDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
+	vkWriteDescriptorSet.pImageInfo = NULL;
+	vkWriteDescriptorSet.pBufferInfo =  &vkDescriptorBufferInfo;
+	vkWriteDescriptorSet.pTexelBufferView = NULL;
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkUpdateDescriptorSets.html
+	// Provided by VK_VERSION_1_0
+	void vkUpdateDescriptorSets(
+    VkDevice                                    device,
+    uint32_t                                    descriptorWriteCount,
+    const VkWriteDescriptorSet*                 pDescriptorWrites,
+    uint32_t                                    descriptorCopyCount,
+    const VkCopyDescriptorSet*                  pDescriptorCopies);
+	*/
+	vkUpdateDescriptorSets(vkDevice, 1, &vkWriteDescriptorSet, 0, NULL);
+	
+	fprintf(gFILE, "CreateDescriptorSet(): vkUpdateDescriptorSets() succedded\n");
+	
+	return vkResult;
+}
+
 VkResult CreateRenderPass(void)
 {
 	//Variable declarations	
@@ -5440,6 +5567,23 @@ VkResult buildCommandBuffers(void)
 		} VkPipelineBindPoint;
 		*/
 		vkCmdBindPipeline(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipeline);
+		
+		
+		/*
+		Bind our descriptor set with pipeline
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdBindDescriptorSets.html
+		// Provided by VK_VERSION_1_0
+		void vkCmdBindDescriptorSets(
+		VkCommandBuffer                             commandBuffer,
+		VkPipelineBindPoint                         pipelineBindPoint,
+		VkPipelineLayout                            layout,
+		uint32_t                                    firstSet,
+		uint32_t                                    descriptorSetCount,
+		const VkDescriptorSet*                      pDescriptorSets,
+		uint32_t                                    dynamicOffsetCount, // Used for dynamic shader stages
+		const uint32_t*                             pDynamicOffsets); // Used for dynamic shader stages
+		*/
+		vkCmdBindDescriptorSets(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSet, 0, NULL);
 		
 		/*
 		Bind with vertex buffer
