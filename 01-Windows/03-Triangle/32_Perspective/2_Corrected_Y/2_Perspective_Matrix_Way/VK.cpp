@@ -1176,6 +1176,7 @@ VkResult UpdateUniformBuffer(void)
 	
 	glm::mat4 perspectiveProjectionMatrix = glm::mat4(1.0f);
 	perspectiveProjectionMatrix = glm::perspective(glm::radians(45.0f), (float)winWidth/(float)winHeight, 0.1f, 100.0f);
+	perspectiveProjectionMatrix[1][1] = perspectiveProjectionMatrix[1][1] * (-1.0f); //2n/t-d member multiplied by -1 
 	
 	myUniformData.projectionMatrix = perspectiveProjectionMatrix;
 	
@@ -4873,7 +4874,7 @@ VkResult CreatePipeline(void)
 	//vkPipelineRasterizationStateCreateInfo.rasterizerDiscardEnable =;
 	vkPipelineRasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
 	vkPipelineRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
-	vkPipelineRasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_CLOCKWISE; //Triangle winding order 
+	vkPipelineRasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE; //Triangle winding order 
 	//vkPipelineRasterizationStateCreateInfo.depthBiasEnable =;
 	//vkPipelineRasterizationStateCreateInfo.depthBiasConstantFactor =;
 	//vkPipelineRasterizationStateCreateInfo.depthBiasClamp =;
