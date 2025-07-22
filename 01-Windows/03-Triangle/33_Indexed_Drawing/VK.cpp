@@ -1609,6 +1609,13 @@ void uninitialize(void)
 				vkShaderMoudule_vertex_shader = VK_NULL_HANDLE;
 				fprintf(gFILE, "uninitialize(): VkShaderMoudule for vertex shader is done\n");
 			}
+				
+			if(uniformData.vkDeviceMemory)
+			{
+				vkFreeMemory(vkDevice, uniformData.vkDeviceMemory, NULL);
+				uniformData.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): uniformData.vkDeviceMemory is freed\n");
+			}
 			
 			//31.9 Destroy uniform buffer
 			if(uniformData.vkBuffer)
@@ -1643,6 +1650,20 @@ void uninitialize(void)
 				VkBuffer                                    buffer,
 				const VkAllocationCallbacks*                pAllocator);
 			*/
+			if(vertexdata_position_index.vkDeviceMemory)
+			{
+				vkFreeMemory(vkDevice, vertexdata_position_index.vkDeviceMemory, NULL);
+				vertexdata_position_index.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_position_index.vkDeviceMemory is freed\n");
+			}
+			
+			if(vertexdata_position_index.vkBuffer)
+			{
+				vkDestroyBuffer(vkDevice, vertexdata_position_index.vkBuffer, NULL);
+				vertexdata_position_index.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_position_index.vkBuffer is freed\n");
+			}
+			
 			if(vertexdata_position.vkDeviceMemory)
 			{
 				vkFreeMemory(vkDevice, vertexdata_position.vkDeviceMemory, NULL);
@@ -5815,6 +5836,25 @@ VkResult buildCommandBuffers(void)
 		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, &vertexdata_position.vkBuffer, vkDeviceSize_offset_array); //Here recording
 		
 		/*
+		Bind our index buffer
+		//https://registry.khronos.org/OpenGL-Refpages/gl4/html/glDrawElements.xhtml
+		void glDrawElements(	GLenum mode,
+								GLsizei count,
+								GLenum type,
+								const void * indices);
+
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdBindIndexBuffer.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkIndexType.html
+		// Provided by VK_VERSION_1_0
+		void vkCmdBindIndexBuffer(
+			VkCommandBuffer                             commandBuffer,
+			VkBuffer                                    buffer, //corresponds to fourth parameter of glDrawElements
+			VkDeviceSize                                offset,
+			VkIndexType                                 indexType); //Corresponds to third parameter of glDrawElements
+		*/
+		vkCmdBindIndexBuffer(vkCommandBuffer_array[i], vertexdata_position_index.vkBuffer, 0,  VK_INDEX_TYPE_UINT32); //4th parameter VK_INDEX_TYPE_UINT32 is matching with our triangle indices array of uint32_t 
+		
+		/*
 		Here we should call Vulkan drawing functions.
 		*/
 		
@@ -5827,7 +5867,27 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstVertex,
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
-		vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0);
+		//vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0); //draws array not indices
+		unsigned int numIndices = (unsigned int) (sizeof(triangle_position_indices)/sizeof(triangle_position_indices[0]));
+		
+		/*
+		//https://registry.khronos.org/OpenGL-Refpages/gl4/html/glDrawElements.xhtml
+		void glDrawElements(	GLenum mode,
+								GLsizei count,
+								GLenum type,
+								const void * indices);
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdDrawIndexed.html
+		// Provided by VK_VERSION_1_0
+		void vkCmdDrawIndexed(
+			VkCommandBuffer                             commandBuffer,
+			uint32_t                                    indexCount, //corresponds to 2nd parameter of glDrawElements
+			uint32_t                                    instanceCount,
+			uint32_t                                    firstIndex,
+			int32_t                                     vertexOffset, //If we want to add any offset from starting index in Vertex Buffer
+			uint32_t                                    firstInstance); //nth instance
+		*/
+		vkCmdDrawIndexed(vkCommandBuffer_array[i], numIndices, 1, 0, 0, 1);
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
