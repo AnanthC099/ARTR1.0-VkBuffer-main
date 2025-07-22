@@ -360,7 +360,6 @@ Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    <Device>
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =        Using "NVIDIA GeForce RTX 4090" with driver: "C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_08efa4f6500ab001\.\nvoglv64.dll"
-Anjaneya_VALIDATION:debugReportCallback():Validation(0) = Validation Information: [ WARNING-cache-file-error ] | MessageID = 0xb8515d13 | vkCreateDevice(): Cannot open shader validation cache at C:\Users\anant\AppData\Local\Temp/shader_validation_cache.bin for reading (it may not exist yet)
 CreateVulKanDevice(): vkCreateDevice() succedded
 initialize(): CreateVulKanDevice() succedded
 GetDeviceQueque(): vkGetDeviceQueue() succedded
@@ -391,6 +390,10 @@ CreateVertexBuffer(): vkCreateBuffer() succedded
 CreateVertexBuffer(): vkAllocateMemory() succedded
 CreateVertexBuffer(): vkBindBufferMemory() succedded
 CreateVertexBuffer(): vkMapMemory() succedded
+CreateVertexBuffer(): vkCreateBuffer() succedded vertexdata_color.vkBuffer
+CreateVertexBuffer(): vkAllocateMemory() succedded for vertexdata_color.vkDeviceMemory
+CreateVertexBuffer(): vkBindBufferMemory() succedded for vertexdata_color.vkBuffer
+CreateVertexBuffer(): vkMapMemory() succedded for vertexdata_color.vkBuffer
 initialize(): CreateVertexBuffer() succedded
 CreateUniformBuffer(): vkCreateBuffer() succedded
 CreateUniformBuffer(): vkAllocateMemory() succedded
@@ -603,7 +606,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 784 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 800 X 600
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -650,7 +653,150 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 785 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1920 X 1080
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+WndProc() WM_CHAR(F key)-> Program entered Fullscreen.
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 800 X 600
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 784 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+WndProc() WM_CHAR(F key)-> Program ended Fullscreen.
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 784 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -744,7 +890,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 797 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 788 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -791,7 +937,383 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 812 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 790 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 792 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 798 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 802 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 807 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 814 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 821 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 825 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 828 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -885,6 +1407,100 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 833 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 837 X 561
+getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
+getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
+getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
+CreateSwapChain(): getPhysicalDevicePresentMode() succedded
+CreateSwapChain(): vkCreateSwapchainKHR() succedded
+CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
+CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
+CreateRenderPass(): vkCreateRenderPass() succedded
+CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateFramebuffers(): vkCreateFramebuffer() succedded
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
+CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
+buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
+buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
+WndProc(): resize() succedded
+resize(): vkDeviceWaitIdle() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkDestroyFramebuffer() is done
+resize(): vkFramebuffer_array is freed
+resize(): vkFreeCommandBuffers() is done
+resize(): vkFreeCommandBuffers() is done
+resize(): vkCommandBuffer_array is freed
+resize(): vkPipeline is freed
+resize(): vkPipelineLayout is freed
+resize(): vkDestroyRenderPass() is done
+resize(): vkDestroyImageView() is done
+resize(): vkDestroyImageView() is done
+resize(): swapChainImageView_array is freed
+resize(): swapChainImage_array is freed
+resize(): vkDestroySwapchainKHR() is done
+getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
+getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
+CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
+CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
 CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 841 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
@@ -932,7 +1548,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 853 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 847 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -979,7 +1595,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 870 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 850 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1026,7 +1642,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 876 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 854 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1073,7 +1689,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 880 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 561
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1120,7 +1736,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 882 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 562
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1167,7 +1783,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 883 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 563
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1214,7 +1830,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 896 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 566
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1261,7 +1877,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 908 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 568
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1308,7 +1924,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 912 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 576
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1355,7 +1971,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 915 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 577
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1402,7 +2018,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 918 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 581
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1449,7 +2065,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 919 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 584
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1496,7 +2112,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 920 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 587
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1543,7 +2159,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 923 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 590
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1590,7 +2206,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 927 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 593
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1637,7 +2253,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 930 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 595
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1684,7 +2300,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 933 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 598
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1731,7 +2347,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 937 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 600
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1778,7 +2394,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 939 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 603
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1825,7 +2441,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 944 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 605
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1872,7 +2488,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 945 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 855 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1919,7 +2535,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 947 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 857 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -1966,7 +2582,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 951 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 859 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2013,7 +2629,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 956 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 860 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2060,7 +2676,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 962 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 861 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2107,7 +2723,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 967 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 864 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2154,7 +2770,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 971 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 867 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2201,7 +2817,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 561
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 869 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2248,7 +2864,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 563
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 871 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2295,7 +2911,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 568
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 875 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2342,7 +2958,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 574
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 879 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2389,7 +3005,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 577
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 883 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2436,7 +3052,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 579
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 889 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2483,7 +3099,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 582
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 606
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2530,7 +3146,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 586
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 608
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2577,7 +3193,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 590
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 616
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2624,7 +3240,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 594
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 619
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2671,7 +3287,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 597
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 622
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2718,7 +3334,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 601
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 625
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2765,7 +3381,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 604
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 630
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2812,7 +3428,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 606
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 635
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2859,7 +3475,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 609
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 638
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2906,7 +3522,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 610
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 641
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -2953,7 +3569,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 976 X 611
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 644
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -3000,7 +3616,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 977 X 611
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 648
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -3047,7 +3663,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 980 X 611
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 654
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -3094,7 +3710,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 982 X 611
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 657
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -3141,7 +3757,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 985 X 611
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 659
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -3188,1229 +3804,7 @@ getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDevi
 getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
 CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
 CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 989 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 994 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 998 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1001 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1004 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1005 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1008 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1009 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1011 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1013 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1017 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1023 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1029 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1038 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1046 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1056 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1058 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 611
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 613
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 619
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 628
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 630
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 637
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 645
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 653
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 656
-getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
-getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
-getPhysicalDevicePresentMode(): vkPresentModeKHR_array is freed
-CreateSwapChain(): getPhysicalDevicePresentMode() succedded
-CreateSwapChain(): vkCreateSwapchainKHR() succedded
-CreateImagesAndImageViews(): first call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): second call to vkGetSwapchainImagesKHR() succedded with swapchainImageCount as 2
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 0
-CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration 1
-CreateRenderPass(): vkCreateRenderPass() succedded
-CreatePipelineLayout(): vkCreatePipelineLayout() function succedded
-CreatePipeline(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
-vkCreateGraphicsPipelines(): vkPipelineCache is freed
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateFramebuffers(): vkCreateFramebuffer() succedded
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 0
-CreateCommandBuffers(): vkAllocateCommandBuffers() succedded for iteration 1
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 0 iteration
-buildCommandBuffers(): vkResetCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkBeginCommandBuffer() succedded at 1 iteration
-buildCommandBuffers(): vkEndCommandBuffer() succedded at 1 iteration
-WndProc(): resize() succedded
-resize(): vkDeviceWaitIdle() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkDestroyFramebuffer() is done
-resize(): vkFramebuffer_array is freed
-resize(): vkFreeCommandBuffers() is done
-resize(): vkFreeCommandBuffers() is done
-resize(): vkCommandBuffer_array is freed
-resize(): vkPipeline is freed
-resize(): vkPipelineLayout is freed
-resize(): vkDestroyRenderPass() is done
-resize(): vkDestroyImageView() is done
-resize(): vkDestroyImageView() is done
-resize(): swapChainImageView_array is freed
-resize(): swapChainImage_array is freed
-resize(): vkDestroySwapchainKHR() is done
-getPhysicalDeviceSurfaceFormatAndColorSpace(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace():  Second call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
-getPhysicalDeviceSurfaceFormatAndColorSpace(): vkSurfaceFormatKHR_array is freed
-CreateSwapChain(): getPhysicalDeviceSurfaceFormatAndColorSpace() succedded
-CreateSwapChain(): vkGetPhysicalDeviceSurfaceCapabilitiesKHR() succedded
-CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 1059 X 658
+CreateSwapChain(): Swapchain Image Width x SwapChain  Image Height = 893 X 662
 getPhysicalDevicePresentMode(): First call to vkGetPhysicalDeviceSurfaceFormatsKHR() succedded
 getPhysicalDevicePresentMode():  Second call to vkGetPhysicalDeviceSurfacePresentModesKHR() succedded
 getPhysicalDevicePresentMode(): vkPresentModeKHR is 1
@@ -4455,6 +3849,8 @@ uninitialize(): VkShaderMoudule for fragment shader is done
 uninitialize(): VkShaderMoudule for vertex shader is done
 uninitialize(): uniformData.vkBuffer is freed
 uninitialize(): uniformData.vkDeviceMemory is freed
+uninitialize(): vertexdata_color.vkDeviceMemory is freed
+uninitialize(): vertexdata_color.vkBuffer is freed
 uninitialize(): vertexdata_position.vkDeviceMemory is freed
 uninitialize(): vertexdata_position.vkBuffer is freed
 uninitialize(): vkFreeCommandBuffers() is done

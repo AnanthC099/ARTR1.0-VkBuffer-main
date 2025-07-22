@@ -1642,6 +1642,27 @@ void uninitialize(void)
 				VkBuffer                                    buffer,
 				const VkAllocationCallbacks*                pAllocator);
 			*/
+			
+			/*
+			Destroy vertexdata_color
+			*/
+			if(vertexdata_color.vkDeviceMemory)
+			{
+				vkFreeMemory(vkDevice, vertexdata_color.vkDeviceMemory, NULL);
+				vertexdata_color.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_color.vkDeviceMemory is freed\n");
+			}
+			
+			if(vertexdata_color.vkBuffer)
+			{
+				vkDestroyBuffer(vkDevice, vertexdata_color.vkBuffer, NULL);
+				vertexdata_color.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_color.vkBuffer is freed\n");
+			}
+			
+			/*
+			Destroy vertexdata_position
+			*/
 			if(vertexdata_position.vkDeviceMemory)
 			{
 				vkFreeMemory(vkDevice, vertexdata_position.vkDeviceMemory, NULL);
@@ -3777,7 +3798,7 @@ VkResult CreateVertexBuffer(void)
 	*/
 	
 	/*
-	memset our global vertexData_position.
+	memset our global vertexdata_color.
 	*/
 	memset((void*)&vertexdata_color, 0, sizeof(VertexData));
 	
@@ -3787,7 +3808,7 @@ VkResult CreateVertexBuffer(void)
 	Out of them, 2 are very important (Usage and Size)
 	*/
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferCreateInfo.html
-	VkBufferCreateInfo vkBufferCreateInfo;
+	//VkBufferCreateInfo vkBufferCreateInfo;
 	memset((void*)&vkBufferCreateInfo, 0, sizeof(VkBufferCreateInfo));
 	
 	/*
@@ -3844,7 +3865,7 @@ VkResult CreateVertexBuffer(void)
 		uint32_t        memoryTypeBits;
 	} VkMemoryRequirements;
 	*/
-	VkMemoryRequirements vkMemoryRequirements;
+	//VkMemoryRequirements vkMemoryRequirements;
 	memset((void*)&vkMemoryRequirements, 0, sizeof(VkMemoryRequirements));
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetBufferMemoryRequirements.html
@@ -3881,7 +3902,7 @@ VkResult CreateVertexBuffer(void)
 		uint32_t           memoryTypeIndex;
 	} VkMemoryAllocateInfo;
 	*/
-	VkMemoryAllocateInfo vkMemoryAllocateInfo;
+	//VkMemoryAllocateInfo vkMemoryAllocateInfo;
 	memset((void*)&vkMemoryAllocateInfo, 0, sizeof(VkMemoryAllocateInfo));
 	vkMemoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	vkMemoryAllocateInfo.pNext = NULL;
@@ -3972,8 +3993,8 @@ VkResult CreateVertexBuffer(void)
     VkMemoryMapFlags                            flags,
     void**                                      ppData);
 	*/
-	void* data = NULL;
-	vkResult = vkMapMemory(vkDevice, vertexdata_position.vkDeviceMemory, 0, vkMemoryAllocateInfo.allocationSize, 0, &data);
+	data = NULL;
+	vkResult = vkMapMemory(vkDevice, vertexdata_color.vkDeviceMemory, 0, vkMemoryAllocateInfo.allocationSize, 0, &data);
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() function failed with error code %d for vertexdata_color.vkBuffer\n", vkResult);
@@ -3987,7 +4008,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, triangle_Position, sizeof(triangle_Position));
+	memcpy(data, triangle_Color, sizeof(triangle_Color));
 	
 	/*
 	To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -3997,7 +4018,7 @@ VkResult CreateVertexBuffer(void)
     VkDevice                                    device,
     VkDeviceMemory                              memory);
 	*/
-	vkUnmapMemory(vkDevice, vertexdata_position.vkDeviceMemory);
+	vkUnmapMemory(vkDevice, vertexdata_color.vkDeviceMemory);
 	
 	return vkResult;
 }
@@ -4969,11 +4990,21 @@ VkResult CreatePipeline(void)
 		VK_VERTEX_INPUT_RATE_INSTANCE = 1,
 	} VkVertexInputRate;
 	*/
-	VkVertexInputBindingDescription vkVertexInputBindingDescription_array[1];
+	VkVertexInputBindingDescription vkVertexInputBindingDescription_array[2];
 	memset((void*)vkVertexInputBindingDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(vkVertexInputBindingDescription_array));
-	vkVertexInputBindingDescription_array[0].binding = 0; //Equivalent to GL_ARRAY_BUFFER
+	/*
+	For Position
+	*/
+	vkVertexInputBindingDescription_array[0].binding = 0; //Corresponding to location = 0 in VS. Equivalent to GL_ARRAY_BUFFER (layout (location = 0))
 	vkVertexInputBindingDescription_array[0].stride = sizeof(float) * 3;
 	vkVertexInputBindingDescription_array[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //vertices maan, indices nako
+	
+	/*
+	For Color
+	*/
+	vkVertexInputBindingDescription_array[1].binding = 1; //Corresponding to location = 1 in VS. Equivalent to GL_ARRAY_BUFFER (layout (location = 1))
+	vkVertexInputBindingDescription_array[1].stride = sizeof(float) * 3;
+	vkVertexInputBindingDescription_array[1].inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //vertices maan, indices nako
 	
 	/*
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkVertexInputAttributeDescription.html
@@ -4985,12 +5016,23 @@ VkResult CreatePipeline(void)
 		uint32_t    offset;
 	} VkVertexInputAttributeDescription;
 	*/
-	VkVertexInputAttributeDescription vkVertexInputAttributeDescription_array[1];
+	VkVertexInputAttributeDescription vkVertexInputAttributeDescription_array[2];
 	memset((void*)vkVertexInputAttributeDescription_array, 0,  sizeof(VkVertexInputAttributeDescription) * _ARRAYSIZE(vkVertexInputAttributeDescription_array));
+	/*
+	For Position
+	*/
 	vkVertexInputAttributeDescription_array[0].location = 0;
 	vkVertexInputAttributeDescription_array[0].binding = 0;
 	vkVertexInputAttributeDescription_array[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 	vkVertexInputAttributeDescription_array[0].offset = 0;
+	
+	/*
+	For Color
+	*/
+	vkVertexInputAttributeDescription_array[1].location = 1;
+	vkVertexInputAttributeDescription_array[1].binding = 1;
+	vkVertexInputAttributeDescription_array[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+	vkVertexInputAttributeDescription_array[1].offset = 0;
 	
 	/*
 	Vertex Input State PSO
@@ -5820,9 +5862,15 @@ VkResult buildCommandBuffers(void)
 			const VkBuffer*                             pBuffers,
 			const VkDeviceSize*                         pOffsets);
 		*/
-		VkDeviceSize vkDeviceSize_offset_array[1];
-		memset((void*)vkDeviceSize_offset_array, 0, sizeof(VkDeviceSize) * _ARRAYSIZE(vkDeviceSize_offset_array));
-		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, &vertexdata_position.vkBuffer, vkDeviceSize_offset_array); //Here recording
+		//Bind Vertex Position Buffer
+		VkDeviceSize vkDeviceSize_offset_position[1];
+		memset((void*)vkDeviceSize_offset_position, 0, sizeof(VkDeviceSize) * _ARRAYSIZE(vkDeviceSize_offset_position));
+		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, &vertexdata_position.vkBuffer, vkDeviceSize_offset_position); //Here recording (firstBinding = 0)
+		
+		//Bind Vertex Color Buffer
+		VkDeviceSize vkDeviceSize_offset_color[1];
+		memset((void*)vkDeviceSize_offset_color, 0, sizeof(VkDeviceSize) * _ARRAYSIZE(vkDeviceSize_offset_color));
+		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 1, 1, &vertexdata_color.vkBuffer, vkDeviceSize_offset_color); //Here recording (firstBinding = 1)
 		
 		/*
 		Here we should call Vulkan drawing functions.
