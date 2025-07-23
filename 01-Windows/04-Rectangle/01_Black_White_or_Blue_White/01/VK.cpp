@@ -3530,11 +3530,15 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.3. Implement CreateVertexBuffer() and inside it first declare our triangle's position array.
 	*/
-	float triangle_Position[] =
+	float rectangle_Position[] =
 	{
-		0.0f, 1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f
+		1.0f, 1.0f, 0.0f, //top right
+		-1.0f, 1.0f, 0.0f, //top left
+		-1.0f, -1.0f, 0.0f, //left bottom
+		
+		-1.0f, -1.0f, 0.0f, //left bottom
+		1.0f, -1.0f, 0.0f, //bottom right
+		1.0f, 1.0f, 0.0f //top right
 	};
 	
 	/*
@@ -3567,7 +3571,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(triangle_Position);
+	vkBufferCreateInfo.size = sizeof(rectangle_Position);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
@@ -3748,7 +3752,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, triangle_Position, sizeof(triangle_Position));
+	memcpy(data, rectangle_Position, sizeof(rectangle_Position));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -5598,7 +5602,7 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstVertex,
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
-		vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0);
+		vkCmdDraw(vkCommandBuffer_array[i], 6, 1, 0, 0);
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
