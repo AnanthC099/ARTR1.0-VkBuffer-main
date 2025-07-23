@@ -3529,13 +3529,16 @@ VkResult CreateVertexBuffer(void)
 
 	/*
 	22.3. Implement CreateVertexBuffer() and inside it first declare our triangle's position array.
+	We create quad , not by using quad topology , but by using two triangles with topology TRIANGLE_LIST
 	*/
 	float rectangle_Position[] =
 	{
+		//First Triangle
 		1.0f, 1.0f, 0.0f, //top right
 		-1.0f, 1.0f, 0.0f, //top left
 		-1.0f, -1.0f, 0.0f, //left bottom
 		
+		//Second Triangle
 		-1.0f, -1.0f, 0.0f, //left bottom
 		1.0f, -1.0f, 0.0f, //bottom right
 		1.0f, 1.0f, 0.0f //top right
