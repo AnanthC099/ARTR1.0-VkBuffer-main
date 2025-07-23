@@ -3533,15 +3533,11 @@ VkResult CreateVertexBuffer(void)
 	*/
 	float rectangle_Position[] =
 	{
-		//First Triangle
+		
 		1.0f, 1.0f, 0.0f, //top right
 		-1.0f, 1.0f, 0.0f, //top left
 		-1.0f, -1.0f, 0.0f, //left bottom
-		
-		//Second Triangle
-		-1.0f, -1.0f, 0.0f, //left bottom
 		1.0f, -1.0f, 0.0f, //bottom right
-		1.0f, 1.0f, 0.0f //top right
 	};
 	
 	/*
@@ -4822,7 +4818,7 @@ VkResult CreatePipeline(void)
 	vkPipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	vkPipelineInputAssemblyStateCreateInfo.pNext = NULL;
 	vkPipelineInputAssemblyStateCreateInfo.flags = 0;
-	vkPipelineInputAssemblyStateCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	vkPipelineInputAssemblyStateCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;
 	vkPipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = VK_FALSE; //Not needed here. Only for geometry shader and for indexed drawing for strip and fan
 	
 	/*
@@ -5605,7 +5601,7 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstVertex,
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
-		vkCmdDraw(vkCommandBuffer_array[i], 6, 1, 0, 0);
+		vkCmdDraw(vkCommandBuffer_array[i], 4, 1, 0, 0);
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
