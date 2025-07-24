@@ -1,0 +1,3 @@
+Though there are two ways, It is not like one way is recommended and other not.
+They need to be used under certain situations.
+We will go by first way, as it is in sync with OpenGL.
