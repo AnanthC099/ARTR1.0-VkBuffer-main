@@ -1644,8 +1644,9 @@ void uninitialize(void)
 				//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyDescriptorPool.html
 				vkDestroyDescriptorPool(vkDevice, vkDescriptorPool, NULL);
 				vkDescriptorPool = VK_NULL_HANDLE;
-				vkDescriptorSet = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): vkDestroyDescriptorPool() is done for vkDescriptorPool and vkDescriptorSet both\n");
+				vkDescriptorSet_rectangle = VK_NULL_HANDLE;
+				vkDescriptorSet_triangle = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkDestroyDescriptorPool() is done for vkDescriptorPool and vkDescriptorSet_rectangle and vkDescriptorSet_triangle both\n");
 			}
 			
 			/*
@@ -1672,18 +1673,32 @@ void uninitialize(void)
 			}
 			
 			//31.9 Destroy uniform buffer
-			if(uniformData.vkBuffer)
+			if(uniformData_rectangle.vkBuffer)
 			{
-				vkDestroyBuffer(vkDevice, uniformData.vkBuffer, NULL);
-				uniformData.vkBuffer = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): uniformData.vkBuffer is freed\n");
+				vkDestroyBuffer(vkDevice, uniformData_rectangle.vkBuffer, NULL);
+				uniformData_rectangle.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): uniformData_rectangle.vkBuffer is freed\n");
 			}
 			
-			if(uniformData.vkDeviceMemory)
+			if(uniformData_rectangle.vkDeviceMemory)
 			{
-				vkFreeMemory(vkDevice, uniformData.vkDeviceMemory, NULL);
-				uniformData.vkDeviceMemory = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): uniformData.vkDeviceMemory is freed\n");
+				vkFreeMemory(vkDevice, uniformData_rectangle.vkDeviceMemory, NULL);
+				uniformData_rectangle.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): uniformData_rectangle.vkDeviceMemory is freed\n");
+			}
+			
+			if(uniformData_triangle.vkBuffer)
+			{
+				vkDestroyBuffer(vkDevice, uniformData_triangle.vkBuffer, NULL);
+				uniformData_triangle.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): uniformData_triangle.vkBuffer is freed\n");
+			}
+			
+			if(uniformData_triangle.vkDeviceMemory)
+			{
+				vkFreeMemory(vkDevice, uniformData_triangle.vkDeviceMemory, NULL);
+				uniformData_triangle.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): uniformData_triangle.vkDeviceMemory is freed\n");
 			}
 			
 			/*
@@ -1704,18 +1719,32 @@ void uninitialize(void)
 				VkBuffer                                    buffer,
 				const VkAllocationCallbacks*                pAllocator);
 			*/
-			if(vertexdata_position.vkDeviceMemory)
+			if(vertexdata_position_rectangle.vkDeviceMemory)
 			{
-				vkFreeMemory(vkDevice, vertexdata_position.vkDeviceMemory, NULL);
-				vertexdata_position.vkDeviceMemory = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): vertexdata_position.vkDeviceMemory is freed\n");
+				vkFreeMemory(vkDevice, vertexdata_position_rectangle.vkDeviceMemory, NULL);
+				vertexdata_position_rectangle.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_position_rectangle.vkDeviceMemory is freed\n");
 			}
 			
-			if(vertexdata_position.vkBuffer)
+			if(vertexdata_position_rectangle.vkBuffer)
 			{
-				vkDestroyBuffer(vkDevice, vertexdata_position.vkBuffer, NULL);
-				vertexdata_position.vkBuffer = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): vertexdata_position.vkBuffer is freed\n");
+				vkDestroyBuffer(vkDevice, vertexdata_position_rectangle.vkBuffer, NULL);
+				vertexdata_position_rectangle.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_position_rectangle.vkBuffer is freed\n");
+			}
+			
+			if(vertexdata_position_triangle.vkDeviceMemory)
+			{
+				vkFreeMemory(vkDevice, vertexdata_position_triangle.vkDeviceMemory, NULL);
+				vertexdata_position_triangle.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_position_triangle.vkDeviceMemory is freed\n");
+			}
+			
+			if(vertexdata_position_triangle.vkBuffer)
+			{
+				vkDestroyBuffer(vkDevice, vertexdata_position_triangle.vkBuffer, NULL);
+				vertexdata_position_triangle.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_position_triangle.vkBuffer is freed\n");
 			}
 			
 			//Step_15_4. In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
@@ -4858,6 +4887,10 @@ VkResult CreateDescriptorSet(void)
 	vkDescriptorSetAllocateInfo.pSetLayouts = &vkDescriptorSetLayout; 
 	
 	/*
+	Triangle
+	*/
+	
+	/*
 	//Jitha structure madhe point ani counter ekatra astat, tithe array expected astoch
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateDescriptorSets.html
 	// Provided by VK_VERSION_1_0
@@ -4866,15 +4899,15 @@ VkResult CreateDescriptorSet(void)
     const VkDescriptorSetAllocateInfo*          pAllocateInfo,
     VkDescriptorSet*                            pDescriptorSets);
 	*/
-	vkResult = vkAllocateDescriptorSets(vkDevice, &vkDescriptorSetAllocateInfo, &vkDescriptorSet);
+	vkResult = vkAllocateDescriptorSets(vkDevice, &vkDescriptorSetAllocateInfo, &vkDescriptorSet_triangle);
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() function failed for vkDescriptorSet_triangle with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() succedded\n");
+		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() succedded for vkDescriptorSet_triangle\n");
 	}
 
 	/*
@@ -4897,7 +4930,7 @@ VkResult CreateDescriptorSet(void)
 	*/
 	VkDescriptorBufferInfo vkDescriptorBufferInfo;
 	memset((void*)&vkDescriptorBufferInfo, 0, sizeof(VkDescriptorBufferInfo));
-	vkDescriptorBufferInfo.buffer = uniformData.vkBuffer;
+	vkDescriptorBufferInfo.buffer = uniformData_triangle.vkBuffer;
 	vkDescriptorBufferInfo.offset = 0;
 	vkDescriptorBufferInfo.range = sizeof(struct MyUniformData);
 	
@@ -4925,7 +4958,7 @@ VkResult CreateDescriptorSet(void)
 	memset((void*)&vkWriteDescriptorSet, 0, sizeof(VkWriteDescriptorSet));
 	vkWriteDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 	vkWriteDescriptorSet.pNext = NULL;
-	vkWriteDescriptorSet.dstSet = vkDescriptorSet;
+	vkWriteDescriptorSet.dstSet = vkDescriptorSet_triangle;
 	vkWriteDescriptorSet.dstBinding = 0; //because our uniform is at binding 0 index in shader
 	vkWriteDescriptorSet.dstArrayElement = 0;
 	vkWriteDescriptorSet.descriptorCount = 1;
@@ -4946,7 +4979,102 @@ VkResult CreateDescriptorSet(void)
 	*/
 	vkUpdateDescriptorSets(vkDevice, 1, &vkWriteDescriptorSet, 0, NULL);
 	
-	fprintf(gFILE, "CreateDescriptorSet(): vkUpdateDescriptorSets() succedded\n");
+	fprintf(gFILE, "CreateDescriptorSet(): vkUpdateDescriptorSets() succedded for vkDescriptorSet_triangle\n");
+	
+	/*
+	Rectangle
+	*/
+	
+	/*
+	//Jitha structure madhe point ani counter ekatra astat, tithe array expected astoch
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateDescriptorSets.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateDescriptorSets(
+    VkDevice                                    device,
+    const VkDescriptorSetAllocateInfo*          pAllocateInfo,
+    VkDescriptorSet*                            pDescriptorSets);
+	*/
+	vkResult = vkAllocateDescriptorSets(vkDevice, &vkDescriptorSetAllocateInfo, &vkDescriptorSet_rectangle);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() function failed for vkDescriptorSet_rectangle with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateDescriptorSet(): vkAllocateDescriptorSets() succedded for vkDescriptorSet_rectangle\n");
+	}
+
+	/*
+	//Describe whether we want buffer as uniform /or image as uniform
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorBufferInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorBufferInfo {
+		VkBuffer        buffer;
+		VkDeviceSize    offset;
+		VkDeviceSize    range;
+	} VkDescriptorBufferInfo;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorImageInfo.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkDescriptorImageInfo {
+		VkSampler        sampler;
+		VkImageView      imageView;
+		VkImageLayout    imageLayout;
+	} VkDescriptorImageInfo;
+	*/
+	//VkDescriptorBufferInfo vkDescriptorBufferInfo;
+	memset((void*)&vkDescriptorBufferInfo, 0, sizeof(VkDescriptorBufferInfo));
+	vkDescriptorBufferInfo.buffer = uniformData_rectangle.vkBuffer;
+	vkDescriptorBufferInfo.offset = 0;
+	vkDescriptorBufferInfo.range = sizeof(struct MyUniformData);
+	
+	/*
+	//Now update the above descriptor set directly to the shader
+	//There are two ways to update 1. Writing directly to shader 2.Copying from one shader to another shader
+	//We will prepare directly writing to the shader
+	//This requires initialization of following structure
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkWriteDescriptorSet.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkWriteDescriptorSet {
+		VkStructureType                  sType;
+		const void*                      pNext;
+		VkDescriptorSet                  dstSet;
+		uint32_t                         dstBinding;
+		uint32_t                         dstArrayElement;
+		uint32_t                         descriptorCount;
+		VkDescriptorType                 descriptorType;
+		const VkDescriptorImageInfo*     pImageInfo;
+		const VkDescriptorBufferInfo*    pBufferInfo;
+		const VkBufferView*              pTexelBufferView; //Used for Texture tiling
+	} VkWriteDescriptorSet;
+	*/
+	//VkWriteDescriptorSet vkWriteDescriptorSet;
+	memset((void*)&vkWriteDescriptorSet, 0, sizeof(VkWriteDescriptorSet));
+	vkWriteDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	vkWriteDescriptorSet.pNext = NULL;
+	vkWriteDescriptorSet.dstSet = vkDescriptorSet_rectangle;
+	vkWriteDescriptorSet.dstBinding = 0; //because our uniform is at binding 0 index in shader
+	vkWriteDescriptorSet.dstArrayElement = 0;
+	vkWriteDescriptorSet.descriptorCount = 1;
+	vkWriteDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
+	vkWriteDescriptorSet.pImageInfo = NULL;
+	vkWriteDescriptorSet.pBufferInfo =  &vkDescriptorBufferInfo;
+	vkWriteDescriptorSet.pTexelBufferView = NULL;
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkUpdateDescriptorSets.html
+	// Provided by VK_VERSION_1_0
+	void vkUpdateDescriptorSets(
+    VkDevice                                    device,
+    uint32_t                                    descriptorWriteCount,
+    const VkWriteDescriptorSet*                 pDescriptorWrites,
+    uint32_t                                    descriptorCopyCount,
+    const VkCopyDescriptorSet*                  pDescriptorCopies);
+	*/
+	vkUpdateDescriptorSets(vkDevice, 1, &vkWriteDescriptorSet, 0, NULL);
+	
+	fprintf(gFILE, "CreateDescriptorSet(): vkUpdateDescriptorSets() succedded for vkDescriptorSet_rectangle\n");
 	
 	return vkResult;
 }
