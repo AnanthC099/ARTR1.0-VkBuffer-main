@@ -1237,7 +1237,7 @@ VkResult UpdateUniformBuffer(void)
 	myUniformData.viewMatrix = glm::mat4(1.0f);
 	myUniformData.projectionMatrix = glm::mat4(1.0f); //Not Required
 	
-	glm::mat4 perspectiveProjectionMatrix = glm::mat4(1.0f);
+	perspectiveProjectionMatrix = glm::mat4(1.0f);
 	perspectiveProjectionMatrix = glm::perspective(glm::radians(45.0f), (float)winWidth/(float)winHeight, 0.1f, 100.0f);
 	perspectiveProjectionMatrix[1][1] = perspectiveProjectionMatrix[1][1] * (-1.0f); //2n/t-d member multiplied by -1 
 	
@@ -4179,7 +4179,7 @@ VkResult CreateUniformBuffer()
     VkBuffer                                    buffer,
     VkMemoryRequirements*                       pMemoryRequirements);
 	*/
-	vkGetBufferMemoryRequirements(vkDevice, uniformData_triangle.vkBuffer.vkBuffer, &vkMemoryRequirements);
+	vkGetBufferMemoryRequirements(vkDevice, uniformData_triangle.vkBuffer, &vkMemoryRequirements);
 	
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
@@ -4296,7 +4296,7 @@ VkResult CreateUniformBuffer()
     VkBuffer                                    buffer,
     VkMemoryRequirements*                       pMemoryRequirements);
 	*/
-	vkGetBufferMemoryRequirements(vkDevice, uniformData_rectangle.vkBuffer.vkBuffer, &vkMemoryRequirements);
+	vkGetBufferMemoryRequirements(vkDevice, uniformData_rectangle.vkBuffer, &vkMemoryRequirements);
 	
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
@@ -6105,6 +6105,9 @@ VkResult buildCommandBuffers(void)
 		*/
 		vkCmdBindPipeline(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipeline);
 		
+		/*
+		Triangle
+		*/
 		
 		/*
 		Bind our descriptor set with pipeline
@@ -6120,7 +6123,7 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    dynamicOffsetCount, // Used for dynamic shader stages
 		const uint32_t*                             pDynamicOffsets); // Used for dynamic shader stages
 		*/
-		vkCmdBindDescriptorSets(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSet, 0, NULL);
+		vkCmdBindDescriptorSets(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSet_triangle, 0, NULL);
 		
 		/*
 		Bind with vertex buffer
@@ -6137,7 +6140,7 @@ VkResult buildCommandBuffers(void)
 		*/
 		VkDeviceSize vkDeviceSize_offset_array[1];
 		memset((void*)vkDeviceSize_offset_array, 0, sizeof(VkDeviceSize) * _ARRAYSIZE(vkDeviceSize_offset_array));
-		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, &vertexdata_position.vkBuffer, vkDeviceSize_offset_array); //Here recording
+		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, &vertexdata_position_triangle.vkBuffer, vkDeviceSize_offset_array); //Here recording
 		
 		/*
 		Here we should call Vulkan drawing functions.
@@ -6153,6 +6156,64 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
 		vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0);
+		/*
+		End of Triangle
+		*/
+		
+		/*
+		Rectangle
+		*/
+		
+		/*
+		Bind our descriptor set with pipeline
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdBindDescriptorSets.html
+		// Provided by VK_VERSION_1_0
+		void vkCmdBindDescriptorSets(
+		VkCommandBuffer                             commandBuffer,
+		VkPipelineBindPoint                         pipelineBindPoint,
+		VkPipelineLayout                            layout,
+		uint32_t                                    firstSet,
+		uint32_t                                    descriptorSetCount,
+		const VkDescriptorSet*                      pDescriptorSets,
+		uint32_t                                    dynamicOffsetCount, // Used for dynamic shader stages
+		const uint32_t*                             pDynamicOffsets); // Used for dynamic shader stages
+		*/
+		vkCmdBindDescriptorSets(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipelineLayout, 0, 1, &vkDescriptorSet_rectangle, 0, NULL);
+		
+		/*
+		Bind with vertex buffer
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDeviceSize.html
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdBindVertexBuffers.html
+		// Provided by VK_VERSION_1_0
+		void vkCmdBindVertexBuffers(
+			VkCommandBuffer                             commandBuffer,
+			uint32_t                                    firstBinding,
+			uint32_t                                    bindingCount,
+			const VkBuffer*                             pBuffers,
+			const VkDeviceSize*                         pOffsets);
+		*/
+		//VkDeviceSize vkDeviceSize_offset_array[1];
+		memset((void*)vkDeviceSize_offset_array, 0, sizeof(VkDeviceSize) * _ARRAYSIZE(vkDeviceSize_offset_array));
+		vkCmdBindVertexBuffers(vkCommandBuffer_array[i], 0, 1, &vertexdata_position_rectangle.vkBuffer, vkDeviceSize_offset_array); //Here recording
+		
+		/*
+		Here we should call Vulkan drawing functions.
+		*/
+		
+		/*
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdDraw.html
+		void vkCmdDraw(
+		VkCommandBuffer                             commandBuffer,
+		uint32_t                                    vertexCount,
+		uint32_t                                    instanceCount,
+		uint32_t                                    firstVertex,
+		uint32_t                                    firstInstance); //0th index cha instance
+		*/
+		vkCmdDraw(vkCommandBuffer_array[i], 3, 6, 0, 0);
+		/*
+		End of Rectangle
+		*/
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
