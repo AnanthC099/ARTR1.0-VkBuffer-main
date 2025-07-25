@@ -4826,7 +4826,7 @@ VkResult CreateDescriptorPool(void)
 	vkDescriptorPoolCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkStructureType.html
 	vkDescriptorPoolCreateInfo.pNext = NULL;
 	vkDescriptorPoolCreateInfo.flags = 0;
-	vkDescriptorPoolCreateInfo.maxSets = 1; //kiti sets pahije tumhala
+	vkDescriptorPoolCreateInfo.maxSets = 2; //kiti sets pahije tumhala
 	vkDescriptorPoolCreateInfo.poolSizeCount =  1;
 	vkDescriptorPoolCreateInfo.pPoolSizes = &vkDescriptorPoolSize;
 	
@@ -6210,7 +6210,7 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstVertex,
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
-		vkCmdDraw(vkCommandBuffer_array[i], 3, 6, 0, 0);
+		vkCmdDraw(vkCommandBuffer_array[i], 6, 1, 0, 0);
 		/*
 		End of Rectangle
 		*/
