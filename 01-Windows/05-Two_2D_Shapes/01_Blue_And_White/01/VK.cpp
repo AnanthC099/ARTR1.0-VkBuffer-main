@@ -1167,12 +1167,15 @@ VkResult UpdateUniformBuffer(void)
 	VkResult vkResult = VK_SUCCESS;
 	
 	//Code
+	/*
+	Triangle
+	*/
 	MyUniformData myUniformData;
 	memset((void*)&myUniformData, 0, sizeof(struct MyUniformData));
 	
 	//Update matrices
 	myUniformData.modelMatrix = glm::mat4(1.0f);
-	myUniformData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+	myUniformData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -6.0f));
 	
 	myUniformData.viewMatrix = glm::mat4(1.0f);
 	myUniformData.projectionMatrix = glm::mat4(1.0f); //Not Required
@@ -1198,10 +1201,10 @@ VkResult UpdateUniformBuffer(void)
     void**                                      ppData);
 	*/
 	void* data = NULL;
-	vkResult = vkMapMemory(vkDevice, uniformData.vkDeviceMemory, 0, sizeof(struct MyUniformData), 0, &data);
+	vkResult = vkMapMemory(vkDevice, uniformData_triangle.vkDeviceMemory, 0, sizeof(struct MyUniformData), 0, &data);
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "UpdateUniformBuffer(): vkMapMemory() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "UpdateUniformBuffer(): vkMapMemory() function failed for uniformData_triangle with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
@@ -1219,7 +1222,64 @@ VkResult UpdateUniformBuffer(void)
     VkDevice                                    device,
     VkDeviceMemory                              memory);
 	*/
-	vkUnmapMemory(vkDevice, uniformData.vkDeviceMemory);
+	vkUnmapMemory(vkDevice, uniformData_triangle.vkDeviceMemory);
+	
+	/*
+	Rectangle
+	*/
+	//MyUniformData myUniformData;
+	memset((void*)&myUniformData, 0, sizeof(struct MyUniformData));
+	
+	//Update matrices
+	myUniformData.modelMatrix = glm::mat4(1.0f);
+	myUniformData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -6.0f));
+	
+	myUniformData.viewMatrix = glm::mat4(1.0f);
+	myUniformData.projectionMatrix = glm::mat4(1.0f); //Not Required
+	
+	glm::mat4 perspectiveProjectionMatrix = glm::mat4(1.0f);
+	perspectiveProjectionMatrix = glm::perspective(glm::radians(45.0f), (float)winWidth/(float)winHeight, 0.1f, 100.0f);
+	perspectiveProjectionMatrix[1][1] = perspectiveProjectionMatrix[1][1] * (-1.0f); //2n/t-d member multiplied by -1 
+	
+	myUniformData.projectionMatrix = perspectiveProjectionMatrix;
+	
+	//Map Uniform Buffer
+	/*
+	This will allow us to do memory mapped IO means when we write on void* buffer data, 
+	it will get automatically written/copied on to device memory represented by device memory object handle.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkMapMemory.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkMapMemory(
+    VkDevice                                    device,
+    VkDeviceMemory                              memory,
+    VkDeviceSize                                offset,
+    VkDeviceSize                                size,
+    VkMemoryMapFlags                            flags,
+    void**                                      ppData);
+	*/
+	data = NULL;
+	vkResult = vkMapMemory(vkDevice, uniformData_rectangle.vkDeviceMemory, 0, sizeof(struct MyUniformData), 0, &data);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "UpdateUniformBuffer(): vkMapMemory() function failed for for uniformData_rectangle with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//Copy the data to the mapped buffer
+	/*
+	31.12. Now to do actual memory mapped IO, call memcpy.
+	*/
+	memcpy(data, &myUniformData, sizeof(struct MyUniformData));
+	
+	/*
+	31.12. To complete this memory mapped IO. finally call vkUmmapMemory() API.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkUnmapMemory.html
+	// Provided by VK_VERSION_1_0
+	void vkUnmapMemory(
+    VkDevice                                    device,
+    VkDeviceMemory                              memory);
+	*/
+	vkUnmapMemory(vkDevice, uniformData_rectangle.vkDeviceMemory);
 	
 	return vkResult;
 }
