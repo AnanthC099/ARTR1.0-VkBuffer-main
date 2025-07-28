@@ -1,2 +1,1 @@
-shaders same as ortho.
-Second method is addition to first method.
+shaders same as ortho

@@ -432,7 +432,11 @@ initialize(): CreateRenderPass() succedded
 CreatePipeline(): vkCreatePipelineCache() succedded
 vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
 vkCreateGraphicsPipelines(): vkPipelineCache is freed
-initialize(): CreatePipeline() succedded
+initialize(): CreatePipeline() succedded  for Triangle
+CreatePipeline(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkCreatePipelineCache() succedded
+vkCreateGraphicsPipelines(): vkPipelineCache is freed
+initialize(): CreatePipeline() succedded for Rectangle
 CreateFramebuffers(): vkCreateFramebuffer() succedded
 CreateFramebuffers(): vkCreateFramebuffer() succedded
 initialize(): CreateFramebuffers() succedded
@@ -459,7 +463,8 @@ uninitialize(): vkSemaphore_BackBuffer is freed
 uninitialize(): vkDestroyFramebuffer() is done
 uninitialize(): vkDestroyFramebuffer() is done
 uninitialize(): vkFramebuffer_array is freed
-uninitialize(): vkPipeline is freed
+uninitialize(): vkPipeline_rectangle is freed
+uninitialize(): vkPipeline_triangle is freed
 uninitialize(): vkDescriptorSetLayout is freed
 uninitialize(): vkPipelineLayout is freed
 uninitialize(): vkDestroyRenderPass() is done

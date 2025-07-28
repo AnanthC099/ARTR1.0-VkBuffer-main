@@ -1,4 +1,5 @@
 #include <stdio.h>		
+#include <stdio.h>		
 #include <stdlib.h>	
 #include <windows.h>	
 #include <math.h>	
@@ -300,7 +301,8 @@ typedef struct VkExtent2D {
 */
 VkRect2D vkRect2D_scissor;
 
-VkPipeline vkPipeline = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipeline.html
+VkPipeline vkPipeline_triangle = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipeline.html
+VkPipeline vkPipeline_rectangle = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipeline.html
 
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -618,7 +620,7 @@ VkResult initialize(void)
 	/*
 	26. Pipeline
 	*/
-	VkResult CreatePipeline(void);
+	VkResult CreatePipeline(VkPipeline*, VkPrimitiveTopology);
 	
 	VkResult CreateFramebuffers(void);
 	VkResult CreateSemaphores(void);
@@ -845,15 +847,28 @@ VkResult initialize(void)
 		fprintf(gFILE, "initialize(): CreateRenderPass() succedded\n");
 	}
 	
-	vkResult = CreatePipeline();
+	//CreatePipeline() call for Triangle
+	vkResult = CreatePipeline(&vkPipeline_triangle, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "initialize(): CreatePipeline() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "initialize(): CreatePipeline() function failed for Triangle with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "initialize(): CreatePipeline() succedded\n");
+		fprintf(gFILE, "initialize(): CreatePipeline() succedded  for Triangle\n");
+	}
+	
+	//CreatePipeline() call for Rectangle
+	vkResult = CreatePipeline(&vkPipeline_rectangle, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "initialize(): CreatePipeline() function failed for Rectangle with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "initialize(): CreatePipeline() succedded for Rectangle\n");
 	}
 		
 	vkResult = CreateFramebuffers();
@@ -927,7 +942,7 @@ VkResult resize(int width, int height)
 	VkResult CreateImagesAndImageViews(void);
 	VkResult CreateRenderPass(void);
 	VkResult CreatePipelineLayout(void);
-	VkResult CreatePipeline(void);
+	VkResult CreatePipeline(VkPipeline*, VkPrimitiveTopology);
 	VkResult CreateFramebuffers(void);
 	VkResult CreateCommandBuffers(void);
 	VkResult buildCommandBuffers(void);
@@ -1017,13 +1032,19 @@ VkResult resize(int width, int height)
 		fprintf(gFILE, "resize(): vkCommandBuffer_array is freed\n");
 	}
 	
-	//30.9
 	//Destroy Pipeline
-	if(vkPipeline)
+	if(vkPipeline_rectangle)
 	{
-		vkDestroyPipeline(vkDevice, vkPipeline, NULL);
-		vkPipeline = VK_NULL_HANDLE;
-		fprintf(gFILE, "resize(): vkPipeline is freed\n");
+		vkDestroyPipeline(vkDevice, vkPipeline_rectangle, NULL);
+		vkPipeline_rectangle = VK_NULL_HANDLE;
+		fprintf(gFILE, "resize(): vkPipeline_rectangle is freed\n");
+	}
+			
+	if(vkPipeline_triangle)
+	{
+		vkDestroyPipeline(vkDevice, vkPipeline_triangle, NULL);
+		vkPipeline_triangle = VK_NULL_HANDLE;
+		fprintf(gFILE, "resize(): vkPipeline_triangle is freed\n");
 	}
 	
 	//30.10
@@ -1120,11 +1141,19 @@ VkResult resize(int width, int height)
 		return vkResult;
 	}
 	
-	//30.17 Create Pipeline
-	vkResult = CreatePipeline();
+	//Create Pipeline for Triangle
+	vkResult = CreatePipeline(&vkPipeline_triangle, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "resize(): CreatePipeline() function failed with error code %d\n", vkResult);
+		fprintf(gFILE, "resize(): CreatePipeline() function failed for Triangle with error code %d\n", vkResult);
+		return vkResult;
+	}
+	
+	//Create Pipeline for Rectangle
+	vkResult = CreatePipeline(&vkPipeline_rectangle, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "resize(): CreatePipeline() function failed for Rectangle with error code %d\n", vkResult);
 		return vkResult;
 	}
 	
@@ -1591,11 +1620,18 @@ void uninitialize(void)
 				fprintf(gFILE, "uninitialize(): vkFramebuffer_array is freed\n");
 			}
 			
-			if(vkPipeline)
+			if(vkPipeline_rectangle)
 			{
-				vkDestroyPipeline(vkDevice, vkPipeline, NULL);
-				vkPipeline = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): vkPipeline is freed\n");
+				vkDestroyPipeline(vkDevice, vkPipeline_rectangle, NULL);
+				vkPipeline_rectangle = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkPipeline_rectangle is freed\n");
+			}
+			
+			if(vkPipeline_triangle)
+			{
+				vkDestroyPipeline(vkDevice, vkPipeline_triangle, NULL);
+				vkPipeline_triangle = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkPipeline_triangle is freed\n");
 			}
 			
 			/*
@@ -5261,10 +5297,11 @@ VkResult CreateRenderPass(void)
 	return vkResult;
 }
 
-VkResult CreatePipeline(void)
+VkResult CreatePipeline(VkPipeline *pPipeline, VkPrimitiveTopology topology)
 {
 	//Variable declarations	
 	VkResult vkResult = VK_SUCCESS;
+	VkPipeline vkPipeline = VK_NULL_HANDLE;
 	
 	/*
 	Code
@@ -5369,7 +5406,7 @@ VkResult CreatePipeline(void)
 	vkPipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	vkPipelineInputAssemblyStateCreateInfo.pNext = NULL;
 	vkPipelineInputAssemblyStateCreateInfo.flags = 0;
-	vkPipelineInputAssemblyStateCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	vkPipelineInputAssemblyStateCreateInfo.topology = topology;
 	vkPipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = VK_FALSE; //Not needed here. Only for geometry shader and for indexed drawing for strip and fan
 	
 	/*
@@ -5823,6 +5860,9 @@ VkResult CreatePipeline(void)
 		fprintf(gFILE, "vkCreateGraphicsPipelines(): vkPipelineCache is freed\n");
 	}
 	
+	//Return the pipeline
+	*pPipeline = vkPipeline;
+	
 	return vkResult;
 }
 
@@ -6103,7 +6143,7 @@ VkResult buildCommandBuffers(void)
 			VK_PIPELINE_BIND_POINT_RAY_TRACING_NV = VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR,
 		} VkPipelineBindPoint;
 		*/
-		vkCmdBindPipeline(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipeline);
+		vkCmdBindPipeline(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipeline_triangle);
 		
 		/*
 		Triangle
@@ -6164,6 +6204,26 @@ VkResult buildCommandBuffers(void)
 		Rectangle
 		*/
 		
+		/*
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineBindPoint.html
+		// Provided by VK_VERSION_1_0
+		typedef enum VkPipelineBindPoint {
+			VK_PIPELINE_BIND_POINT_GRAPHICS = 0,
+			VK_PIPELINE_BIND_POINT_COMPUTE = 1,
+		#ifdef VK_ENABLE_BETA_EXTENSIONS
+		  // Provided by VK_AMDX_shader_enqueue
+			VK_PIPELINE_BIND_POINT_EXECUTION_GRAPH_AMDX = 1000134000,
+		#endif
+		  // Provided by VK_KHR_ray_tracing_pipeline
+			VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR = 1000165000,
+		  // Provided by VK_HUAWEI_subpass_shading
+			VK_PIPELINE_BIND_POINT_SUBPASS_SHADING_HUAWEI = 1000369003,
+		  // Provided by VK_NV_ray_tracing
+			VK_PIPELINE_BIND_POINT_RAY_TRACING_NV = VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR,
+		} VkPipelineBindPoint;
+		*/
+		vkCmdBindPipeline(vkCommandBuffer_array[i], VK_PIPELINE_BIND_POINT_GRAPHICS, vkPipeline_rectangle);
+			
 		/*
 		Bind our descriptor set with pipeline
 		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdBindDescriptorSets.html
