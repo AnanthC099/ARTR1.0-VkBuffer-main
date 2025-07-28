@@ -1751,6 +1751,34 @@ void uninitialize(void)
 				fprintf(gFILE, "uninitialize(): vertexdata_position_triangle.vkBuffer is freed\n");
 			}
 			
+			if(vertexdata_color_triangle.vkDeviceMemory)
+			{
+				vkFreeMemory(vkDevice, vertexdata_color_triangle.vkDeviceMemory, NULL);
+				vertexdata_color_triangle.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_color_triangle.vkDeviceMemory is freed\n");
+			}
+
+			if(vertexdata_color_triangle.vkBuffer)
+			{
+				vkDestroyBuffer(vkDevice, vertexdata_color_triangle.vkBuffer, NULL);
+				vertexdata_color_triangle.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_color_triangle.vkBuffer is freed\n");
+			}
+
+			if(vertexdata_color_rectangle.vkDeviceMemory)
+			{
+				vkFreeMemory(vkDevice, vertexdata_color_rectangle.vkDeviceMemory, NULL);
+				vertexdata_color_rectangle.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_color_rectangle.vkDeviceMemory is freed\n");
+			}
+
+			if(vertexdata_color_rectangle.vkBuffer)
+			{
+				vkDestroyBuffer(vkDevice, vertexdata_color_rectangle.vkBuffer, NULL);
+				vertexdata_color_rectangle.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_color_rectangle.vkBuffer is freed\n");
+			}
+			
 			//Step_15_4. In unitialize(), free each command buffer by using vkFreeCommandBuffers()(https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html) in a loop of size swapchainImage count.
 			for(uint32_t i =0; i < swapchainImageCount; i++)
 			{
