@@ -306,6 +306,11 @@ VkRect2D vkRect2D_scissor;
 
 VkPipeline vkPipeline = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipeline.html
 
+/* ---------- animation state ---------- */
+static float gAngleTri  = 0.0f;
+static float gAngleRect = 0.0f;
+static const float gSpeed = 0.02f;
+
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -1178,8 +1183,14 @@ VkResult UpdateUniformBuffer(void)
 	memset((void*)&myUniformData, 0, sizeof(struct MyUniformData));
 	
 	//Update matrices
+	//myUniformData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -6.0f));
+	//myUniformData.modelMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(gAngleTri),glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 translationMatrix = glm::mat4(1.0f);
+	translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -6.0f));
+	glm::mat4 rotationMatrix = glm::mat4(1.0f);
+	rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(gAngleTri),glm::vec3(0.0f, 1.0f, 0.0f));
 	myUniformData.modelMatrix = glm::mat4(1.0f);
-	myUniformData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.5f, 0.0f, -6.0f));
+	myUniformData.modelMatrix = translationMatrix * rotationMatrix;
 	
 	myUniformData.viewMatrix = glm::mat4(1.0f);
 	myUniformData.projectionMatrix = glm::mat4(1.0f); //Not Required
@@ -1235,8 +1246,13 @@ VkResult UpdateUniformBuffer(void)
 	memset((void*)&myUniformData, 0, sizeof(struct MyUniformData));
 	
 	//Update matrices
+	translationMatrix = glm::mat4(1.0f);
+	translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -6.0f));
+	rotationMatrix = glm::mat4(1.0f);
+	rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(gAngleRect), glm::vec3(1.0f, 0.0f, 0.0f));
 	myUniformData.modelMatrix = glm::mat4(1.0f);
-	myUniformData.modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(1.5f, 0.0f, -6.0f));
+	myUniformData.modelMatrix = translationMatrix * rotationMatrix;
+	
 	
 	myUniformData.viewMatrix = glm::mat4(1.0f);
 	myUniformData.projectionMatrix = glm::mat4(1.0f); //Not Required
@@ -1446,6 +1462,20 @@ VkResult display(void)
 void update(void)
 {
 	// Code
+	if (!bInitialized || bWindowMinimize) return;
+
+    gAngleTri  += gSpeed;
+    gAngleRect += gSpeed;
+
+    if (gAngleTri  >= 360.0f)
+	{
+		gAngleTri  -= 360.0f;
+	}
+	
+    if (gAngleRect >= 360.0f)
+	{
+		gAngleRect -= 360.0f;
+	}
 }
 
 /*
@@ -5943,7 +5973,7 @@ VkResult CreatePipeline(void)
 	//vkPipelineRasterizationStateCreateInfo.depthClampEnable =;
 	//vkPipelineRasterizationStateCreateInfo.rasterizerDiscardEnable =;
 	vkPipelineRasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
-	vkPipelineRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
+	vkPipelineRasterizationStateCreateInfo.cullMode = VK_CULL_MODE_NONE;
 	vkPipelineRasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE; //Triangle winding order 
 	//vkPipelineRasterizationStateCreateInfo.depthBiasEnable =;
 	//vkPipelineRasterizationStateCreateInfo.depthBiasConstantFactor =;
