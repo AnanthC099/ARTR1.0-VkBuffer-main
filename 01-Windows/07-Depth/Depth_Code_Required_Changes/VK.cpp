@@ -4663,7 +4663,7 @@ VkResult CreateRenderPass(void)
 	vkSubpassDescription.pipelineBindPoint =  VK_PIPELINE_BIND_POINT_GRAPHICS; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineBindPoint.html
 	vkSubpassDescription.inputAttachmentCount = 0;
 	vkSubpassDescription.pInputAttachments = NULL;
-	vkSubpassDescription.colorAttachmentCount = _ARRAYSIZE(vkAttachmentDescription_array);
+	vkSubpassDescription.colorAttachmentCount = 1; //This count should be count of VkAttachmentReference used for color
 	vkSubpassDescription.pColorAttachments = (const VkAttachmentReference*)&vkAttachmentReference;
 	vkSubpassDescription.pResolveAttachments = NULL;
 	vkSubpassDescription.pDepthStencilAttachment = NULL;
@@ -5279,37 +5279,36 @@ VkResult CreateFramebuffers(void)
 	
 	/*
 	Code
-	*/
-	
-	/*
-	1. Declare an array of VkImageView (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageView.html) equal to number of attachments i.e in our example array of member.
-	*/
-	VkImageView vkImageView_attachment_array[1];
-	memset((void*)vkImageView_attachment_array, 0, sizeof(VkImageView) * _ARRAYSIZE(vkImageView_attachment_array));
-	
-	/*
-	2. Declare and initialize VkFramebufferCreateInfo structure (https://registry.khronos.org/vulkan/specs/latest/man/html/VkFramebufferCreateInfo.html).
-	Allocate the framebuffer array by malloc eqal size to swapchainImageCount.
-	 Start loop for  swapchainImageCount and call vkCreateFramebuffer() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateFramebuffer.html) to create framebuffers.
-	*/
-	VkFramebufferCreateInfo vkFramebufferCreateInfo;
-	memset((void*)&vkFramebufferCreateInfo, 0, sizeof(VkFramebufferCreateInfo));
-	
-	vkFramebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-	vkFramebufferCreateInfo.pNext = NULL;
-	vkFramebufferCreateInfo.flags = 0;
-	vkFramebufferCreateInfo.renderPass = vkRenderPass;
-	vkFramebufferCreateInfo.attachmentCount = _ARRAYSIZE(vkImageView_attachment_array);
-	vkFramebufferCreateInfo.pAttachments = vkImageView_attachment_array;
-	vkFramebufferCreateInfo.width = vkExtent2D_SwapChain.width;
-	vkFramebufferCreateInfo.height = vkExtent2D_SwapChain.height;
-	vkFramebufferCreateInfo.layers = 1;
-	
+	*/	
 	vkFramebuffer_array = (VkFramebuffer*)malloc(sizeof(VkFramebuffer) * swapchainImageCount);
 	//for sake of brevity, no error checking
 	
 	for(uint32_t i = 0 ; i < swapchainImageCount; i++)
 	{
+		/*
+		1. Declare an array of VkImageView (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageView.html) equal to number of attachments i.e in our example array of member.
+		*/
+		VkImageView vkImageView_attachment_array[1];
+		memset((void*)vkImageView_attachment_array, 0, sizeof(VkImageView) * _ARRAYSIZE(vkImageView_attachment_array));
+		
+		/*
+		2. Declare and initialize VkFramebufferCreateInfo structure (https://registry.khronos.org/vulkan/specs/latest/man/html/VkFramebufferCreateInfo.html).
+		Allocate the framebuffer array by malloc eqal size to swapchainImageCount.
+		 Start loop for  swapchainImageCount and call vkCreateFramebuffer() (https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateFramebuffer.html) to create framebuffers.
+		*/
+		VkFramebufferCreateInfo vkFramebufferCreateInfo;
+		memset((void*)&vkFramebufferCreateInfo, 0, sizeof(VkFramebufferCreateInfo));
+		
+		vkFramebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		vkFramebufferCreateInfo.pNext = NULL;
+		vkFramebufferCreateInfo.flags = 0;
+		vkFramebufferCreateInfo.renderPass = vkRenderPass;
+		vkFramebufferCreateInfo.attachmentCount = _ARRAYSIZE(vkImageView_attachment_array);
+		vkFramebufferCreateInfo.pAttachments = vkImageView_attachment_array;
+		vkFramebufferCreateInfo.width = vkExtent2D_SwapChain.width;
+		vkFramebufferCreateInfo.height = vkExtent2D_SwapChain.height;
+		vkFramebufferCreateInfo.layers = 1;
+		
 		vkImageView_attachment_array[0] = swapChainImageView_array[i];
 		
 		vkResult = vkCreateFramebuffer(vkDevice, &vkFramebufferCreateInfo, NULL, &vkFramebuffer_array[i]);
