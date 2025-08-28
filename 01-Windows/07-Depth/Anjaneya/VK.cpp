@@ -3462,12 +3462,126 @@ VkResult CreateImagesAndImageViews(void)
 	vkImageCreateInfo.mipLevels = 1;
 	vkImageCreateInfo.arrayLayers = 1;
 	vkImageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSampleCountFlagBits.html
-	vkImageCreateInfo.tiling = ; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageTiling.html
-	vkImageCreateInfo.usage = ;
-	vkImageCreateInfo.sharingMode = ;
-	vkImageCreateInfo.queueFamilyIndexCount = ;
-	vkImageCreateInfo.pQueueFamilyIndices = ;
-	vkImageCreateInfo.initialLayout = ;
+	vkImageCreateInfo.tiling =  VK_IMAGE_TILING_OPTIMAL; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageTiling.html
+	vkImageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageUsageFlags.html
+	//vkImageCreateInfo.sharingMode = ;
+	//vkImageCreateInfo.queueFamilyIndexCount = ;
+	//vkImageCreateInfo.pQueueFamilyIndices = ;
+	//vkImageCreateInfo.initialLayout = ;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateImage.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateImage(
+    VkDevice                                    device,
+    const VkImageCreateInfo*                    pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkImage*                                    pImage);
+	*/
+	vkResult = vkCreateImage(vkDevice, &vkImageCreateInfo, NULL, vkImageView_depth);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImage() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImage() succedded\n");
+	}
+	
+	//Memory requirements for depth Image
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryRequirements {
+		VkDeviceSize    size;
+		VkDeviceSize    alignment;
+		uint32_t        memoryTypeBits;
+	} VkMemoryRequirements;
+	*/
+	VkMemoryRequirements vkMemoryRequirements;
+	memset((void*)&vkMemoryRequirements, 0, sizeof(VkMemoryRequirements));
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetBufferMemoryRequirements.html
+	/*
+	// Provided by VK_VERSION_1_0
+	void vkGetBufferMemoryRequirements(
+    VkDevice                                    device,
+    VkBuffer                                    buffer,
+    VkMemoryRequirements*                       pMemoryRequirements);
+	*/
+	vkGetBufferMemoryRequirements(vkDevice, uniformData.vkBuffer, &vkMemoryRequirements);
+	
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryAllocateInfo {
+		VkStructureType    sType;
+		const void*        pNext;
+		VkDeviceSize       allocationSize;
+		uint32_t           memoryTypeIndex;
+	} VkMemoryAllocateInfo;
+	*/
+	VkMemoryAllocateInfo vkMemoryAllocateInfo;
+	memset((void*)&vkMemoryAllocateInfo, 0, sizeof(VkMemoryAllocateInfo));
+	vkMemoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	vkMemoryAllocateInfo.pNext = NULL;
+	vkMemoryAllocateInfo.allocationSize = vkMemoryRequirements.size; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDeviceSize.html (vkMemoryRequirements allocates memory in regions.)
+	
+	vkMemoryAllocateInfo.memoryTypeIndex = 0; //Initial value before entering into the loop
+	for(uint32_t i =0; i < vkPhysicalDeviceMemoryProperties.memoryTypeCount; i++) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPhysicalDeviceMemoryProperties.html
+	{
+		if((vkMemoryRequirements.memoryTypeBits & 1) == 1) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryRequirements.html
+		{
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryType.html
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryPropertyFlagBits.html
+			if(vkPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+			{
+				vkMemoryAllocateInfo.memoryTypeIndex = i;
+				break;
+			}			
+		}
+		vkMemoryRequirements.memoryTypeBits >>= 1;
+	}
+	
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateMemory(
+    VkDevice                                    device,
+    const VkMemoryAllocateInfo*                 pAllocateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDeviceMemory*                             pMemory);
+	*/
+	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo, NULL, &uniformData.vkDeviceMemory_depth); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkAllocateMemory() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkAllocateMemory() succedded\n");
+	}
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBindBufferMemory.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkBindBufferMemory(
+    VkDevice                                    device,
+    VkBuffer                                    buffer, //whom to bind
+    VkDeviceMemory                              memory, //what to bind
+    VkDeviceSize                                memoryOffset);
+	*/
+	vkResult = vkBindBufferMemory(vkDevice, uniformData.vkBuffer, uniformData.vkDeviceMemory, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkBindBufferMemory() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkBindBufferMemory() succedded\n");
+	}
 	
 	return vkResult;
 }
@@ -3479,6 +3593,8 @@ VkResult GetSupportedDepthFormat(void)
 	VkResult vkResult = VK_SUCCESS;
 	
 	//Code
+	
+	
 	return vkResult;
 }
 
