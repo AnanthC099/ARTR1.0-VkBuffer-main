@@ -3509,7 +3509,7 @@ VkResult CreateImagesAndImageViews(void)
     VkBuffer                                    buffer,
     VkMemoryRequirements*                       pMemoryRequirements);
 	*/
-	vkGetBufferMemoryRequirements(vkDevice, uniformData.vkBuffer, &vkMemoryRequirements);
+	vkGetBufferMemoryRequirements(vkDevice, uniformData.vkImage_depth, &vkMemoryRequirements);
 	
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
@@ -3572,7 +3572,7 @@ VkResult CreateImagesAndImageViews(void)
     VkDeviceMemory                              memory, //what to bind
     VkDeviceSize                                memoryOffset);
 	*/
-	vkResult = vkBindBufferMemory(vkDevice, uniformData.vkBuffer, uniformData.vkDeviceMemory, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
+	vkResult = vkBindBufferMemory(vkDevice, uniformData.vkImage_depth, uniformData.vkDeviceMemory_depth, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): vkBindBufferMemory() function failed with error code %d\n", vkResult);
@@ -3582,6 +3582,9 @@ VkResult CreateImagesAndImageViews(void)
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): vkBindBufferMemory() succedded\n");
 	}
+	
+	//Create ImageView for above depth image
+	
 	
 	return vkResult;
 }
