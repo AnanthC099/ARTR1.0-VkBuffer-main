@@ -3584,7 +3584,72 @@ VkResult CreateImagesAndImageViews(void)
 	}
 	
 	//Create ImageView for above depth image
+	//Declare  and initialize VkImageViewCreateInfo struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewCreateInfo.html) except its ".image" member.
+	//Initialize VkImageViewCreateInfo struct
+	VkImageViewCreateInfo vkImageViewCreateInfo;
+	memset((void*)&vkImageViewCreateInfo, 0, sizeof(VkImageViewCreateInfo));
 	
+	/*
+	typedef struct VkImageViewCreateInfo {
+    VkStructureType            sType;
+    const void*                pNext;
+    VkImageViewCreateFlags     flags;
+    VkImage                    image;
+    VkImageViewType            viewType;
+    VkFormat                   format;
+    VkComponentMapping         components;
+    VkImageSubresourceRange    subresourceRange;
+	} VkImageViewCreateInfo;
+	*/
+	
+	vkImageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	vkImageViewCreateInfo.pNext = NULL;
+	vkImageViewCreateInfo.flags = 0;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+	vkImageViewCreateInfo.format = vkFormat_depth;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkComponentMapping.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkComponentSwizzle.html
+	//vkImageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_R;
+	//vkImageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_G;
+	//vkImageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_B;
+	//vkImageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_A;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageSubresourceRange.html
+	/*
+	typedef struct VkImageSubresourceRange {
+    VkImageAspectFlags    aspectMask;
+    uint32_t              baseMipLevel;
+    uint32_t              levelCount;
+    uint32_t              baseArrayLayer;
+    uint32_t              layerCount;
+	} VkImageSubresourceRange;
+	*/
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
+	vkImageViewCreateInfo.subresourceRange.aspectMask =  VK_IMAGE_ASPECT_DEPTH_BIT|VK_IMAGE_ASPECT_STENCIL_BIT;
+	vkImageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+	vkImageViewCreateInfo.subresourceRange.levelCount = 1;
+	vkImageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+	vkImageViewCreateInfo.subresourceRange.layerCount = 1;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewType.html
+	vkImageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	vkImageViewCreateInfo.image = vkImage_depth;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateImageView.html
+	vkResult = vkCreateImageView(vkDevice, &vkImageViewCreateInfo, NULL, &vkImageView_depth);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() function failed with error code %d for depth image\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() succedded for depth image\n");
+	}
 	
 	return vkResult;
 }
@@ -3594,6 +3659,23 @@ VkResult GetSupportedDepthFormat(void)
 {
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
+	
+	////https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+	VkFormat vkFormat_depth_array[] = 
+	{ 
+		VK_FORMAT_D32_SFLOAT_S8_UINT,
+		VK_FORMAT_D32_SFLOAT,
+		VK_FORMAT_D24_UNORM_S8_UINT,
+		VK_FORMAT_D16_UNORM_S8_UINT,
+		VK_FORMAT_D16_UNORM
+	};
+	
+	for(uint32_t i =0;i < (sizeof(vkFormat_depth_array)/sizeof(vkFormat_depth_array[0]);i++)
+	{
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatProperties.html
+		VkFormatProperties vkFormatProperties;
+		memset((void*)&vkFormatProperties, 0, sizeof(vkFormatProperties));
+	}
 	
 	//Code
 	
