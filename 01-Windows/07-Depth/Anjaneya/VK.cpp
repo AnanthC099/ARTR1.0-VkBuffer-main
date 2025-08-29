@@ -3673,12 +3673,21 @@ VkResult GetSupportedDepthFormat(void)
 	for(uint32_t i =0;i < (sizeof(vkFormat_depth_array)/sizeof(vkFormat_depth_array[0]);i++)
 	{
 		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatProperties.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatFeatureFlags.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatFeatureFlagBits.html
 		VkFormatProperties vkFormatProperties;
 		memset((void*)&vkFormatProperties, 0, sizeof(vkFormatProperties));
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatProperties.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceFormatProperties.html
+		vkGetPhysicalDeviceFormatProperties(vkPhysicalDevice_selected, vkFormat_depth_array[i], &vkFormatProperties);
+		if(vkFormatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
+		{
+			vkFormat_depth = vkFormat_depth_array[i];
+			vkResult = VK_SUCCESS;
+			break;
+		}
 	}
-	
-	//Code
-	
 	
 	return vkResult;
 }
@@ -4827,9 +4836,10 @@ VkResult CreateRenderPass(void)
     VkImageLayout                   finalLayout;
 	} VkAttachmentDescription;
 	*/
-	VkAttachmentDescription  vkAttachmentDescription_array[1]; //color and depth when added array will be of 2
+	VkAttachmentDescription  vkAttachmentDescription_array[2]; //color and depth when added array will be of 2
 	memset((void*)vkAttachmentDescription_array, 0, sizeof(VkAttachmentDescription) * _ARRAYSIZE(vkAttachmentDescription_array));
 	
+	//For Color
 	/*
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentDescriptionFlagBits.html
 	
@@ -4915,18 +4925,119 @@ VkResult CreateRenderPass(void)
 	Madhe kahi changes zale, source praname thev
 	*/
 	
+	//For Depth
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentDescriptionFlagBits.html
+	
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentDescriptionFlagBits {
+		VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT = 0x00000001,
+	} VkAttachmentDescriptionFlagBits;
+	
+	Info on Sony japan company documentation of paper presentation.
+	Mostly 0 , only for manging memory in embedded devices
+	Multiple attachments jar astil , tar eka mekanchi memory vapru shaktat.
+	*/
+	vkAttachmentDescription_array[1].flags = 0; 
+	
+	vkAttachmentDescription_array[1].format = vkFormat_depth;
+
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSampleCountFlagBits.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkSampleCountFlagBits {
+    VK_SAMPLE_COUNT_1_BIT = 0x00000001,
+    VK_SAMPLE_COUNT_2_BIT = 0x00000002,
+    VK_SAMPLE_COUNT_4_BIT = 0x00000004,
+    VK_SAMPLE_COUNT_8_BIT = 0x00000008,
+    VK_SAMPLE_COUNT_16_BIT = 0x00000010,
+    VK_SAMPLE_COUNT_32_BIT = 0x00000020,
+    VK_SAMPLE_COUNT_64_BIT = 0x00000040,
+	} VkSampleCountFlagBits;
+	
+	https://www.google.com/search?q=sampling+meaning+in+texturw&oq=sampling+meaning+in+texturw&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTYzMjlqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8
+	*/
+	vkAttachmentDescription_array[1].samples = VK_SAMPLE_COUNT_1_BIT; // No MSAA
+	
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentLoadOp.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentLoadOp {
+		VK_ATTACHMENT_LOAD_OP_LOAD = 0,
+		VK_ATTACHMENT_LOAD_OP_CLEAR = 1,
+		VK_ATTACHMENT_LOAD_OP_DONT_CARE = 2,
+	  // Provided by VK_VERSION_1_4
+		VK_ATTACHMENT_LOAD_OP_NONE = 1000400000,
+	  // Provided by VK_EXT_load_store_op_none
+		VK_ATTACHMENT_LOAD_OP_NONE_EXT = VK_ATTACHMENT_LOAD_OP_NONE,
+	  // Provided by VK_KHR_load_store_op_none
+		VK_ATTACHMENT_LOAD_OP_NONE_KHR = VK_ATTACHMENT_LOAD_OP_NONE,
+	} VkAttachmentLoadOp;
+	
+	ya structure chi mahiti direct renderpass la jata.
+	*/
+	vkAttachmentDescription_array[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; //Render pass madhe aat aalyavar kay karu attachment cha image data sobat
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentStoreOp.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentStoreOp {
+    VK_ATTACHMENT_STORE_OP_STORE = 0,
+    VK_ATTACHMENT_STORE_OP_DONT_CARE = 1,
+  // Provided by VK_VERSION_1_3
+    VK_ATTACHMENT_STORE_OP_NONE = 1000301000,
+  // Provided by VK_KHR_dynamic_rendering, VK_KHR_load_store_op_none
+    VK_ATTACHMENT_STORE_OP_NONE_KHR = VK_ATTACHMENT_STORE_OP_NONE,
+  // Provided by VK_QCOM_render_pass_store_ops
+    VK_ATTACHMENT_STORE_OP_NONE_QCOM = VK_ATTACHMENT_STORE_OP_NONE,
+  // Provided by VK_EXT_load_store_op_none
+    VK_ATTACHMENT_STORE_OP_NONE_EXT = VK_ATTACHMENT_STORE_OP_NONE,
+	} VkAttachmentStoreOp;
+	*/
+	vkAttachmentDescription_array[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE; //Render pass madhun baher gelyavar kay karu attachment image data sobat
+	
+	vkAttachmentDescription_array[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // For both depth and stencil, dont go on name
+	vkAttachmentDescription_array[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE; // For both depth and stencil, dont go on name
+	
+	/*
+	https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	he sarv attachment madhla data cha arrangement cha aahe
+	Unpacking athva RTR cha , karan color attachment mhnaje mostly texture
+	*/
+	vkAttachmentDescription_array[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; //Renderpass cha aat aalyavar , attachment cha data arrangemnent cha kay karu
+	vkAttachmentDescription_array[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL; //Renderpass cha baher gelyavar , attachment cha data arrangemnent cha kay karu
+	/*
+	jya praname soure image aage , taasach layout thevun present kar.
+	Madhe kahi changes zale, source praname thev
+	*/
+	
 	/*
 	/////////////////////////////////
+	//For Color
 	2. Declare and initialize VkAttachmentReference struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentReference.html) , which will have information about the attachment we described above.
 	(jevha depth baghu , tevha proper ek extra element add hoil array madhe)
 	*/
-	VkAttachmentReference vkAttachmentReference;
-	memset((void*)&vkAttachmentReference, 0, sizeof(VkAttachmentReference));
-	vkAttachmentReference.attachment = 0; //It is index. 0th is color attchment , 1st will be depth attachment
+	VkAttachmentReference vkAttachmentReference_color;
+	memset((void*)&vkAttachmentReference_color, 0, sizeof(VkAttachmentReference));
+	vkAttachmentReference_color.attachment = 0; //It is index. 0th is color attchment , 1st will be depth attachment
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
 	//he image ksa vapraycha aahe , sang mala
-	vkAttachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
+	vkAttachmentReference_color.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
+	
+	/*
+	/////////////////////////////////
+	//For Depth
+	Declare and initialize VkAttachmentReference struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentReference.html) , which will have information about the attachment we described above.
+	(jevha depth baghu , tevha proper ek extra element add hoil array madhe)
+	*/
+	VkAttachmentReference vkAttachmentReference_depth;
+	memset((void*)&vkAttachmentReference_depth, 0, sizeof(VkAttachmentReference));
+	vkAttachmentReference_depth.attachment = 0; //It is index. 0th is color attchment , 1st will be depth attachment
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	//he image ksa vapraycha aahe , sang mala
+	vkAttachmentReference_color.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
 	
 	/*
 	/////////////////////////////////
