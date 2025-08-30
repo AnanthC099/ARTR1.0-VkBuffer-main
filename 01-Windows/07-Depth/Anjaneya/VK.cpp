@@ -5013,7 +5013,7 @@ VkResult CreateRenderPass(void)
 	
 	/*
 	/////////////////////////////////
-	//For Color
+	//For Color attachment
 	2. Declare and initialize VkAttachmentReference struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentReference.html) , which will have information about the attachment we described above.
 	(jevha depth baghu , tevha proper ek extra element add hoil array madhe)
 	*/
@@ -5027,17 +5027,17 @@ VkResult CreateRenderPass(void)
 	
 	/*
 	/////////////////////////////////
-	//For Depth
+	//For Depth attachmnent
 	Declare and initialize VkAttachmentReference struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentReference.html) , which will have information about the attachment we described above.
 	(jevha depth baghu , tevha proper ek extra element add hoil array madhe)
 	*/
 	VkAttachmentReference vkAttachmentReference_depth;
 	memset((void*)&vkAttachmentReference_depth, 0, sizeof(VkAttachmentReference));
-	vkAttachmentReference_depth.attachment = 0; //It is index. 0th is color attchment , 1st will be depth attachment
+	vkAttachmentReference_depth.attachment = 1; //It is index. 0th is color attchment , 1st will be depth attachment
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
 	//he image ksa vapraycha aahe , sang mala
-	vkAttachmentReference_color.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
+	vkAttachmentReference_depth.layout =  VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
 	
 	/*
 	/////////////////////////////////
@@ -5051,9 +5051,9 @@ VkResult CreateRenderPass(void)
 	vkSubpassDescription.inputAttachmentCount = 0;
 	vkSubpassDescription.pInputAttachments = NULL;
 	vkSubpassDescription.colorAttachmentCount = 1; //This count should be count of VkAttachmentReference used for color
-	vkSubpassDescription.pColorAttachments = (const VkAttachmentReference*)&vkAttachmentReference;
+	vkSubpassDescription.pColorAttachments = (const VkAttachmentReference*)&vkAttachmentReference_color;
 	vkSubpassDescription.pResolveAttachments = NULL;
-	vkSubpassDescription.pDepthStencilAttachment = NULL;
+	vkSubpassDescription.pDepthStencilAttachment = (const VkAttachmentReference*)&vkAttachmentReference_depth;
 	vkSubpassDescription.preserveAttachmentCount = 0;
 	vkSubpassDescription.pPreserveAttachments = NULL;
 	
