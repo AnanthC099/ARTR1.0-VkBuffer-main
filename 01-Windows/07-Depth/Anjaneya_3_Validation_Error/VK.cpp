@@ -3495,15 +3495,15 @@ VkResult CreateImagesAndImageViews(void)
 	} VkImageCreateInfo;
 	*/
 	VkImageCreateInfo vkImageCreateInfo;
-	memset((void*)&vkImageCreateInfo, 0, sizeof(vkImageCreateInfo));
+	memset((void*)&vkImageCreateInfo, 0, sizeof(VkImageCreateInfo));
 	vkImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	vkImageCreateInfo.pNext = NULL;
 	vkImageCreateInfo.flags = 0;
 	vkImageCreateInfo.imageType = VK_IMAGE_TYPE_2D; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageType.html
 	vkImageCreateInfo.format = vkFormat_depth;
 	
-	vkImageCreateInfo.extent.width = winWidth; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
-	vkImageCreateInfo.extent.height = winHeight; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	vkImageCreateInfo.extent.width = (uint32_t)winWidth; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	vkImageCreateInfo.extent.height = (uint32_t)winHeight; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
 	vkImageCreateInfo.extent.depth = 1; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
 	
 	vkImageCreateInfo.mipLevels = 1;
@@ -3525,7 +3525,7 @@ VkResult CreateImagesAndImageViews(void)
     const VkAllocationCallbacks*                pAllocator,
     VkImage*                                    pImage);
 	*/
-	vkResult = vkCreateImage(vkDevice, &vkImageCreateInfo, NULL, vkImageView_depth);
+	vkResult = vkCreateImage(vkDevice, &vkImageCreateInfo, NULL, &vkImage_depth);
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImage() function failed with error code %d\n", vkResult);
@@ -3556,7 +3556,7 @@ VkResult CreateImagesAndImageViews(void)
     VkBuffer                                    buffer,
     VkMemoryRequirements*                       pMemoryRequirements);
 	*/
-	vkGetBufferMemoryRequirements(vkDevice, uniformData.vkImage_depth, &vkMemoryRequirements);
+	vkGetImageMemoryRequirements(vkDevice, vkImage_depth, &vkMemoryRequirements);
 	
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
@@ -3599,7 +3599,7 @@ VkResult CreateImagesAndImageViews(void)
     const VkAllocationCallbacks*                pAllocator,
     VkDeviceMemory*                             pMemory);
 	*/
-	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo, NULL, &uniformData.vkDeviceMemory_depth); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo, NULL, &vkDeviceMemory_depth); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): vkAllocateMemory() function failed with error code %d\n", vkResult);
@@ -3619,7 +3619,7 @@ VkResult CreateImagesAndImageViews(void)
     VkDeviceMemory                              memory, //what to bind
     VkDeviceSize                                memoryOffset);
 	*/
-	vkResult = vkBindBufferMemory(vkDevice, uniformData.vkImage_depth, uniformData.vkDeviceMemory_depth, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
+	vkResult = vkBindImageMemory(vkDevice, vkImage_depth, vkDeviceMemory_depth, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateImagesAndImageViews(): vkBindBufferMemory() function failed with error code %d\n", vkResult);
@@ -3633,7 +3633,6 @@ VkResult CreateImagesAndImageViews(void)
 	//Create ImageView for above depth image
 	//Declare  and initialize VkImageViewCreateInfo struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewCreateInfo.html) except its ".image" member.
 	//Initialize VkImageViewCreateInfo struct
-	VkImageViewCreateInfo vkImageViewCreateInfo;
 	memset((void*)&vkImageViewCreateInfo, 0, sizeof(VkImageViewCreateInfo));
 	
 	/*
@@ -3717,7 +3716,7 @@ VkResult GetSupportedDepthFormat(void)
 		VK_FORMAT_D16_UNORM
 	};
 	
-	for(uint32_t i =0;i < (sizeof(vkFormat_depth_array)/sizeof(vkFormat_depth_array[0]);i++)
+	for(uint32_t i =0;i < (sizeof(vkFormat_depth_array)/sizeof(vkFormat_depth_array[0])); i++)
 	{
 		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatProperties.html
 		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatFeatureFlags.html
