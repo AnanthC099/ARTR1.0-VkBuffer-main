@@ -1048,6 +1048,28 @@ VkResult resize(int width, int height)
 		fprintf(gFILE, "resize(): vkDestroyRenderPass() is done\n");
 	}
 	
+	//destroy depth image view
+	if(vkImageView_depth)
+	{
+		vkDestroyImageView(vkDevice, vkImageView_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImageView.html
+		vkImageView_depth = VK_NULL_HANDLE;
+	}
+			
+	//destroy device memory for depth image
+	if(vkDeviceMemory_depth)
+	{
+		vkFreeMemory(vkDevice, vkDeviceMemory_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeMemory.html
+		vkDeviceMemory_depth = VK_NULL_HANDLE;
+	}
+			
+	//destroy depth image
+	if(vkImage_depth)
+	{
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImage.html
+		vkDestroyImage(vkDevice, vkImage_depth, NULL);
+		vkImage_depth = VK_NULL_HANDLE;
+	}
+	
 	//30.12
 	//Destroy Swapchain image and image view: Keeping the "destructor logic aside" for a while , first destroy image views from imagesViews array in a loop using vkDestroyImageViews() api.
 	//(https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImageView.html)
@@ -1683,6 +1705,31 @@ void uninitialize(void)
 				vkDestroyCommandPool(vkDevice, vkCommandPool, NULL);
 				vkCommandPool = VK_NULL_HANDLE;
 				fprintf(gFILE, "uninitialize(): vkDestroyCommandPool() is done\n");
+			}
+			
+			//destroy depth image view
+			if(vkImageView_depth)
+			{
+				vkDestroyImageView(vkDevice, vkImageView_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImageView.html
+				vkImageView_depth = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkImageView_depth is done\n");
+			}
+			
+			//destroy device memory for depth image
+			if(vkDeviceMemory_depth)
+			{
+				vkFreeMemory(vkDevice, vkDeviceMemory_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeMemory.html
+				vkDeviceMemory_depth = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkDeviceMemory_depth is done\n");
+			}
+			
+			//destroy depth image
+			if(vkImage_depth)
+			{
+				//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImage.html
+				vkDestroyImage(vkDevice, vkImage_depth, NULL);
+				vkImage_depth = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkImage_depth is done\n");
 			}
 			
 			/*
@@ -5675,7 +5722,7 @@ VkResult CreateFramebuffers(void)
 		/*
 		1. Declare an array of VkImageView (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageView.html) equal to number of attachments i.e in our example array of member.
 		*/
-		VkImageView vkImageView_attachment_array[1];
+		VkImageView vkImageView_attachment_array[2]; //was 1, made to 2 madhe for depth 
 		memset((void*)vkImageView_attachment_array, 0, sizeof(VkImageView) * _ARRAYSIZE(vkImageView_attachment_array));
 		
 		/*
@@ -5697,6 +5744,7 @@ VkResult CreateFramebuffers(void)
 		vkFramebufferCreateInfo.layers = 1;
 		
 		vkImageView_attachment_array[0] = swapChainImageView_array[i];
+		vkImageView_attachment_array[1] = vkImageView_depth;
 		
 		vkResult = vkCreateFramebuffer(vkDevice, &vkFramebufferCreateInfo, NULL, &vkFramebuffer_array[i]);
 		if (vkResult != VK_SUCCESS)
@@ -6036,11 +6084,4 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugReportCallback(VkDebugReportFlagsEXT vkDebug
 	fprintf(gFILE, "Anjaneya_VALIDATION:debugReportCallback():%s(%d) = %s\n", pLayerPrefix, messageCode, pMessage);  
     return (VK_FALSE);
 }
-
-
-
-
-
-
-
 
