@@ -5664,7 +5664,57 @@ VkResult CreatePipeline(void)
 	vkGraphicsPipelineCreateInfo.pViewportState = &vkPipelineViewportStateCreateInfo; //5
 	vkGraphicsPipelineCreateInfo.pRasterizationState = &vkPipelineRasterizationStateCreateInfo; //3
 	vkGraphicsPipelineCreateInfo.pMultisampleState = &vkPipelineMultisampleStateCreateInfo; //8
-	vkGraphicsPipelineCreateInfo.pDepthStencilState = NULL; //6
+	//vkGraphicsPipelineCreateInfo.pDepthStencilState = NULL; //6
+	
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineDepthStencilStateCreateInfo {
+		VkStructureType                           sType;
+		const void*                               pNext;
+		VkPipelineDepthStencilStateCreateFlags    flags;
+		VkBool32                                  depthTestEnable;
+		VkBool32                                  depthWriteEnable;
+		VkCompareOp                               depthCompareOp;
+		VkBool32                                  depthBoundsTestEnable;
+		VkBool32                                  stencilTestEnable;
+		VkStencilOpState                          front;
+		VkStencilOpState                          back;
+		float                                     minDepthBounds;
+		float                                     maxDepthBounds;
+	} VkPipelineDepthStencilStateCreateInfo;
+	*/
+	VkPipelineDepthStencilStateCreateInfo vkPipelineDepthStencilStateCreateInfo;
+	memset((void*)&vkPipelineDepthStencilStateCreateInfo, 0, sizeof(VkPipelineDepthStencilStateCreateInfo));
+	vkPipelineDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	vkPipelineDepthStencilStateCreateInfo.pNext = NULL;
+	vkPipelineDepthStencilStateCreateInfo.flags = 0;
+	vkPipelineDepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
+	vkPipelineDepthStencilStateCreateInfo.depthWriteEnable= VK_TRUE; 
+	vkPipelineDepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompareOp.html
+	vkPipelineDepthStencilStateCreateInfo.depthBoundsTestEnable= VK_FALSE;
+	vkPipelineDepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
+	//vkPipelineDepthStencilStateCreateInfo.minDepthBounds = ;
+	//vkPipelineDepthStencilStateCreateInfo.maxDepthBounds= ;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOpState.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOp.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompareOp.html
+	vkPipelineDepthStencilStateCreateInfo.back.failOp = VK_STENCIL_OP_KEEP; 
+	vkPipelineDepthStencilStateCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
+	vkPipelineDepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS; // one of 8 tests 
+	//vkPipelineDepthStencilStateCreateInfo.back.depthFailOp = ;
+	//vkPipelineDepthStencilStateCreateInfo.back.compareMask = ;
+	//vkPipelineDepthStencilStateCreateInfo.back.writeMask = ;
+	//vkPipelineDepthStencilStateCreateInfo.back.reference = ;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOpState.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOp.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompareOp.html
+	vkPipelineDepthStencilStateCreateInfo.front = vkPipelineDepthStencilStateCreateInfo.back; 
+	
+	vkGraphicsPipelineCreateInfo.pDepthStencilState = &vkPipelineDepthStencilStateCreateInfo; //6
+	
+	
 	vkGraphicsPipelineCreateInfo.pColorBlendState = &vkPipelineColorBlendStateCreateInfo; //4
 	vkGraphicsPipelineCreateInfo.pDynamicState = NULL; //7
 	vkGraphicsPipelineCreateInfo.layout = vkPipelineLayout; //11
