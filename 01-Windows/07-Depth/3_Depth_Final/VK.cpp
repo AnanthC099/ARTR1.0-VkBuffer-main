@@ -179,6 +179,9 @@ typedef union VkClearColorValue {
 */
 VkClearColorValue vkClearColorValue;
 
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkClearDepthStencilValue.html
+VkClearDepthStencilValue vkClearDepthStencilValue;
+
 /*
 20_Render
 */
@@ -298,6 +301,12 @@ typedef struct VkExtent2D {
 VkRect2D vkRect2D_scissor;
 
 VkPipeline vkPipeline = VK_NULL_HANDLE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipeline.html
+
+// Depth changes
+VkFormat vkFormat_depth = VK_FORMAT_UNDEFINED;
+VkImage vkImage_depth = VK_NULL_HANDLE;
+VkDeviceMemory vkDeviceMemory_depth = VK_NULL_HANDLE;
+VkImageView vkImageView_depth = VK_NULL_HANDLE;  
 
 // Entry-Point Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -896,6 +905,13 @@ VkResult initialize(void)
 	vkClearColorValue.float32[2] = 1.0f;
 	vkClearColorValue.float32[3] = 1.0f;
 	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkClearDepthStencilValue.html
+	memset((void*)&vkClearDepthStencilValue, 0, sizeof(VkClearDepthStencilValue));
+	//Set default clear depth value
+	vkClearDepthStencilValue.depth = 1.0f; //type float
+	//Set default clear stencil value
+	vkClearDepthStencilValue.stencil = 0; //type uint32_t
+	
 	vkResult = buildCommandBuffers();
 	if (vkResult != VK_SUCCESS)
 	{
@@ -1040,6 +1056,28 @@ VkResult resize(int width, int height)
 		vkDestroyRenderPass(vkDevice, vkRenderPass, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyRenderPass.html
 		vkRenderPass = VK_NULL_HANDLE;
 		fprintf(gFILE, "resize(): vkDestroyRenderPass() is done\n");
+	}
+	
+	//destroy depth image view
+	if(vkImageView_depth)
+	{
+		vkDestroyImageView(vkDevice, vkImageView_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImageView.html
+		vkImageView_depth = VK_NULL_HANDLE;
+	}
+			
+	//destroy device memory for depth image
+	if(vkDeviceMemory_depth)
+	{
+		vkFreeMemory(vkDevice, vkDeviceMemory_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeMemory.html
+		vkDeviceMemory_depth = VK_NULL_HANDLE;
+	}
+			
+	//destroy depth image
+	if(vkImage_depth)
+	{
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImage.html
+		vkDestroyImage(vkDevice, vkImage_depth, NULL);
+		vkImage_depth = VK_NULL_HANDLE;
 	}
 	
 	//30.12
@@ -1677,6 +1715,31 @@ void uninitialize(void)
 				vkDestroyCommandPool(vkDevice, vkCommandPool, NULL);
 				vkCommandPool = VK_NULL_HANDLE;
 				fprintf(gFILE, "uninitialize(): vkDestroyCommandPool() is done\n");
+			}
+			
+			//destroy depth image view
+			if(vkImageView_depth)
+			{
+				vkDestroyImageView(vkDevice, vkImageView_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImageView.html
+				vkImageView_depth = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkImageView_depth is done\n");
+			}
+			
+			//destroy device memory for depth image
+			if(vkDeviceMemory_depth)
+			{
+				vkFreeMemory(vkDevice, vkDeviceMemory_depth, NULL); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeMemory.html
+				vkDeviceMemory_depth = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkDeviceMemory_depth is done\n");
+			}
+			
+			//destroy depth image
+			if(vkImage_depth)
+			{
+				//https://registry.khronos.org/vulkan/specs/latest/man/html/vkDestroyImage.html
+				vkDestroyImage(vkDevice, vkImage_depth, NULL);
+				vkImage_depth = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vkImage_depth is done\n");
 			}
 			
 			/*
@@ -3277,7 +3340,10 @@ VkResult CreateSwapChain(VkBool32 vsync)
 }
 
 VkResult CreateImagesAndImageViews(void)
-{
+{	
+	//Function Declarations 
+	VkResult GetSupportedDepthFormat(void);
+
 	//Variable declarations
 	VkResult vkResult = VK_SUCCESS;
 	
@@ -3401,6 +3467,281 @@ VkResult CreateImagesAndImageViews(void)
 		else
 		{
 			fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() succedded for iteration %d\n", i);
+		}
+	}
+	
+	//For depth image
+	vkResult = GetSupportedDepthFormat();
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): GetSupportedDepthFormat() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): GetSupportedDepthFormat() succedded\n");
+	}
+	
+	//For depth image, initialize VkImageCreateInfo
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageCreateInfo.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkImageCreateInfo {
+		VkStructureType          sType;
+		const void*              pNext;
+		VkImageCreateFlags       flags;
+		VkImageType              imageType;
+		VkFormat                 format;
+		VkExtent3D               extent;
+		uint32_t                 mipLevels;
+		uint32_t                 arrayLayers;
+		VkSampleCountFlagBits    samples;
+		VkImageTiling            tiling;
+		VkImageUsageFlags        usage;
+		VkSharingMode            sharingMode;
+		uint32_t                 queueFamilyIndexCount;
+		const uint32_t*          pQueueFamilyIndices;
+		VkImageLayout            initialLayout;
+	} VkImageCreateInfo;
+	*/
+	VkImageCreateInfo vkImageCreateInfo;
+	memset((void*)&vkImageCreateInfo, 0, sizeof(VkImageCreateInfo));
+	vkImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	vkImageCreateInfo.pNext = NULL;
+	vkImageCreateInfo.flags = 0;
+	vkImageCreateInfo.imageType = VK_IMAGE_TYPE_2D; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageType.html
+	vkImageCreateInfo.format = vkFormat_depth;
+	
+	vkImageCreateInfo.extent.width = (uint32_t)winWidth; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	vkImageCreateInfo.extent.height = (uint32_t)winHeight; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	vkImageCreateInfo.extent.depth = 1; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	
+	vkImageCreateInfo.mipLevels = 1;
+	vkImageCreateInfo.arrayLayers = 1;
+	vkImageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSampleCountFlagBits.html
+	vkImageCreateInfo.tiling =  VK_IMAGE_TILING_OPTIMAL; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageTiling.html
+	vkImageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageUsageFlags.html
+	//vkImageCreateInfo.sharingMode = ;
+	//vkImageCreateInfo.queueFamilyIndexCount = ;
+	//vkImageCreateInfo.pQueueFamilyIndices = ;
+	//vkImageCreateInfo.initialLayout = ;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateImage.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateImage(
+    VkDevice                                    device,
+    const VkImageCreateInfo*                    pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkImage*                                    pImage);
+	*/
+	vkResult = vkCreateImage(vkDevice, &vkImageCreateInfo, NULL, &vkImage_depth);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImage() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImage() succedded\n");
+	}
+	
+	//Memory requirements for depth Image
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryRequirements {
+		VkDeviceSize    size;
+		VkDeviceSize    alignment;
+		uint32_t        memoryTypeBits;
+	} VkMemoryRequirements;
+	*/
+	VkMemoryRequirements vkMemoryRequirements;
+	memset((void*)&vkMemoryRequirements, 0, sizeof(VkMemoryRequirements));
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetBufferMemoryRequirements.html
+	/*
+	// Provided by VK_VERSION_1_0
+	void vkGetBufferMemoryRequirements(
+    VkDevice                                    device,
+    VkBuffer                                    buffer,
+    VkMemoryRequirements*                       pMemoryRequirements);
+	*/
+	vkGetImageMemoryRequirements(vkDevice, vkImage_depth, &vkMemoryRequirements);
+	
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryAllocateInfo {
+		VkStructureType    sType;
+		const void*        pNext;
+		VkDeviceSize       allocationSize;
+		uint32_t           memoryTypeIndex;
+	} VkMemoryAllocateInfo;
+	*/
+	VkMemoryAllocateInfo vkMemoryAllocateInfo;
+	memset((void*)&vkMemoryAllocateInfo, 0, sizeof(VkMemoryAllocateInfo));
+	vkMemoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	vkMemoryAllocateInfo.pNext = NULL;
+	vkMemoryAllocateInfo.allocationSize = vkMemoryRequirements.size; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDeviceSize.html (vkMemoryRequirements allocates memory in regions.)
+	
+	vkMemoryAllocateInfo.memoryTypeIndex = 0; //Initial value before entering into the loop
+	for(uint32_t i =0; i < vkPhysicalDeviceMemoryProperties.memoryTypeCount; i++) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPhysicalDeviceMemoryProperties.html
+	{
+		if((vkMemoryRequirements.memoryTypeBits & 1) == 1) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryRequirements.html
+		{
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryType.html
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryPropertyFlagBits.html
+			if(vkPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+			{
+				vkMemoryAllocateInfo.memoryTypeIndex = i;
+				break;
+			}			
+		}
+		vkMemoryRequirements.memoryTypeBits >>= 1;
+	}
+	
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateMemory(
+    VkDevice                                    device,
+    const VkMemoryAllocateInfo*                 pAllocateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDeviceMemory*                             pMemory);
+	*/
+	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo, NULL, &vkDeviceMemory_depth); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkAllocateMemory() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkAllocateMemory() succedded\n");
+	}
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBindBufferMemory.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkBindBufferMemory(
+    VkDevice                                    device,
+    VkBuffer                                    buffer, //whom to bind
+    VkDeviceMemory                              memory, //what to bind
+    VkDeviceSize                                memoryOffset);
+	*/
+	vkResult = vkBindImageMemory(vkDevice, vkImage_depth, vkDeviceMemory_depth, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkBindBufferMemory() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkBindBufferMemory() succedded\n");
+	}
+	
+	//Create ImageView for above depth image
+	//Declare  and initialize VkImageViewCreateInfo struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewCreateInfo.html) except its ".image" member.
+	//Initialize VkImageViewCreateInfo struct
+	memset((void*)&vkImageViewCreateInfo, 0, sizeof(VkImageViewCreateInfo));
+	
+	/*
+	typedef struct VkImageViewCreateInfo {
+    VkStructureType            sType;
+    const void*                pNext;
+    VkImageViewCreateFlags     flags;
+    VkImage                    image;
+    VkImageViewType            viewType;
+    VkFormat                   format;
+    VkComponentMapping         components;
+    VkImageSubresourceRange    subresourceRange;
+	} VkImageViewCreateInfo;
+	*/
+	
+	vkImageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	vkImageViewCreateInfo.pNext = NULL;
+	vkImageViewCreateInfo.flags = 0;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+	vkImageViewCreateInfo.format = vkFormat_depth;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkComponentMapping.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkComponentSwizzle.html
+	//vkImageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_R;
+	//vkImageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_G;
+	//vkImageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_B;
+	//vkImageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_A;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageSubresourceRange.html
+	/*
+	typedef struct VkImageSubresourceRange {
+    VkImageAspectFlags    aspectMask;
+    uint32_t              baseMipLevel;
+    uint32_t              levelCount;
+    uint32_t              baseArrayLayer;
+    uint32_t              layerCount;
+	} VkImageSubresourceRange;
+	*/
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
+	vkImageViewCreateInfo.subresourceRange.aspectMask =  VK_IMAGE_ASPECT_DEPTH_BIT|VK_IMAGE_ASPECT_STENCIL_BIT;
+	vkImageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+	vkImageViewCreateInfo.subresourceRange.levelCount = 1;
+	vkImageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+	vkImageViewCreateInfo.subresourceRange.layerCount = 1;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageViewType.html
+	vkImageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	vkImageViewCreateInfo.image = vkImage_depth;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateImageView.html
+	vkResult = vkCreateImageView(vkDevice, &vkImageViewCreateInfo, NULL, &vkImageView_depth);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() function failed with error code %d for depth image\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateImagesAndImageViews(): vkCreateImageView() succedded for depth image\n");
+	}
+	
+	return vkResult;
+}
+
+
+VkResult GetSupportedDepthFormat(void)
+{
+	//Variable declarations
+	VkResult vkResult = VK_SUCCESS;
+	
+	////https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+	VkFormat vkFormat_depth_array[] = 
+	{ 
+		VK_FORMAT_D32_SFLOAT_S8_UINT,
+		VK_FORMAT_D32_SFLOAT,
+		VK_FORMAT_D24_UNORM_S8_UINT,
+		VK_FORMAT_D16_UNORM_S8_UINT,
+		VK_FORMAT_D16_UNORM
+	};
+	
+	for(uint32_t i =0;i < (sizeof(vkFormat_depth_array)/sizeof(vkFormat_depth_array[0])); i++)
+	{
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatProperties.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatFeatureFlags.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatFeatureFlagBits.html
+		VkFormatProperties vkFormatProperties;
+		memset((void*)&vkFormatProperties, 0, sizeof(vkFormatProperties));
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormatProperties.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetPhysicalDeviceFormatProperties.html
+		vkGetPhysicalDeviceFormatProperties(vkPhysicalDevice_selected, vkFormat_depth_array[i], &vkFormatProperties);
+		if(vkFormatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
+		{
+			vkFormat_depth = vkFormat_depth_array[i];
+			vkResult = VK_SUCCESS;
+			break;
 		}
 	}
 	
@@ -4551,9 +4892,10 @@ VkResult CreateRenderPass(void)
     VkImageLayout                   finalLayout;
 	} VkAttachmentDescription;
 	*/
-	VkAttachmentDescription  vkAttachmentDescription_array[1]; //color and depth when added array will be of 2
+	VkAttachmentDescription  vkAttachmentDescription_array[2]; //color and depth when added array will be of 2
 	memset((void*)vkAttachmentDescription_array, 0, sizeof(VkAttachmentDescription) * _ARRAYSIZE(vkAttachmentDescription_array));
 	
+	//For Color
 	/*
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentDescriptionFlagBits.html
 	
@@ -4639,18 +4981,119 @@ VkResult CreateRenderPass(void)
 	Madhe kahi changes zale, source praname thev
 	*/
 	
+	//For Depth
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentDescriptionFlagBits.html
+	
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentDescriptionFlagBits {
+		VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT = 0x00000001,
+	} VkAttachmentDescriptionFlagBits;
+	
+	Info on Sony japan company documentation of paper presentation.
+	Mostly 0 , only for manging memory in embedded devices
+	Multiple attachments jar astil , tar eka mekanchi memory vapru shaktat.
+	*/
+	vkAttachmentDescription_array[1].flags = 0; 
+	
+	vkAttachmentDescription_array[1].format = vkFormat_depth;
+
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkSampleCountFlagBits.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkSampleCountFlagBits {
+    VK_SAMPLE_COUNT_1_BIT = 0x00000001,
+    VK_SAMPLE_COUNT_2_BIT = 0x00000002,
+    VK_SAMPLE_COUNT_4_BIT = 0x00000004,
+    VK_SAMPLE_COUNT_8_BIT = 0x00000008,
+    VK_SAMPLE_COUNT_16_BIT = 0x00000010,
+    VK_SAMPLE_COUNT_32_BIT = 0x00000020,
+    VK_SAMPLE_COUNT_64_BIT = 0x00000040,
+	} VkSampleCountFlagBits;
+	
+	https://www.google.com/search?q=sampling+meaning+in+texturw&oq=sampling+meaning+in+texturw&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTYzMjlqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8
+	*/
+	vkAttachmentDescription_array[1].samples = VK_SAMPLE_COUNT_1_BIT; // No MSAA
+	
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentLoadOp.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentLoadOp {
+		VK_ATTACHMENT_LOAD_OP_LOAD = 0,
+		VK_ATTACHMENT_LOAD_OP_CLEAR = 1,
+		VK_ATTACHMENT_LOAD_OP_DONT_CARE = 2,
+	  // Provided by VK_VERSION_1_4
+		VK_ATTACHMENT_LOAD_OP_NONE = 1000400000,
+	  // Provided by VK_EXT_load_store_op_none
+		VK_ATTACHMENT_LOAD_OP_NONE_EXT = VK_ATTACHMENT_LOAD_OP_NONE,
+	  // Provided by VK_KHR_load_store_op_none
+		VK_ATTACHMENT_LOAD_OP_NONE_KHR = VK_ATTACHMENT_LOAD_OP_NONE,
+	} VkAttachmentLoadOp;
+	
+	ya structure chi mahiti direct renderpass la jata.
+	*/
+	vkAttachmentDescription_array[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; //Render pass madhe aat aalyavar kay karu attachment cha image data sobat
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentStoreOp.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkAttachmentStoreOp {
+    VK_ATTACHMENT_STORE_OP_STORE = 0,
+    VK_ATTACHMENT_STORE_OP_DONT_CARE = 1,
+  // Provided by VK_VERSION_1_3
+    VK_ATTACHMENT_STORE_OP_NONE = 1000301000,
+  // Provided by VK_KHR_dynamic_rendering, VK_KHR_load_store_op_none
+    VK_ATTACHMENT_STORE_OP_NONE_KHR = VK_ATTACHMENT_STORE_OP_NONE,
+  // Provided by VK_QCOM_render_pass_store_ops
+    VK_ATTACHMENT_STORE_OP_NONE_QCOM = VK_ATTACHMENT_STORE_OP_NONE,
+  // Provided by VK_EXT_load_store_op_none
+    VK_ATTACHMENT_STORE_OP_NONE_EXT = VK_ATTACHMENT_STORE_OP_NONE,
+	} VkAttachmentStoreOp;
+	*/
+	vkAttachmentDescription_array[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE; //Render pass madhun baher gelyavar kay karu attachment image data sobat
+	
+	vkAttachmentDescription_array[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; // For both depth and stencil, dont go on name
+	vkAttachmentDescription_array[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE; // For both depth and stencil, dont go on name
+	
+	/*
+	https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	he sarv attachment madhla data cha arrangement cha aahe
+	Unpacking athva RTR cha , karan color attachment mhnaje mostly texture
+	*/
+	vkAttachmentDescription_array[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; //Renderpass cha aat aalyavar , attachment cha data arrangemnent cha kay karu
+	vkAttachmentDescription_array[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL; //Renderpass cha baher gelyavar , attachment cha data arrangemnent cha kay karu
+	/*
+	jya praname soure image aage , taasach layout thevun present kar.
+	Madhe kahi changes zale, source praname thev
+	*/
+	
 	/*
 	/////////////////////////////////
+	//For Color attachment
 	2. Declare and initialize VkAttachmentReference struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentReference.html) , which will have information about the attachment we described above.
 	(jevha depth baghu , tevha proper ek extra element add hoil array madhe)
 	*/
-	VkAttachmentReference vkAttachmentReference;
-	memset((void*)&vkAttachmentReference, 0, sizeof(VkAttachmentReference));
-	vkAttachmentReference.attachment = 0; //It is index. 0th is color attchment , 1st will be depth attachment
+	VkAttachmentReference vkAttachmentReference_color;
+	memset((void*)&vkAttachmentReference_color, 0, sizeof(VkAttachmentReference));
+	vkAttachmentReference_color.attachment = 0; //It is index. 0th is color attchment , 1st will be depth attachment
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
 	//he image ksa vapraycha aahe , sang mala
-	vkAttachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
+	vkAttachmentReference_color.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
+	
+	/*
+	/////////////////////////////////
+	//For Depth attachmnent
+	Declare and initialize VkAttachmentReference struct (https://registry.khronos.org/vulkan/specs/latest/man/html/VkAttachmentReference.html) , which will have information about the attachment we described above.
+	(jevha depth baghu , tevha proper ek extra element add hoil array madhe)
+	*/
+	VkAttachmentReference vkAttachmentReference_depth;
+	memset((void*)&vkAttachmentReference_depth, 0, sizeof(VkAttachmentReference));
+	vkAttachmentReference_depth.attachment = 1; //It is index. 0th is color attchment , 1st will be depth attachment
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	//he image ksa vapraycha aahe , sang mala
+	vkAttachmentReference_depth.layout =  VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL; //layout kasa thevaycha aahe , vapraycha aahe ? i.e yacha layout asa thev ki mi he attachment , color attachment mhanun vapru shakel
 	
 	/*
 	/////////////////////////////////
@@ -4664,9 +5107,9 @@ VkResult CreateRenderPass(void)
 	vkSubpassDescription.inputAttachmentCount = 0;
 	vkSubpassDescription.pInputAttachments = NULL;
 	vkSubpassDescription.colorAttachmentCount = 1; //This count should be count of VkAttachmentReference used for color
-	vkSubpassDescription.pColorAttachments = (const VkAttachmentReference*)&vkAttachmentReference;
+	vkSubpassDescription.pColorAttachments = (const VkAttachmentReference*)&vkAttachmentReference_color;
 	vkSubpassDescription.pResolveAttachments = NULL;
-	vkSubpassDescription.pDepthStencilAttachment = NULL;
+	vkSubpassDescription.pDepthStencilAttachment = (const VkAttachmentReference*)&vkAttachmentReference_depth;
 	vkSubpassDescription.preserveAttachmentCount = 0;
 	vkSubpassDescription.pPreserveAttachments = NULL;
 	
@@ -5221,7 +5664,57 @@ VkResult CreatePipeline(void)
 	vkGraphicsPipelineCreateInfo.pViewportState = &vkPipelineViewportStateCreateInfo; //5
 	vkGraphicsPipelineCreateInfo.pRasterizationState = &vkPipelineRasterizationStateCreateInfo; //3
 	vkGraphicsPipelineCreateInfo.pMultisampleState = &vkPipelineMultisampleStateCreateInfo; //8
-	vkGraphicsPipelineCreateInfo.pDepthStencilState = NULL; //6
+	//vkGraphicsPipelineCreateInfo.pDepthStencilState = NULL; //6
+	
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkPipelineDepthStencilStateCreateInfo {
+		VkStructureType                           sType;
+		const void*                               pNext;
+		VkPipelineDepthStencilStateCreateFlags    flags;
+		VkBool32                                  depthTestEnable;
+		VkBool32                                  depthWriteEnable;
+		VkCompareOp                               depthCompareOp;
+		VkBool32                                  depthBoundsTestEnable;
+		VkBool32                                  stencilTestEnable;
+		VkStencilOpState                          front;
+		VkStencilOpState                          back;
+		float                                     minDepthBounds;
+		float                                     maxDepthBounds;
+	} VkPipelineDepthStencilStateCreateInfo;
+	*/
+	VkPipelineDepthStencilStateCreateInfo vkPipelineDepthStencilStateCreateInfo;
+	memset((void*)&vkPipelineDepthStencilStateCreateInfo, 0, sizeof(VkPipelineDepthStencilStateCreateInfo));
+	vkPipelineDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	vkPipelineDepthStencilStateCreateInfo.pNext = NULL;
+	vkPipelineDepthStencilStateCreateInfo.flags = 0;
+	vkPipelineDepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
+	vkPipelineDepthStencilStateCreateInfo.depthWriteEnable= VK_TRUE; 
+	vkPipelineDepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompareOp.html
+	vkPipelineDepthStencilStateCreateInfo.depthBoundsTestEnable= VK_FALSE;
+	vkPipelineDepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
+	//vkPipelineDepthStencilStateCreateInfo.minDepthBounds = ;
+	//vkPipelineDepthStencilStateCreateInfo.maxDepthBounds= ;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOpState.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOp.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompareOp.html
+	vkPipelineDepthStencilStateCreateInfo.back.failOp = VK_STENCIL_OP_KEEP; 
+	vkPipelineDepthStencilStateCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
+	vkPipelineDepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS; // one of 8 tests 
+	//vkPipelineDepthStencilStateCreateInfo.back.depthFailOp = ;
+	//vkPipelineDepthStencilStateCreateInfo.back.compareMask = ;
+	//vkPipelineDepthStencilStateCreateInfo.back.writeMask = ;
+	//vkPipelineDepthStencilStateCreateInfo.back.reference = ;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOpState.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkStencilOp.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCompareOp.html
+	vkPipelineDepthStencilStateCreateInfo.front = vkPipelineDepthStencilStateCreateInfo.back; 
+	
+	vkGraphicsPipelineCreateInfo.pDepthStencilState = &vkPipelineDepthStencilStateCreateInfo; //6
+	
+	
 	vkGraphicsPipelineCreateInfo.pColorBlendState = &vkPipelineColorBlendStateCreateInfo; //4
 	vkGraphicsPipelineCreateInfo.pDynamicState = NULL; //7
 	vkGraphicsPipelineCreateInfo.layout = vkPipelineLayout; //11
@@ -5288,7 +5781,7 @@ VkResult CreateFramebuffers(void)
 		/*
 		1. Declare an array of VkImageView (https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageView.html) equal to number of attachments i.e in our example array of member.
 		*/
-		VkImageView vkImageView_attachment_array[1];
+		VkImageView vkImageView_attachment_array[2]; //was 1, made to 2 madhe for depth 
 		memset((void*)vkImageView_attachment_array, 0, sizeof(VkImageView) * _ARRAYSIZE(vkImageView_attachment_array));
 		
 		/*
@@ -5310,6 +5803,7 @@ VkResult CreateFramebuffers(void)
 		vkFramebufferCreateInfo.layers = 1;
 		
 		vkImageView_attachment_array[0] = swapChainImageView_array[i];
+		vkImageView_attachment_array[1] = vkImageView_depth;
 		
 		vkResult = vkCreateFramebuffer(vkDevice, &vkFramebufferCreateInfo, NULL, &vkFramebuffer_array[i]);
 		if (vkResult != VK_SUCCESS)
@@ -5485,9 +5979,10 @@ VkResult buildCommandBuffers(void)
 		/*
 		5. Declare, memset and initialize struct array of VkClearValue type
 		*/
-		VkClearValue vkClearValue_array[1];
+		VkClearValue vkClearValue_array[2]; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkClearValue.html
 		memset((void*)vkClearValue_array, 0, sizeof(VkClearValue) * _ARRAYSIZE(vkClearValue_array));
 		vkClearValue_array[0].color = vkClearColorValue;
+		vkClearValue_array[1].depthStencil = vkClearDepthStencilValue;
 		
 		/*
 		6. Then declare , memset and initialize VkRenderPassBeginInfo struct.
@@ -5649,11 +6144,4 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugReportCallback(VkDebugReportFlagsEXT vkDebug
 	fprintf(gFILE, "Anjaneya_VALIDATION:debugReportCallback():%s(%d) = %s\n", pLayerPrefix, messageCode, pMessage);  
     return (VK_FALSE);
 }
-
-
-
-
-
-
-
 
