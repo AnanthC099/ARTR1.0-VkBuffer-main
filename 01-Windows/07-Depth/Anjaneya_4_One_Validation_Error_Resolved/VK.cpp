@@ -179,6 +179,9 @@ typedef union VkClearColorValue {
 */
 VkClearColorValue vkClearColorValue;
 
+//https://registry.khronos.org/vulkan/specs/latest/man/html/VkClearDepthStencilValue.html
+VkClearDepthStencilValue vkClearDepthStencilValue;
+
 /*
 20_Render
 */
@@ -901,6 +904,13 @@ VkResult initialize(void)
 	vkClearColorValue.float32[1] = 0.0f;
 	vkClearColorValue.float32[2] = 1.0f;
 	vkClearColorValue.float32[3] = 1.0f;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkClearDepthStencilValue.html
+	memset((void*)&vkClearDepthStencilValue, 0, sizeof(VkClearDepthStencilValue));
+	//Set default clear depth value
+	vkClearDepthStencilValue.depth = 1.0f; //type float
+	//Set default clear stencil value
+	vkClearDepthStencilValue.stencil = 0; //type uint32_t
 	
 	vkResult = buildCommandBuffers();
 	if (vkResult != VK_SUCCESS)
@@ -5919,9 +5929,10 @@ VkResult buildCommandBuffers(void)
 		/*
 		5. Declare, memset and initialize struct array of VkClearValue type
 		*/
-		VkClearValue vkClearValue_array[1];
+		VkClearValue vkClearValue_array[2]; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkClearValue.html
 		memset((void*)vkClearValue_array, 0, sizeof(VkClearValue) * _ARRAYSIZE(vkClearValue_array));
 		vkClearValue_array[0].color = vkClearColorValue;
+		vkClearValue_array[1].depthStencil = vkClearDepthStencilValue;
 		
 		/*
 		6. Then declare , memset and initialize VkRenderPassBeginInfo struct.
