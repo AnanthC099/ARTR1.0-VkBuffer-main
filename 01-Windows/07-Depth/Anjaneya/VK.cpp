@@ -1432,7 +1432,7 @@ VkResult display(void)
 void update(void)
 {
 	// Code
-	angle = angle + 0.3f;
+	angle = angle + 0.01f;
 	if(angle > 360.0f)
 	{
 		angle =  angle - 360.0f;
@@ -3904,18 +3904,53 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.3. Implement CreateVertexBuffer() and inside it first declare our triangle's position array.
 	*/
-	float triangle_Position[] =
+	// PYRAMID
+	// position
+	float pyramidVertices[] = 
 	{
-		0.0f, 1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f
+		 // front
+		 0.0f,  1.0f,  0.0f, // front-top
+		-1.0f, -1.0f,  1.0f, // front-left
+		 1.0f, -1.0f,  1.0f, // front-right
+		 
+		 // right
+		 0.0f,  1.0f,  0.0f, // right-top
+		 1.0f, -1.0f,  1.0f, // right-left
+		 1.0f, -1.0f, -1.0f, // right-right
+
+		 // back
+		 0.0f,  1.0f,  0.0f, // back-top
+		 1.0f, -1.0f, -1.0f, // back-left
+		-1.0f, -1.0f, -1.0f, // back-right
+
+		 // left
+		 0.0f,  1.0f,  0.0f, // left-top
+		-1.0f, -1.0f, -1.0f, // left-left
+		-1.0f, -1.0f,  1.0f, // left-right
 	};
 	
-	float triangle_Color[] =
+	// color
+	float pyramidColors[] =
 	{
-		1.0f, 0.0f, 0.0f,  // Top
-		0.0f, 1.0f, 0.0f,  // Left
-		0.0f, 0.0f, 1.0f   // Right
+		// front
+		1.0f, 0.0f, 0.0f, // front-top
+		0.0f, 1.0f, 0.0f, // front-left
+		0.0f, 0.0f, 1.0f, // front-right
+		
+		// right
+		1.0f, 0.0f, 0.0f, // right-top
+		0.0f, 0.0f, 1.0f, // right-left
+		0.0f, 1.0f, 0.0f, // right-right
+		
+		// back
+		1.0f, 0.0f, 0.0f, // back-top
+		0.0f, 1.0f, 0.0f, // back-left
+		0.0f, 0.0f, 1.0f, // back-right
+		
+		// left
+		1.0f, 0.0f, 0.0f, // left-top
+		0.0f, 0.0f, 1.0f, // left-left
+		0.0f, 1.0f, 0.0f, // left-right
 	};
 	
 	/*
@@ -3948,7 +3983,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(triangle_Position);
+	vkBufferCreateInfo.size = sizeof(pyramidVertices);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
@@ -4129,7 +4164,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, triangle_Position, sizeof(triangle_Position));
+	memcpy(data, pyramidVertices, sizeof(pyramidVertices));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -4163,7 +4198,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(triangle_Position);
+	vkBufferCreateInfo.size = sizeof(pyramidColors);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
@@ -4341,7 +4376,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, triangle_Color, sizeof(triangle_Color));
+	memcpy(data, pyramidColors, sizeof(pyramidColors));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -6356,7 +6391,7 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstVertex,
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
-		vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0);
+		vkCmdDraw(vkCommandBuffer_array[i], 12, 1, 0, 0);
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
