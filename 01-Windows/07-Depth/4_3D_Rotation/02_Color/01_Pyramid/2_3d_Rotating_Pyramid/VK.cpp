@@ -4198,7 +4198,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(pyramidVertices);
+	vkBufferCreateInfo.size = sizeof(pyramidColors);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
