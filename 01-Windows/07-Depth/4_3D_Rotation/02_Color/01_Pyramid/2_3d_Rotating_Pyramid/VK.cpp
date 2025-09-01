@@ -1432,7 +1432,7 @@ VkResult display(void)
 void update(void)
 {
 	// Code
-	angle = angle + 0.3f;
+	angle = angle + 0.01f;
 	if(angle > 360.0f)
 	{
 		angle =  angle - 360.0f;
@@ -6391,7 +6391,7 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstVertex,
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
-		vkCmdDraw(vkCommandBuffer_array[i], 3, 1, 0, 0);
+		vkCmdDraw(vkCommandBuffer_array[i], 12, 1, 0, 0);
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
