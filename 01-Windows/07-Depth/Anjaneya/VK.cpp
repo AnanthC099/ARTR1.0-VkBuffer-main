@@ -1221,6 +1221,10 @@ VkResult UpdateUniformBuffer(void)
 	glm::mat4 translationMatrix = glm::mat4(1.0f);
 	translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -4.0f));
 	glm::mat4 rotationMatrix = glm::mat4(1.0f);
+	
+	glm::mat4 rotationMatrix_x = glm::mat4(1.0f);
+	rotationMatrix_x = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+	
 	rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
 	myUniformData.modelMatrix = translationMatrix * rotationMatrix;
 	
@@ -1432,7 +1436,7 @@ VkResult display(void)
 void update(void)
 {
 	// Code
-	angle = angle + 0.01f;
+	angle = angle + 0.3f;
 	if(angle > 360.0f)
 	{
 		angle =  angle - 360.0f;
@@ -3904,53 +3908,144 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.3. Implement CreateVertexBuffer() and inside it first declare our triangle's position array.
 	*/
-	// PYRAMID
+	// CUBE
 	// position
-	float pyramidVertices[] = 
-	{
-		 // front
-		 0.0f,  1.0f,  0.0f, // front-top
-		-1.0f, -1.0f,  1.0f, // front-left
-		 1.0f, -1.0f,  1.0f, // front-right
-		 
-		 // right
-		 0.0f,  1.0f,  0.0f, // right-top
-		 1.0f, -1.0f,  1.0f, // right-left
-		 1.0f, -1.0f, -1.0f, // right-right
-
-		 // back
-		 0.0f,  1.0f,  0.0f, // back-top
-		 1.0f, -1.0f, -1.0f, // back-left
-		-1.0f, -1.0f, -1.0f, // back-right
-
-		 // left
-		 0.0f,  1.0f,  0.0f, // left-top
-		-1.0f, -1.0f, -1.0f, // left-left
-		-1.0f, -1.0f,  1.0f, // left-right
-	};
-	
-	// color
-	float pyramidColors[] =
+	float cubeVertices[] =
 	{
 		// front
-		1.0f, 0.0f, 0.0f, // front-top
-		0.0f, 1.0f, 0.0f, // front-left
-		0.0f, 0.0f, 1.0f, // front-right
+		// triangle one
+		 1.0f,  1.0f,  1.0f, // top-right of front
+		-1.0f,  1.0f,  1.0f, // top-left of front
+		 1.0f, -1.0f,  1.0f, // bottom-right of front
 		
+		// triangle two
+		 1.0f, -1.0f,  1.0f, // bottom-right of front
+		-1.0f,  1.0f,  1.0f, // top-left of front
+		-1.0f, -1.0f,  1.0f, // bottom-left of front
+
 		// right
-		1.0f, 0.0f, 0.0f, // right-top
-		0.0f, 0.0f, 1.0f, // right-left
-		0.0f, 1.0f, 0.0f, // right-right
-		
+		// triangle one
+		 1.0f,  1.0f, -1.0f, // top-right of right
+		 1.0f,  1.0f,  1.0f, // top-left of right
+		 1.0f, -1.0f, -1.0f, // bottom-right of right
+		 
+		// triangle two
+		 1.0f, -1.0f, -1.0f, // bottom-right of right
+		 1.0f,  1.0f,  1.0f, // top-left of right
+		 1.0f, -1.0f,  1.0f, // bottom-left of right
+
 		// back
-		1.0f, 0.0f, 0.0f, // back-top
-		0.0f, 1.0f, 0.0f, // back-left
-		0.0f, 0.0f, 1.0f, // back-right
+		// triangle one
+		 1.0f,  1.0f, -1.0f, // top-right of back
+		-1.0f,  1.0f, -1.0f, // top-left of back
+		 1.0f, -1.0f, -1.0f, // bottom-right of back
 		
+		// triangle two
+		 1.0f, -1.0f, -1.0f, // bottom-right of back
+		-1.0f,  1.0f, -1.0f, // top-left of back
+		-1.0f, -1.0f, -1.0f, // bottom-left of back
+
 		// left
-		1.0f, 0.0f, 0.0f, // left-top
-		0.0f, 0.0f, 1.0f, // left-left
-		0.0f, 1.0f, 0.0f, // left-right
+		// triangle one
+		-1.0f,  1.0f,  1.0f, // top-right of left
+		-1.0f,  1.0f, -1.0f, // top-left of left
+		-1.0f, -1.0f,  1.0f, // bottom-right of left
+		
+		// triangle two
+		-1.0f, -1.0f,  1.0f, // bottom-right of left
+		-1.0f,  1.0f, -1.0f, // top-left of left
+		-1.0f, -1.0f, -1.0f, // bottom-left of left
+
+		// top
+		// triangle one
+		 1.0f,  1.0f, -1.0f, // top-right of top
+		-1.0f,  1.0f, -1.0f, // top-left of top
+		 1.0f,  1.0f,  1.0f, // bottom-right of top
+
+		// triangle two
+		 1.0f,  1.0f,  1.0f, // bottom-right of top
+		-1.0f,  1.0f, -1.0f, // top-left of top
+		-1.0f,  1.0f,  1.0f, // bottom-left of top
+
+		// bottom
+		// triangle one
+		 1.0f, -1.0f,  1.0f, // top-right of bottom
+		-1.0f, -1.0f,  1.0f, // top-left of bottom
+		 1.0f, -1.0f, -1.0f, // bottom-right of bottom
+		
+		// triangle two
+		 1.0f, -1.0f, -1.0f, // bottom-right of bottom
+		-1.0f, -1.0f,  1.0f, // top-left of bottom
+		-1.0f, -1.0f, -1.0f, // bottom-left of bottom
+	};
+
+	float cubeColors[] =
+	{
+		// front
+		// triangle one
+		1.0f, 0.0f, 0.0f, // top-right of front
+		1.0f, 0.0f, 0.0f, // top-left of front
+		1.0f, 0.0f, 0.0f, // bottom-right of front
+
+		// triangle two
+		1.0f, 0.0f, 0.0f, // bottom-right of front
+		1.0f, 0.0f, 0.0f, // top-left of front
+		1.0f, 0.0f, 0.0f, // bottom-left of front
+
+		// right
+		// triangle one
+		0.0f, 0.0f, 1.0f, // top-right of right
+		0.0f, 0.0f, 1.0f, // top-left of right
+		0.0f, 0.0f, 1.0f, // bottom-right of right
+		
+		// triangle two
+		0.0f, 0.0f, 1.0f, // bottom-right of right
+		0.0f, 0.0f, 1.0f, // top-left of right
+		0.0f, 0.0f, 1.0f, // bottom-left of right
+
+		// back
+		// triangle one
+		1.0f, 1.0f, 0.0f, // top-right of back
+		1.0f, 1.0f, 0.0f, // top-left of back
+		1.0f, 1.0f, 0.0f, // bottom-right of back
+		
+		// triangle two
+		1.0f, 1.0f, 0.0f, // bottom-right of back
+		1.0f, 1.0f, 0.0f, // top-left of back
+		1.0f, 1.0f, 0.0f, // bottom-left of back
+
+		// left
+		// triangle one
+		1.0f, 0.0f, 1.0f, // top-right of left
+		1.0f, 0.0f, 1.0f, // top-left of left
+		1.0f, 0.0f, 1.0f, // bottom-right of left
+
+		// triangle two
+		1.0f, 0.0f, 1.0f, // bottom-right of left
+		1.0f, 0.0f, 1.0f, // top-left of left
+		1.0f, 0.0f, 1.0f, // bottom-left of left
+
+		// top
+		// triangle one
+		0.0f, 1.0f, 0.0f, // top-right of top
+		0.0f, 1.0f, 0.0f, // top-left of top
+		0.0f, 1.0f, 0.0f, // bottom-right of top
+
+		// triangle two
+		0.0f, 1.0f, 0.0f, // bottom-right of top
+		0.0f, 1.0f, 0.0f, // top-left of top
+		0.0f, 1.0f, 0.0f, // bottom-left of top
+
+		// bottom
+		// triangle one
+		1.0f, 0.5f, 0.0f, // top-right of bottom
+		1.0f, 0.5f, 0.0f, // top-left of bottom
+		1.0f, 0.5f, 0.0f, // bottom-right of bottom
+
+		// triangle two
+		1.0f, 0.5f, 0.0f, // bottom-right of bottom
+		1.0f, 0.5f, 0.0f, // top-left of bottom
+		1.0f, 0.5f, 0.0f, // bottom-left of bottom
 	};
 	
 	/*
@@ -3983,7 +4078,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(pyramidVertices);
+	vkBufferCreateInfo.size = sizeof(cubeVertices);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
@@ -4164,7 +4259,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, pyramidVertices, sizeof(pyramidVertices));
+	memcpy(data, cubeVertices, sizeof(cubeVertices));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -4198,7 +4293,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(pyramidColors);
+	vkBufferCreateInfo.size = sizeof(cubeColors);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
@@ -4376,7 +4471,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, pyramidColors, sizeof(pyramidColors));
+	memcpy(data, cubeColors, sizeof(cubeColors));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
