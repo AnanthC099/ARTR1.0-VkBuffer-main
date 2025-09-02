@@ -1220,13 +1220,22 @@ VkResult UpdateUniformBuffer(void)
 	myUniformData.modelMatrix = glm::mat4(1.0f);
 	glm::mat4 translationMatrix = glm::mat4(1.0f);
 	translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -4.0f));
-	glm::mat4 rotationMatrix = glm::mat4(1.0f);
 	
 	glm::mat4 rotationMatrix_x = glm::mat4(1.0f);
-	rotationMatrix_x = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+	rotationMatrix_x = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.0f)); // X axes rotation
 	
-	rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-	myUniformData.modelMatrix = translationMatrix * rotationMatrix;
+	glm::mat4 rotationMatrix_y = glm::mat4(1.0f);
+	rotationMatrix_y = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f)); // Y axes rotation
+	
+	glm::mat4 rotationMatrix_z = glm::mat4(1.0f);
+	rotationMatrix_z = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)); // Z axes rotation
+	
+	glm::mat4 rotationMatrix = glm::mat4(1.0f);
+	rotationMatrix = rotationMatrix_x * rotationMatrix_y * rotationMatrix_z;
+	
+	glm::mat4 scaleMatrix = glm::mat4(1.0f);
+	scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.75f, 0.75f, 0.75f));
+	myUniformData.modelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
 	
 	myUniformData.viewMatrix = glm::mat4(1.0f);
 	myUniformData.projectionMatrix = glm::mat4(1.0f); //Not Required
@@ -3913,139 +3922,79 @@ VkResult CreateVertexBuffer(void)
 	float cubeVertices[] =
 	{
 		// front
-		// triangle one
 		 1.0f,  1.0f,  1.0f, // top-right of front
 		-1.0f,  1.0f,  1.0f, // top-left of front
-		 1.0f, -1.0f,  1.0f, // bottom-right of front
-		
-		// triangle two
-		 1.0f, -1.0f,  1.0f, // bottom-right of front
-		-1.0f,  1.0f,  1.0f, // top-left of front
 		-1.0f, -1.0f,  1.0f, // bottom-left of front
+		 1.0f, -1.0f,  1.0f, // bottom-right of front
 
 		// right
-		// triangle one
 		 1.0f,  1.0f, -1.0f, // top-right of right
 		 1.0f,  1.0f,  1.0f, // top-left of right
-		 1.0f, -1.0f, -1.0f, // bottom-right of right
-		 
-		// triangle two
-		 1.0f, -1.0f, -1.0f, // bottom-right of right
-		 1.0f,  1.0f,  1.0f, // top-left of right
 		 1.0f, -1.0f,  1.0f, // bottom-left of right
+		 1.0f, -1.0f, -1.0f, // bottom-right of right
 
 		// back
-		// triangle one
 		 1.0f,  1.0f, -1.0f, // top-right of back
 		-1.0f,  1.0f, -1.0f, // top-left of back
-		 1.0f, -1.0f, -1.0f, // bottom-right of back
-		
-		// triangle two
-		 1.0f, -1.0f, -1.0f, // bottom-right of back
-		-1.0f,  1.0f, -1.0f, // top-left of back
 		-1.0f, -1.0f, -1.0f, // bottom-left of back
+		 1.0f, -1.0f, -1.0f, // bottom-right of back
 
 		// left
-		// triangle one
 		-1.0f,  1.0f,  1.0f, // top-right of left
 		-1.0f,  1.0f, -1.0f, // top-left of left
-		-1.0f, -1.0f,  1.0f, // bottom-right of left
-		
-		// triangle two
-		-1.0f, -1.0f,  1.0f, // bottom-right of left
-		-1.0f,  1.0f, -1.0f, // top-left of left
 		-1.0f, -1.0f, -1.0f, // bottom-left of left
+		-1.0f, -1.0f,  1.0f, // bottom-right of left
 
 		// top
-		// triangle one
 		 1.0f,  1.0f, -1.0f, // top-right of top
 		-1.0f,  1.0f, -1.0f, // top-left of top
-		 1.0f,  1.0f,  1.0f, // bottom-right of top
-
-		// triangle two
-		 1.0f,  1.0f,  1.0f, // bottom-right of top
-		-1.0f,  1.0f, -1.0f, // top-left of top
 		-1.0f,  1.0f,  1.0f, // bottom-left of top
+		 1.0f,  1.0f,  1.0f, // bottom-right of top
 
 		// bottom
-		// triangle one
 		 1.0f, -1.0f,  1.0f, // top-right of bottom
 		-1.0f, -1.0f,  1.0f, // top-left of bottom
-		 1.0f, -1.0f, -1.0f, // bottom-right of bottom
-		
-		// triangle two
-		 1.0f, -1.0f, -1.0f, // bottom-right of bottom
-		-1.0f, -1.0f,  1.0f, // top-left of bottom
 		-1.0f, -1.0f, -1.0f, // bottom-left of bottom
+		 1.0f, -1.0f, -1.0f, // bottom-right of bottom
 	};
 
 	float cubeColors[] =
 	{
 		// front
-		// triangle one
 		1.0f, 0.0f, 0.0f, // top-right of front
 		1.0f, 0.0f, 0.0f, // top-left of front
-		1.0f, 0.0f, 0.0f, // bottom-right of front
-
-		// triangle two
-		1.0f, 0.0f, 0.0f, // bottom-right of front
-		1.0f, 0.0f, 0.0f, // top-left of front
 		1.0f, 0.0f, 0.0f, // bottom-left of front
+		1.0f, 0.0f, 0.0f, // bottom-right of front
 
 		// right
-		// triangle one
 		0.0f, 0.0f, 1.0f, // top-right of right
 		0.0f, 0.0f, 1.0f, // top-left of right
-		0.0f, 0.0f, 1.0f, // bottom-right of right
-		
-		// triangle two
-		0.0f, 0.0f, 1.0f, // bottom-right of right
-		0.0f, 0.0f, 1.0f, // top-left of right
 		0.0f, 0.0f, 1.0f, // bottom-left of right
+		0.0f, 0.0f, 1.0f, // bottom-right of right
 
 		// back
-		// triangle one
 		1.0f, 1.0f, 0.0f, // top-right of back
 		1.0f, 1.0f, 0.0f, // top-left of back
-		1.0f, 1.0f, 0.0f, // bottom-right of back
-		
-		// triangle two
-		1.0f, 1.0f, 0.0f, // bottom-right of back
-		1.0f, 1.0f, 0.0f, // top-left of back
 		1.0f, 1.0f, 0.0f, // bottom-left of back
+		1.0f, 1.0f, 0.0f, // bottom-right of back
 
 		// left
-		// triangle one
 		1.0f, 0.0f, 1.0f, // top-right of left
 		1.0f, 0.0f, 1.0f, // top-left of left
-		1.0f, 0.0f, 1.0f, // bottom-right of left
-
-		// triangle two
-		1.0f, 0.0f, 1.0f, // bottom-right of left
-		1.0f, 0.0f, 1.0f, // top-left of left
 		1.0f, 0.0f, 1.0f, // bottom-left of left
+		1.0f, 0.0f, 1.0f, // bottom-right of left
 
 		// top
-		// triangle one
 		0.0f, 1.0f, 0.0f, // top-right of top
 		0.0f, 1.0f, 0.0f, // top-left of top
-		0.0f, 1.0f, 0.0f, // bottom-right of top
-
-		// triangle two
-		0.0f, 1.0f, 0.0f, // bottom-right of top
-		0.0f, 1.0f, 0.0f, // top-left of top
 		0.0f, 1.0f, 0.0f, // bottom-left of top
+		0.0f, 1.0f, 0.0f, // bottom-right of top
 
 		// bottom
-		// triangle one
 		1.0f, 0.5f, 0.0f, // top-right of bottom
 		1.0f, 0.5f, 0.0f, // top-left of bottom
-		1.0f, 0.5f, 0.0f, // bottom-right of bottom
-
-		// triangle two
-		1.0f, 0.5f, 0.0f, // bottom-right of bottom
-		1.0f, 0.5f, 0.0f, // top-left of bottom
 		1.0f, 0.5f, 0.0f, // bottom-left of bottom
+		1.0f, 0.5f, 0.0f, // bottom-right of bottom
 	};
 	
 	/*
@@ -5650,7 +5599,7 @@ VkResult CreatePipeline(void)
 	vkPipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	vkPipelineInputAssemblyStateCreateInfo.pNext = NULL;
 	vkPipelineInputAssemblyStateCreateInfo.flags = 0;
-	vkPipelineInputAssemblyStateCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	vkPipelineInputAssemblyStateCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;
 	vkPipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = VK_FALSE; //Not needed here. Only for geometry shader and for indexed drawing for strip and fan
 	
 	/*
@@ -6486,7 +6435,13 @@ VkResult buildCommandBuffers(void)
 		uint32_t                                    firstVertex,
 		uint32_t                                    firstInstance); //0th index cha instance
 		*/
-		vkCmdDraw(vkCommandBuffer_array[i], 12, 1, 0, 0);
+		// One face per call, 4 verts each (triangle fan)
+		vkCmdDraw(vkCommandBuffer_array[i], 4, 1,  0, 0);   // front
+		vkCmdDraw(vkCommandBuffer_array[i], 4, 1,  4, 0);   // right
+		vkCmdDraw(vkCommandBuffer_array[i], 4, 1,  8, 0);   // back
+		vkCmdDraw(vkCommandBuffer_array[i], 4, 1, 12, 0);   // left
+		vkCmdDraw(vkCommandBuffer_array[i], 4, 1, 16, 0);   // top
+		vkCmdDraw(vkCommandBuffer_array[i], 4, 1, 20, 0);   // bottom
 		
 		/*
 		8. End the renderpass by calling vkCmdEndRenderpass.
