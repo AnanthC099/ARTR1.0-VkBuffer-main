@@ -224,7 +224,7 @@ typedef struct
 //22. Position
 VertexData vertexdata_position;
 //22. Color
-VertexData vertexdata_color;
+VertexData vertexdata_texcoord;
 
 //31-Ortho: Uniform Buffer (Uniform related declarations)
 //31.1
@@ -1702,18 +1702,18 @@ void uninitialize(void)
 				VkBuffer                                    buffer,
 				const VkAllocationCallbacks*                pAllocator);
 			*/
-			if(vertexdata_color.vkDeviceMemory)
+			if(vertexdata_texcoord.vkDeviceMemory)
 			{
-				vkFreeMemory(vkDevice, vertexdata_color.vkDeviceMemory, NULL);
-				vertexdata_color.vkDeviceMemory = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): vertexdata_color.vkDeviceMemory is freed\n");
+				vkFreeMemory(vkDevice, vertexdata_texcoord.vkDeviceMemory, NULL);
+				vertexdata_texcoord.vkDeviceMemory = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_texcoord.vkDeviceMemory is freed\n");
 			}
 
-			if(vertexdata_color.vkBuffer)
+			if(vertexdata_texcoord.vkBuffer)
 			{
-				vkDestroyBuffer(vkDevice, vertexdata_color.vkBuffer, NULL);
-				vertexdata_color.vkBuffer = VK_NULL_HANDLE;
-				fprintf(gFILE, "uninitialize(): vertexdata_color.vkBuffer is freed\n");
+				vkDestroyBuffer(vkDevice, vertexdata_texcoord.vkBuffer, NULL);
+				vertexdata_texcoord.vkBuffer = VK_NULL_HANDLE;
+				fprintf(gFILE, "uninitialize(): vertexdata_texcoord.vkBuffer is freed\n");
 			}
 			
 			if(vertexdata_position.vkDeviceMemory)
@@ -4182,7 +4182,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	Color
 	*/
-	memset((void*)&vertexdata_color, 0, sizeof(VertexData));
+	memset((void*)&vertexdata_texcoord, 0, sizeof(VertexData));
 	
 	memset((void*)&vkBufferCreateInfo, 0, sizeof(VkBufferCreateInfo));
 	/*
@@ -4218,15 +4218,15 @@ VkResult CreateVertexBuffer(void)
     const VkAllocationCallbacks*                pAllocator,
     VkBuffer*                                   pBuffer);
 	*/
-	vkResult = vkCreateBuffer(vkDevice, &vkBufferCreateInfo, NULL, &vertexdata_color.vkBuffer); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateBuffer.html
+	vkResult = vkCreateBuffer(vkDevice, &vkBufferCreateInfo, NULL, &vertexdata_texcoord.vkBuffer); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateBuffer.html
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() function failed for vertexdata_color.vkBuffer with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() function failed for vertexdata_texcoord.vkBuffer with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() succedded for vertexdata_color.vkBuffer\n");
+		fprintf(gFILE, "CreateVertexBuffer(): vkCreateBuffer() succedded for vertexdata_texcoord.vkBuffer\n");
 	}
 	
 	/*
@@ -4248,7 +4248,7 @@ VkResult CreateVertexBuffer(void)
     VkBuffer                                    buffer,
     VkMemoryRequirements*                       pMemoryRequirements);
 	*/
-	vkGetBufferMemoryRequirements(vkDevice, vertexdata_color.vkBuffer, &vkMemoryRequirements);
+	vkGetBufferMemoryRequirements(vkDevice, vertexdata_texcoord.vkBuffer, &vkMemoryRequirements);
 	
 	/*
 	   To actually allocate the required memory, we need to call vkAllocateMemory().
@@ -4317,15 +4317,15 @@ VkResult CreateVertexBuffer(void)
     const VkAllocationCallbacks*                pAllocator,
     VkDeviceMemory*                             pMemory);
 	*/
-	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo, NULL, &vertexdata_color.vkDeviceMemory); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo, NULL, &vertexdata_texcoord.vkDeviceMemory); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() function failed for vertexdata_color.vkBuffer with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() function failed for vertexdata_texcoord.vkBuffer with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() succedded for vertexdata_color.vkBuffer\n");
+		fprintf(gFILE, "CreateVertexBuffer(): vkAllocateMemory() succedded for vertexdata_texcoord.vkBuffer\n");
 	}
 	
 	/*
@@ -4341,15 +4341,15 @@ VkResult CreateVertexBuffer(void)
     VkDeviceMemory                              memory, //what to bind
     VkDeviceSize                                memoryOffset);
 	*/
-	vkResult = vkBindBufferMemory(vkDevice, vertexdata_color.vkBuffer, vertexdata_color.vkDeviceMemory, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
+	vkResult = vkBindBufferMemory(vkDevice, vertexdata_texcoord.vkBuffer, vertexdata_texcoord.vkDeviceMemory, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() function failed for vertexdata_color.vkBuffer with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() function failed for vertexdata_texcoord.vkBuffer with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() succedded for vertexdata_color.vkBuffer\n");
+		fprintf(gFILE, "CreateVertexBuffer(): vkBindBufferMemory() succedded for vertexdata_texcoord.vkBuffer\n");
 	}
 	
 	/*
@@ -4365,15 +4365,15 @@ VkResult CreateVertexBuffer(void)
     void**                                      ppData);
 	*/
 	data = NULL;
-	vkResult = vkMapMemory(vkDevice, vertexdata_color.vkDeviceMemory, 0, vkMemoryAllocateInfo.allocationSize, 0, &data);
+	vkResult = vkMapMemory(vkDevice, vertexdata_texcoord.vkDeviceMemory, 0, vkMemoryAllocateInfo.allocationSize, 0, &data);
 	if (vkResult != VK_SUCCESS)
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() function failed for vertexdata_color.vkBuffer with error code %d\n", vkResult);
+		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() function failed for vertexdata_texcoord.vkBuffer with error code %d\n", vkResult);
 		return vkResult;
 	}
 	else
 	{
-		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() succedded for vertexdata_color.vkBuffer\n");
+		fprintf(gFILE, "CreateVertexBuffer(): vkMapMemory() succedded for vertexdata_texcoord.vkBuffer\n");
 	}
 	
 	/*
@@ -4389,7 +4389,7 @@ VkResult CreateVertexBuffer(void)
     VkDevice                                    device,
     VkDeviceMemory                              memory);
 	*/
-	vkUnmapMemory(vkDevice, vertexdata_color.vkDeviceMemory);
+	vkUnmapMemory(vkDevice, vertexdata_texcoord.vkDeviceMemory);
 	
 	return vkResult;
 }
@@ -6375,7 +6375,7 @@ VkResult buildCommandBuffers(void)
 		*/
 		VkBuffer vertexBuffers[2] = {
 			vertexdata_position.vkBuffer,
-			vertexdata_color.vkBuffer
+			vertexdata_texcoord.vkBuffer
 		};
 		VkDeviceSize vkDeviceSize_offset_array[2];
 		memset((void*)vkDeviceSize_offset_array, 0, sizeof(VkDeviceSize) * _ARRAYSIZE(vkDeviceSize_offset_array));
