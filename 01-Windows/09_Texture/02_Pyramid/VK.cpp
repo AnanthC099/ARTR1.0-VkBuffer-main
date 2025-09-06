@@ -3,6 +3,9 @@
 #include <windows.h>	
 #include <math.h>	
 
+//Header file for texture
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include "VK.h"			
 #define LOG_FILE (char*)"Log.txt" 
 
