@@ -4201,7 +4201,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(pyramidColors);
+	vkBufferCreateInfo.size = sizeof(pyramidTexcoords);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
@@ -4379,7 +4379,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, pyramidColors, sizeof(pyramidColors));
+	memcpy(data, pyramidTexcoords, sizeof(pyramidTexcoords));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -5465,12 +5465,14 @@ VkResult CreatePipeline(void)
 	VkVertexInputBindingDescription vkVertexInputBindingDescription_array[2];
 	memset((void*)vkVertexInputBindingDescription_array, 0,  sizeof(VkVertexInputBindingDescription) * _ARRAYSIZE(vkVertexInputBindingDescription_array));
 	
+	//Position
 	vkVertexInputBindingDescription_array[0].binding = 0; //Equivalent to GL_ARRAY_BUFFER
 	vkVertexInputBindingDescription_array[0].stride = sizeof(float) * 3;
 	vkVertexInputBindingDescription_array[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //vertices maan, indices nako
 	
+	//Texcoords
 	vkVertexInputBindingDescription_array[1].binding = 1;
-	vkVertexInputBindingDescription_array[1].stride = sizeof(float) * 3;
+	vkVertexInputBindingDescription_array[1].stride = sizeof(float) * 2;
 	vkVertexInputBindingDescription_array[1].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 	
 	/*
@@ -5486,14 +5488,16 @@ VkResult CreatePipeline(void)
 	VkVertexInputAttributeDescription vkVertexInputAttributeDescription_array[2];
 	memset((void*)vkVertexInputAttributeDescription_array, 0,  sizeof(VkVertexInputAttributeDescription) * _ARRAYSIZE(vkVertexInputAttributeDescription_array));
 	
+	//Position
 	vkVertexInputAttributeDescription_array[0].location = 0;
 	vkVertexInputAttributeDescription_array[0].binding = 0;
 	vkVertexInputAttributeDescription_array[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 	vkVertexInputAttributeDescription_array[0].offset = 0;
 	
+	//Texcords
 	vkVertexInputAttributeDescription_array[1].location = 1;
 	vkVertexInputAttributeDescription_array[1].binding = 1;
-	vkVertexInputAttributeDescription_array[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+	vkVertexInputAttributeDescription_array[1].format = VK_FORMAT_R32G32_SFLOAT;
 	vkVertexInputAttributeDescription_array[1].offset = 0;
 	
 	/*
