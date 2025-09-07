@@ -3932,28 +3932,28 @@ VkResult CreateVertexBuffer(void)
 		-1.0f, -1.0f,  1.0f, // left-right
 	};
 	
-	// color
-	float pyramidColors[] =
+	// texcoords
+	float pyramidTexcoords[] =
 	{
 		// front
-		1.0f, 0.0f, 0.0f, // front-top
-		0.0f, 1.0f, 0.0f, // front-left
-		0.0f, 0.0f, 1.0f, // front-right
-		
+		0.5, 1.0, // front-top
+		0.0, 0.0, // front-left
+		1.0, 0.0, // front-right
+
 		// right
-		1.0f, 0.0f, 0.0f, // right-top
-		0.0f, 0.0f, 1.0f, // right-left
-		0.0f, 1.0f, 0.0f, // right-right
-		
+		0.5, 1.0, // right-top
+		1.0, 0.0, // right-left
+		0.0, 0.0, // right-right
+
 		// back
-		1.0f, 0.0f, 0.0f, // back-top
-		0.0f, 1.0f, 0.0f, // back-left
-		0.0f, 0.0f, 1.0f, // back-right
-		
+		0.5, 1.0, // back-top
+		0.0, 0.0, // back-left
+		1.0, 0.0, // back-right
+
 		// left
-		1.0f, 0.0f, 0.0f, // left-top
-		0.0f, 0.0f, 1.0f, // left-left
-		0.0f, 1.0f, 0.0f, // left-right
+		0.5, 1.0, // left-top
+		1.0, 0.0, // left-left
+		0.0, 0.0, // left-right
 	};
 	
 	/*
@@ -4180,7 +4180,7 @@ VkResult CreateVertexBuffer(void)
 	vkUnmapMemory(vkDevice, vertexdata_position.vkDeviceMemory);
 	
 	/*
-	Color
+	Texcoord
 	*/
 	memset((void*)&vertexdata_texcoord, 0, sizeof(VertexData));
 	
