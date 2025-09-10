@@ -4548,6 +4548,238 @@ VkResult CreateTexture(const char* textureFileName)
 		vkMemoryRequirements_stagingBuffer.memoryTypeBits >>= 1;
 	}
 	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	Now call vkAllocateMemory()  and get the required Vulkan memory objects handle into the ".vkDeviceMemory" member of put global structure.
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateMemory(
+    VkDevice                                    device,
+    const VkMemoryAllocateInfo*                 pAllocateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDeviceMemory*                             pMemory);
+	*/
+	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo_stagingBuffer, NULL, &vkDeviceMemory_staging_buffer); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateMemory() for allocating staging Buffer device memory failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateMemory() for allocating staging Buffer device memory succedded\n");
+	}
+	
+	/*
+	Now we have our required deviceMemory handle as well as VkBuffer Handle.
+	Bind this device memory handle to VkBuffer Handle by using vkBindBufferMemory().
+	Declare a void* buffer say "data" and call vkMapMemory() to map our device memory object handle to this void* buffer data.
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBindBufferMemory.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkBindBufferMemory(
+    VkDevice                                    device,
+    VkBuffer                                    buffer, //whom to bind
+    VkDeviceMemory                              memory, //what to bind
+    VkDeviceSize                                memoryOffset);
+	
+	// We are binding device memory object handle with Vulkan buffer object handle. 
+	*/
+	vkResult = vkBindBufferMemory(vkDevice, vkBuffer_staging_buffer, vkDeviceMemory_staging_buffer, 0);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkBindBufferMemory() for staging buffer failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkBindBufferMemory() for staging buffer succedded\n");
+	}
+	
+	/*
+	This will allow us to do memory mapped IO means when we write on void* buffer data,
+	it will get automatically written/copied on to device memory represented by device memory object handle.
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkMapMemory.html
+	
+	// Provided by VK_VERSION_1_0
+	VkResult vkMapMemory(
+    VkDevice                                    device,
+    VkDeviceMemory                              memory,
+    VkDeviceSize                                offset,
+    VkDeviceSize                                size,
+    VkMemoryMapFlags                            flags,
+    void**                                      ppData);
+	*/
+	void* data = NULL;
+	vkResult = vkMapMemory(vkDevice, vkDeviceMemory_staging_buffer, 0, Image_Size, 0, &data);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkMapMemory() for staging buffer failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkMapMemory() for staging buffer succedded\n");
+	}
+	
+	/*
+	Now to do actual memory mapped IO, call memcpy.
+	*/
+	memcpy(data, imageData, sizeof(Image_Size));
+	
+	/*
+	To complete this memory mapped IO. finally call vkUmmapMemory() API.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkUnmapMemory.html
+	// Provided by VK_VERSION_1_0
+	void vkUnmapMemory(
+    VkDevice                                    device,
+    VkDeviceMemory                              memory);
+	*/
+	vkUnmapMemory(vkDevice, vkDeviceMemory_staging_buffer);
+	
+	//T2 Additional Step: As copying of image data is already done into staging buffer, we can free the actual image data given by stb
+	stbi_image_free(imageData);
+	imageData = NULL;
+	fprintf(gFILE, "CreateTexture(): stbi_image_free freed imageData\n");
+	
+	//End of T2 and start of T3 (Keep depth code handy)
+	//T3: Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight).
+	
+	//For depth image, initialize VkImageCreateInfo
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageCreateInfo.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkImageCreateInfo {
+		VkStructureType          sType;
+		const void*              pNext;
+		VkImageCreateFlags       flags;
+		VkImageType              imageType;
+		VkFormat                 format;
+		VkExtent3D               extent;
+		uint32_t                 mipLevels;
+		uint32_t                 arrayLayers;
+		VkSampleCountFlagBits    samples;
+		VkImageTiling            tiling;
+		VkImageUsageFlags        usage;
+		VkSharingMode            sharingMode;
+		uint32_t                 queueFamilyIndexCount;
+		const uint32_t*          pQueueFamilyIndices;
+		VkImageLayout            initialLayout;
+	} VkImageCreateInfo;
+	*/
+	VkImageCreateInfo vkImageCreateInfo;
+	memset((void*)&vkImageCreateInfo, 0, sizeof(VkImageCreateInfo));
+	vkImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	vkImageCreateInfo.pNext = NULL;
+	vkImageCreateInfo.flags = 0;
+	vkImageCreateInfo.imageType = VK_IMAGE_TYPE_2D; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageType.html
+	
+	/*
+	In some samples of Sascha Williams, SRGB is used here.
+	But used VK_FORMAT_R8G8B8A8_UNORM for portability in mobile and desktops.
+	Put SRGB is quality obtained is higher
+	*/
+	vkImageCreateInfo.format = VK_FORMAT_R8G8B8A8_UNORM; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkFormat.html
+	
+	vkImageCreateInfo.extent.width = (uint32_t)texture_width; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	vkImageCreateInfo.extent.height = (uint32_t)texture_height; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	vkImageCreateInfo.extent.depth = 1; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkExtent3D.html
+	
+	vkImageCreateInfo.mipLevels = 1;
+	vkImageCreateInfo.arrayLayers = 1;
+	vkImageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSampleCountFlagBits.html
+	vkImageCreateInfo.tiling =  VK_IMAGE_TILING_OPTIMAL; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageTiling.html
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageUsageFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageUsageFlagBits.html
+	vkImageCreateInfo.usage = (VK_IMAGE_USAGE_TRANSFER_DST_BIT| VK_IMAGE_USAGE_SAMPLED_BIT); // VK_IMAGE_USAGE_SAMPLED_BIT as we are going to sample in texture
+	vkImageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkSharingMode.html
+	//vkImageCreateInfo.queueFamilyIndexCount = ;
+	//vkImageCreateInfo.pQueueFamilyIndices = ;
+	vkImageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateImage.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkCreateImage(
+    VkDevice                                    device,
+    const VkImageCreateInfo*                    pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkImage*                                    pImage);
+	*/
+	vkResult = vkCreateImage(vkDevice, &vkImageCreateInfo, NULL, &vkImage_texture);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkCreateImage() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkCreateImage() succedded\n");
+	}
+	
+	//Memory requirements for depth Image
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryRequirements {
+		VkDeviceSize    size;
+		VkDeviceSize    alignment;
+		uint32_t        memoryTypeBits;
+	} VkMemoryRequirements;
+	*/
+	VkMemoryRequirements vkMemoryRequirements_image;
+	memset((void*)&vkMemoryRequirements_image, 0, sizeof(VkMemoryRequirements));
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkGetBufferMemoryRequirements.html
+	/*
+	// Provided by VK_VERSION_1_0
+	void vkGetBufferMemoryRequirements(
+    VkDevice                                    device,
+    VkBuffer                                    buffer,
+    VkMemoryRequirements*                       pMemoryRequirements);
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryRequirements.html
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryRequirements {
+		VkDeviceSize    size;
+		VkDeviceSize    alignment;
+		uint32_t        memoryTypeBits;
+	} VkMemoryRequirements;
+	*/
+	vkGetImageMemoryRequirements(vkDevice, vkImage_texture, &vkMemoryRequirements_image);
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryAllocateInfo.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkMemoryAllocateInfo {
+		VkStructureType    sType;
+		const void*        pNext;
+		VkDeviceSize       allocationSize;
+		uint32_t           memoryTypeIndex;
+	} VkMemoryAllocateInfo;
+	*/
+	VkMemoryAllocateInfo vkMemoryAllocateInfo_image;
+	memset((void*)&vkMemoryAllocateInfo_image, 0, sizeof(VkMemoryAllocateInfo));
+	vkMemoryAllocateInfo_image.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	vkMemoryAllocateInfo_image.pNext = NULL;
+	vkMemoryAllocateInfo_image.allocationSize = vkMemoryRequirements_image.size; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDeviceSize.html (vkMemoryRequirements allocates memory in regions.)
+	
+	vkMemoryAllocateInfo_image.memoryTypeIndex = 0; //Initial value before entering into the loop
+	for(uint32_t i = 0; i < vkPhysicalDeviceMemoryProperties.memoryTypeCount; i++) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkPhysicalDeviceMemoryProperties.html
+	{
+		if((vkMemoryRequirements_image.memoryTypeBits & 1) == 1) //https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryRequirements.html
+		{
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryType.html
+			//https://registry.khronos.org/vulkan/specs/latest/man/html/VkMemoryPropertyFlagBits.html
+			if(vkPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+			{
+				vkMemoryAllocateInfo_image.memoryTypeIndex = i;
+				break;
+			}			
+		}
+		vkMemoryAllocateInfo_image.memoryTypeBits >>= 1;
+	}
+	
 	return vkResult;
 }
 
