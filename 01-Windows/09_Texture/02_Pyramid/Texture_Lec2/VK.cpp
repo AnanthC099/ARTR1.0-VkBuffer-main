@@ -4780,6 +4780,50 @@ VkResult CreateTexture(const char* textureFileName)
 		vkMemoryAllocateInfo_image.memoryTypeBits >>= 1;
 	}
 	
+	/*
+	Now call vkAllocateMemory()  and get the required Vulkan memory objects handle into the ".vkDeviceMemory" member of put global structure.
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateMemory(
+    VkDevice                                    device,
+    const VkMemoryAllocateInfo*                 pAllocateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkDeviceMemory*                             pMemory);
+	*/
+	vkResult = vkAllocateMemory(vkDevice, &vkMemoryAllocateInfo_image, NULL, &vkDeviceMemory_texture); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateMemory.html
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateMemory() function failed for vkDeviceMemory_texture with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateMemory() succedded for vkDeviceMemory_texture\n");
+	}
+	
+	/*
+	Now we have our required deviceMemory handle as well as VkBuffer Handle.
+	Bind this device memory handle to VkBuffer Handle by using vkBindBufferMemory().
+	Declare a void* buffer say "data" and call vkMapMemory() to map our device memory object handle to this void* buffer data.
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBindImageMemory.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkBindImageMemory(
+    VkDevice                                    device,
+    VkImage                                     image,
+    VkDeviceMemory                              memory,
+    VkDeviceSize                                memoryOffset);
+	*/
+	vkResult = vkBindImageMemory(vkDevice, vkImage_texture, vkDeviceMemory_texture, 0); // We are binding device memory object handle with Vulkan buffer object handle. 
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkBindImageMemory() function failed for vertexdata_texcoord.vkBuffer with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkBindImageMemory() succedded for vertexdata_texcoord.vkBuffer\n");
+	}
+	
 	return vkResult;
 }
 
