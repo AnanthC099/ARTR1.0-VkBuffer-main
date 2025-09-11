@@ -128,7 +128,25 @@ There are changes in function names.
 Keep depth code handy.
 Third step completed/9
 
-03:12:34 to :
+03:12:34 to 03:17:32 :
+BuildCommandBuffers() normally send data to GPU.
+But some times we need to do same thing in initialize(), follow 01:46:36 to 01:51:37
+!!! We have done this before !!!
+Important Interview question.
+Fourth step to be started/9
+Before these steps , command pool allocate zal pahije.
+karan command pool shivay command buffer kasa tayaar honar
+
+03:17:32 to 03:24:33 :
+Refer CreateVertexBuffer() from Staging Buffer Code
+7 sub step peki first code
+Fourth step Part 1 Completed /9
+
+03:24:33 to  03:32:38 :
+03:37:29 to 03:30:21 : General discussion on why long variable names
+03:30:21 to 03:32:38 : Fourth step Part2  Completed /9
+
+03:32:38 to :
 
 
 

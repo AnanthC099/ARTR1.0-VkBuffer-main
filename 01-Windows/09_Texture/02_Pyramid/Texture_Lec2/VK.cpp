@@ -4822,7 +4822,88 @@ VkResult CreateTexture(const char* textureFileName)
 	}
 	
 	//T4: Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier.
-	//
+	/*
+	Declare and initialize struct VkCommandBufferAllocateInfo (https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferAllocateInfo.html)
+	The number of command buffers are coventionally equal to number of swapchain images.
+	
+	typedef struct VkCommandBufferAllocateInfo {
+    VkStructureType         sType;
+    const void*             pNext;
+    VkCommandPool           commandPool;
+    VkCommandBufferLevel    level;
+    uint32_t                commandBufferCount;
+	} VkCommandBufferAllocateInfo;
+	*/
+	VkCommandBufferAllocateInfo vkCommandBufferAllocateInfo_transition_image_layout;
+	memset((void*)&vkCommandBufferAllocateInfo_transition_image_layout, 0, sizeof(VkCommandBufferAllocateInfo));
+	vkCommandBufferAllocateInfo_transition_image_layout.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	vkCommandBufferAllocateInfo_transition_image_layout.pNext = NULL;
+	//vkCommandBufferAllocateInfo_transition_image_layout.flags = 0;
+	vkCommandBufferAllocateInfo_transition_image_layout.commandPool = vkCommandPool;
+	
+	//https://docs.vulkan.org/spec/latest/chapters/cmdbuffers.html#VkCommandBufferAllocateInfo
+	vkCommandBufferAllocateInfo_transition_image_layout.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	
+	vkCommandBufferAllocateInfo_transition_image_layout.commandBufferCount = 1;
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateCommandBuffers.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateCommandBuffers(
+    VkDevice                                    device,
+    const VkCommandBufferAllocateInfo*          pAllocateInfo,
+    VkCommandBuffer*                            pCommandBuffers);
+	*/
+	VkCommandBuffer vkCommandBuffer_transition_image_layout = VK_NULL_HANDLE;
+	vkResult = vkAllocateCommandBuffers(vkDevice, &vkCommandBufferAllocateInfo_transition_image_layout, &vkCommandBuffer_transition_image_layout);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateCommandBuffers() function failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateCommandBuffers() succedded for iteration %d\n", i);
+	}
+	
+	/*
+	Then declare, memset and initialize VkCommandBufferBeginInfo struct.
+	*/
+	VkCommandBufferBeginInfo vkCommandBufferBeginInfo_transition_image_layout;
+	memset((void*)&vkCommandBufferBeginInfo_transition_image_layout, 0, sizeof(VkCommandBufferBeginInfo));
+	vkCommandBufferBeginInfo_transition_image_layout.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	vkCommandBufferBeginInfo_transition_image_layout.pNext = NULL;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferBeginInfo.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferUsageFlagBits.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkCommandBufferUsageFlagBits {
+    VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT = 0x00000001,
+    VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT = 0x00000002,
+    VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT = 0x00000004,
+	} VkCommandBufferUsageFlagBits;
+	*/
+	vkCommandBufferBeginInfo_transition_image_layout.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;  //Due to this we dont need to reset command buffer
+	vkCommandBufferBeginInfo_transition_image_layout.pInheritanceInfo = NULL;
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBeginCommandBuffer.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkBeginCommandBuffer(
+    VkCommandBuffer                             commandBuffer,
+    const VkCommandBufferBeginInfo*             pBeginInfo);
+	*/
+	vkResult = vkBeginCommandBuffer(vkCommandBuffer_transition_image_layout, &vkCommandBufferBeginInfo_transition_image_layout);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkBeginCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout copy failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkBeginCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout copy succedded\n");
+	}
 	
 	return vkResult;
 }
