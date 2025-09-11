@@ -121,13 +121,14 @@ First step completed/9
 CreateTexture() end
 Second step completed/9
 
-02:47:41 to :
+02:47:41 to 03:12:34:
 We have to repeat same steps as in CreateTexture().
 But for image
 There are changes in function names.
 Keep depth code handy.
+Third step completed/9
 
-03:12:05
+03:12:34 to :
 
 
 
