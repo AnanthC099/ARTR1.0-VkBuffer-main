@@ -1,0 +1,158 @@
+00:00:00 to 01:00:36 :  Song
+01:00:36 to 01:06:20 : Introduction
+01:06:20 to 01:13:11 : Texture Introduction
+Today's method is aplicale for all eg GP-GPU
+Pipeline barrier
+Even required for ray tracing
+ 01:13:11 to 01:16:49 :
+take C:\Users\anant\Documents\ARTR1.0-VkBuffer-main\01-Windows\09_Texture\02_Pyramid\Texture_Lec1 as base code.
+Fullform of STB - Shaun T Barette.
+Single file habit of Shaun like Sir.
+01:16:49 to 01:17:04  :
+CreateTexture() lihaycha aahe.
+01:17:04 to 01:19:02 : 
+Aditya Boob : Call Sir.
+ 01:19:02 to  01:27:45: 
+Steps sangtil Sir aadhi.
+Steps for texture (Second lecture)
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same lime glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual image copy.
+
+01:27:45 to 01:33:41:
+4th point explanation
+
+01:33:41 to  01:39:02:
+4th point explanation continued
+Steps for texture (Second lecture)
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same line glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier
+
+01:39:02 to : 01:40:21 : Step 5
+Steps for texture (Second lecture)
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same line glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier.
+5) Now actually copy the Image data from Staging buffer to empty VkImage.
+
+01:40:21 to 01:43:19 :  Sixth Step
+Steps for texture (Second lecture)
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same line glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier.
+5) Now actually copy the Image data from Staging buffer to empty VkImage.
+6)  Now again do image layout transition similar to Step 4 for correct reading/writing of image data by shaders.
+
+01:43:19 to 01:43:58 : Seventh Step
+Steps for texture (Second lecture)
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same line glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier.
+5) Now actually copy the Image data from Staging buffer to empty VkImage.
+6)  Now again do image layout transition similar to Step 4 for correct reading/writing of image data by shaders.
+7) Now Staging buffer is not needed. Hence release its memory and itself.
+
+01:43:19 to 01:43:58 : Eighth Step
+Steps for texture (Second lecture)
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same line glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier.
+5) Now actually copy the Image data from Staging buffer to empty VkImage.
+6)  Now again do image layout transition similar to Step 4 for correct reading/writing of image data by shaders.
+7) Now Staging buffer is not needed. Hence release its memory and itself.
+8) Create Image View for above image.
+
+01:43:58 to 01:44:42: Ninth Step
+Steps for texture (Second lecture)
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same line glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier.
+5) Now actually copy the Image data from Staging buffer to empty VkImage.
+6)  Now again do image layout transition similar to Step 4 for correct reading/writing of image data by shaders.
+7) Now Staging buffer is not needed. Hence release its memory and itself.
+8) Create Image View for above image.
+9) Create texture sampler for above image
+
+01:44:42 to 01:46:36 :  Tenth Last Step
+Steps for texture (Second lecture)
+0) Declare global texture data like VkImage, VkDeviceMemory of Image, VkImageView of Image, Sampler
+1) Create Texture: Get Image Info like width, height, no of channels and actual image data using functions in stb_image.h. (Same line glTexImage2D)
+2) Put above image data into a staging buffer.
+3) Create "device only visible", empty but enough sized VkImage equal to size of the image (ImageWidth X ImageHeight). (Dynamic glbufferdata last parameter)
+4) Send "image transition layout" to Vulkan/GPU before the actual staging buffer from Step 2 to empty VkImage from Step 3, using Pipeline barrier.
+5) Now actually copy the Image data from Staging buffer to empty VkImage.
+6)  Now again do image layout transition similar to Step 4 for correct reading/writing of image data by shaders.
+7) Now Staging buffer is not needed. Hence release its memory and itself.
+8) Create Image View for above image.
+9) Create texture sampler for above image
+10) Uninitialize  all texture related all global data like VkImage, VkDeviceMemory of Image, VkImageView of Image, Sampler
+
+
+
+
+01:46:36 to 01:51:37 : Start coding now
+Sir mentioned flow
+01:51:37 to 01:53:01 : 
+Again Sir revised flow
+01:53:01 to 01:54:06:
+Again Sir revised flow
+
+01:54:06 to 01:57:40: 
+Code now
+Global variables declared
+
+
+01:57:40 to 02:02:03 : 
+Go to initialize()
+
+02:02:03 to  02:18:02: 
+Now come to end of CreateVertexBuffer() closing braces
+First step completed/9
+
+02:18:02 to 02:47:41:
+CreateTexture() end
+Second step completed/9
+
+02:47:41 to 03:12:34:
+We have to repeat same steps as in CreateTexture().
+But for image
+There are changes in function names.
+Keep depth code handy.
+Third step completed/9
+
+03:12:34 to 03:17:32 :
+BuildCommandBuffers() normally send data to GPU.
+But some times we need to do same thing in initialize(), follow 01:46:36 to 01:51:37
+!!! We have done this before !!!
+Important Interview question.
+Fourth step to be started/9
+Before these steps , command pool allocate zal pahije.
+karan command pool shivay command buffer kasa tayaar honar
+
+03:17:32 to 03:24:33 :
+Refer CreateVertexBuffer() from Staging Buffer Code
+7 sub step peki first code
+Fourth step Part 1 Completed /9
+
+03:24:33 to  03:32:38 :
+03:37:29 to 03:30:21 : General discussion on why long variable names
+03:30:21 to 03:32:38 : Fourth step Part2  Completed /9
+
+03:32:38 to :
+
+
+
+
+
+
+
+
+
