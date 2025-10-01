@@ -4905,6 +4905,439 @@ VkResult CreateTexture(const char* textureFileName)
 		fprintf(gFILE, "CreateTexture(): vkBeginCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout copy succedded\n");
 	}
 	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlags.html
+	VkPipelineStageFlags vkPipelineStageFlags_source = 0;
+	VkPipelineStageFlags vkPipelineStageFlags_dest = 0;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageMemoryBarrier.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkImageMemoryBarrier {
+		VkStructureType            sType;
+		const void*                pNext;
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAccessFlags.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkAccessFlagBits.html
+		VkAccessFlags              srcAccessMask;
+		VkAccessFlags              dstAccessMask;
+		
+		VkImageLayout              oldLayout;
+		VkImageLayout              newLayout;
+		uint32_t                   srcQueueFamilyIndex;
+		uint32_t                   dstQueueFamilyIndex;
+		VkImage                    image;
+		VkImageSubresourceRange    subresourceRange;
+	} VkImageMemoryBarrier;
+	*/
+	VkImageMemoryBarrier vkImageMemoryBarrier;
+	memset((void*)&vkImageMemoryBarrier, 0, sizeof(VkImageMemoryBarrier));
+	vkImageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	vkImageMemoryBarrier.pNext = NULL;
+	vkImageMemoryBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	vkImageMemoryBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+	vkImageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED; //https://registry.khronos.org/vulkan/specs/latest/man/html/VK_QUEUE_FAMILY_IGNORED.html
+	vkImageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED; //https://registry.khronos.org/vulkan/specs/latest/man/html/VK_QUEUE_FAMILY_IGNORED.html
+	vkImageMemoryBarrier.image = vkImage_texture;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageSubresourceRange.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkImageSubresourceRange {
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlags.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
+		VkImageAspectFlags    aspectMask;
+		uint32_t              baseMipLevel;
+		uint32_t              levelCount;
+		uint32_t              baseArrayLayer;
+		uint32_t              layerCount;
+	} VkImageSubresourceRange;
+	*/
+	vkImageMemoryBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	vkImageMemoryBarrier.subresourceRange.baseMipLevel = 0; //baseMipLevel is the first mipmap level accessible to the view.
+	vkImageMemoryBarrier.subresourceRange.levelCount = 1; //levelCount is the number of mipmap levels (starting from baseMipLevel) accessible to the view.
+	vkImageMemoryBarrier.subresourceRange.baseArrayLayer = 0; //baseArrayLayer is the first array layer accessible to the view.
+	vkImageMemoryBarrier.subresourceRange.layerCount = 1; //layerCount is the number of array layers (starting from baseArrayLayer) accessible to the view.
+	
+	if( (vkImageMemoryBarrier.oldLayout == VK_IMAGE_LAYOUT_UNDEFINED) && (vkImageMemoryBarrier.newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL))
+	{
+		vkImageMemoryBarrier.srcAccessMask = 0;
+		vkImageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT ;
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlags.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlagBits.html
+		vkPipelineStageFlags_source = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+		vkPipelineStageFlags_dest = VK_PIPELINE_STAGE_TRANSFER_BIT;
+	}
+	else if(  (vkImageMemoryBarrier.oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) && (vkImageMemoryBarrier.newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) )
+	{
+		vkImageMemoryBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		vkImageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT  ;
+		
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlags.html
+		//https://registry.khronos.org/vulkan/specs/latest/man/html/VkPipelineStageFlagBits.html
+		vkPipelineStageFlags_source = VK_PIPELINE_STAGE_TRANSFER_BIT;
+		vkPipelineStageFlags_dest =  VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): Unsupported texture layout transition\n");
+		return VK_ERROR_INITIALIZATION_FAILED;
+	}
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdPipelineBarrier.html
+	/*
+	// Provided by VK_VERSION_1_0
+	void vkCmdPipelineBarrier(
+    VkCommandBuffer                             commandBuffer,
+    VkPipelineStageFlags                        srcStageMask,
+    VkPipelineStageFlags                        dstStageMask,
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDependencyFlags.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkDependencyFlagBits.html
+    VkDependencyFlags                           dependencyFlags,
+	uint32_t                                    memoryBarrierCount,
+    const VkMemoryBarrier*                      pMemoryBarriers,
+    uint32_t                                    bufferMemoryBarrierCount,
+    const VkBufferMemoryBarrier*                pBufferMemoryBarriers,
+    uint32_t                                    imageMemoryBarrierCount,
+    const VkImageMemoryBarrier*                 pImageMemoryBarriers);
+	*/
+	vkCmdPipelineBarrier(
+	vkCommandBuffer_transition_image_layout,
+	vkPipelineStageFlags_source,
+	vkPipelineStageFlags_dest,
+	0,
+	0,
+	NULL,
+	0,
+	NULL,
+	1,
+	&vkImageMemoryBarrier
+	);
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkEndCommandBuffer.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkEndCommandBuffer(
+    VkCommandBuffer                             commandBuffer);
+	*/
+	vkResult = vkEndCommandBuffer(vkCommandBuffer_transition_image_layout);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkEndCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkEndCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout succedded\n");
+	}
+	
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSubmitInfo.html
+	// Declare, memset and initialize VkSubmitInfo structure
+	VkSubmitInfo vkSubmitInfo_transition_image_layout;
+	memset((void*)&vkSubmitInfo_transition_image_layout, 0, sizeof(VkSubmitInfo));
+	vkSubmitInfo_transition_image_layout.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	vkSubmitInfo_transition_image_layout.pNext = NULL;
+	
+	// No synchronization required . So these members not required
+	//vkSubmitInfo_transition_image_layout.pWaitDstStageMask = &waitDstStageMask;
+	//vkSubmitInfo_transition_image_layout.waitSemaphoreCount = 1;
+	//vkSubmitInfo_transition_image_layout.pWaitSemaphores = &vkSemaphore_BackBuffer;
+	vkSubmitInfo_transition_image_layout.commandBufferCount = 1;
+	vkSubmitInfo_transition_image_layout.pCommandBuffers = &vkCommandBuffer_transition_image_layout;
+	//Only 1 buffer, so no synchronization required
+	//vkSubmitInfo_transition_image_layout.signalSemaphoreCount = 1;
+	//vkSubmitInfo_transition_image_layout.pSignalSemaphores = &vkSemaphore_RenderComplete;
+	
+	//Now submit above work to the queque
+	vkResult = vkQueueSubmit(vkQueue, 1, &vkSubmitInfo_transition_image_layout, VK_NULL_HANDLE); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueSubmit.html
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueSubmit()  for vkSubmitInfo_transition_image_layout failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueSubmit()  for vkSubmitInfo_transition_image_layout suceeded\n");
+	}
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueWaitIdle.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkQueueWaitIdle(VkQueue queue);
+	*/
+	vkResult = vkQueueWaitIdle(vkQueue);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueWaitIdle()  for vkSubmitInfo_transition_image_layout failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueWaitIdle()  for vkSubmitInfo_transition_image_layout suceeded\n");
+	}
+	
+	/*
+	After done free the command buffer.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html
+	// Provided by VK_VERSION_1_0
+	void vkFreeCommandBuffers(
+    VkDevice                                    device,
+    VkCommandPool                               commandPool,
+    uint32_t                                    commandBufferCount,
+    const VkCommandBuffer*                      pCommandBuffers);
+	*/
+	if(vkCommandBuffer_transition_image_layout)
+	{
+		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_transition_image_layout);
+		vkCommandBuffer = VK_NULL_HANDLE;
+		fprintf(gFILE, "CreateTexture(): vkCommandBuffer for vkCommandBuffer_transition_image_layout is freed\n");
+	}
+	
+	//T5: Now actually copy the Image data from Staging buffer to empty VkImage.
+	/*
+	Declare and initialize struct VkCommandBufferAllocateInfo (https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferAllocateInfo.html)
+	The number of command buffers are coventionally equal to number of swapchain images.
+	
+	typedef struct VkCommandBufferAllocateInfo {
+    VkStructureType         sType;
+    const void*             pNext;
+    VkCommandPool           commandPool;
+    VkCommandBufferLevel    level;
+    uint32_t                commandBufferCount;
+	} VkCommandBufferAllocateInfo;
+	*/
+	VkCommandBufferAllocateInfo vkCommandBufferAllocateInfo_buffer_to_image_copy;
+	memset((void*)&vkCommandBufferAllocateInfo_buffer_to_image_copy, 0, sizeof(VkCommandBufferAllocateInfo));
+	vkCommandBufferAllocateInfo_buffer_to_image_copy.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	vkCommandBufferAllocateInfo_buffer_to_image_copy.pNext = NULL;
+	//vkCommandBufferAllocateInfo_buffer_to_image_copy.flags = 0;
+	vkCommandBufferAllocateInfo_buffer_to_image_copy.commandPool = vkCommandPool;
+	
+	//https://docs.vulkan.org/spec/latest/chapters/cmdbuffers.html#VkCommandBufferAllocateInfo
+	vkCommandBufferAllocateInfo_buffer_to_image_copy.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	
+	vkCommandBufferAllocateInfo_buffer_to_image_copy.commandBufferCount = 1;
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateCommandBuffers.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkAllocateCommandBuffers(
+    VkDevice                                    device,
+    const VkCommandBufferAllocateInfo*          pAllocateInfo,
+    VkCommandBuffer*                            pCommandBuffers);
+	*/
+	VkCommandBuffer vkCommandBuffer_buffer_to_image_copy = VK_NULL_HANDLE;
+	vkResult = vkAllocateCommandBuffers(vkDevice, &vkCommandBufferAllocateInfo_buffer_to_image_copy, &vkCommandBuffer_buffer_to_image_copy);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateCommandBuffers() function for vkCommandBuffer_buffer_to_image_copy failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkAllocateCommandBuffers() succedded for vkCommandBuffer_buffer_to_image_copyn");
+	}
+	
+	/*
+	Then declare, memset and initialize VkCommandBufferBeginInfo struct.
+	*/
+	VkCommandBufferBeginInfo vkCommandBufferBeginInfo_buffer_to_image_copy;
+	memset((void*)&vkCommandBufferBeginInfo_buffer_to_image_copy, 0, sizeof(VkCommandBufferBeginInfo));
+	vkCommandBufferBeginInfo_buffer_to_image_copy.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	vkCommandBufferBeginInfo_buffer_to_image_copy.pNext = NULL;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferBeginInfo.html
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkCommandBufferUsageFlagBits.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef enum VkCommandBufferUsageFlagBits {
+    VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT = 0x00000001,
+    VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT = 0x00000002,
+    VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT = 0x00000004,
+	} VkCommandBufferUsageFlagBits;
+	*/
+	vkCommandBufferBeginInfo_buffer_to_image_copy.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;  //Due to this we dont need to reset command buffer
+	vkCommandBufferBeginInfo_buffer_to_image_copy.pInheritanceInfo = NULL;
+	
+	/*
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkBeginCommandBuffer.html
+	// Provided by VK_VERSION_1_0
+	VkResult vkBeginCommandBuffer(
+    VkCommandBuffer                             commandBuffer,
+    const VkCommandBufferBeginInfo*             pBeginInfo);
+	*/
+	vkResult = vkBeginCommandBuffer(vkCommandBuffer_buffer_to_image_copy, &vkCommandBufferBeginInfo_buffer_to_image_copy);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkBeginCommandBuffer() for vkCommandBufferBeginInfo_buffer_to_image_copy copy failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkBeginCommandBuffer() for vkCommandBufferBeginInfo_buffer_to_image_copy copy succedded\n");
+	}
+	
+	
+	//T5: s2
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferImageCopy.html
+	// Provided by VK_VERSION_1_0
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkBufferImageCopy {
+		VkDeviceSize                bufferOffset;
+		uint32_t                    bufferRowLength;
+		uint32_t                    bufferImageHeight;
+		VkImageSubresourceLayers    imageSubresource;
+		VkOffset3D                  imageOffset;
+		VkExtent3D                  imageExtent;
+	} VkBufferImageCopy;
+	*/
+	VkBufferImageCopy vkBufferImageCopy;
+	memset((void*)&vkBufferImageCopy, 0, sizeof(VkBufferImageCopy));
+	vkBufferImageCopy.bufferOffset = 0;
+	vkBufferImageCopy.bufferRowLength = 0;
+	vkBufferImageCopy.bufferImageHeight = 0;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageSubresourceLayers.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkImageSubresourceLayers {
+		VkImageAspectFlags    aspectMask;
+		uint32_t              mipLevel;
+		uint32_t              baseArrayLayer;
+		uint32_t              layerCount;
+	} VkImageSubresourceLayers;
+	*/
+	vkBufferImageCopy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	vkBufferImageCopy.imageSubresource.mipLevel = 0;
+	vkBufferImageCopy.imageSubresource.baseArrayLayer = 0;
+	vkBufferImageCopy.imageSubresource.layerCount = 1;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkOffset3D.html
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkOffset3D {
+		int32_t    x;
+		int32_t    y;
+		int32_t    z;
+	} VkOffset3D;
+	*/
+	vkBufferImageCopy.imageOffset.x = 0;
+	vkBufferImageCopy.imageOffset.y = 0;
+	vkBufferImageCopy.imageOffset.z = 0;
+	
+	/*
+	// Provided by VK_VERSION_1_0
+	typedef struct VkExtent3D {
+		uint32_t    width;
+		uint32_t    height;
+		uint32_t    depth;
+	} VkExtent3D;
+	*/
+	vkBufferImageCopy.imageExtent.width = texture_width;
+	vkBufferImageCopy.imageExtent.height = texture_height;
+	vkBufferImageCopy.imageExtent.depth = 1;
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCmdCopyBufferToImage.html
+	/*
+	// Provided by VK_VERSION_1_0
+	void vkCmdCopyBufferToImage(
+    VkCommandBuffer                             commandBuffer,
+    VkBuffer                                    srcBuffer,
+    VkImage                                     dstImage,
+    VkImageLayout                               dstImageLayout,
+    uint32_t                                    regionCount,
+    const VkBufferImageCopy*                    pRegions);
+	*/
+	vkCmdCopyBufferToImage(
+		vkCommandBuffer_buffer_to_image_copy,
+		vkBuffer_staging_buffer,
+		vkImage_texture,
+		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, //https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageLayout.html
+		1,
+		&vkBufferImageCopy
+	);
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkEndCommandBuffer.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkEndCommandBuffer(
+    VkCommandBuffer                             commandBuffer);
+	*/
+	vkResult = vkEndCommandBuffer(vkCommandBuffer_buffer_to_image_copy);
+	if (vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkEndCommandBuffer() for vkCommandBufferBeginInfo_buffer_to_image_copy copy failed with error code %d\n", vkResult);
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkEndCommandBuffer() for vkCommandBufferBeginInfo_buffer_to_image_copy copy succedded\n");
+	}
+	
+	// https://registry.khronos.org/vulkan/specs/latest/man/html/VkSubmitInfo.html
+	// Declare, memset and initialize VkSubmitInfo structure
+	VkSubmitInfo vkSubmitInfo_transition_image_layout;
+	memset((void*)&vkSubmitInfo_transition_image_layout, 0, sizeof(VkSubmitInfo));
+	vkSubmitInfo_transition_image_layout.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	vkSubmitInfo_transition_image_layout.pNext = NULL;
+	
+	// No synchronization required . So these members not required
+	//vkSubmitInfo_transition_image_layout.pWaitDstStageMask = &waitDstStageMask;
+	//vkSubmitInfo_transition_image_layout.waitSemaphoreCount = 1;
+	//vkSubmitInfo_transition_image_layout.pWaitSemaphores = &vkSemaphore_BackBuffer;
+	vkSubmitInfo_transition_image_layout.commandBufferCount = 1;
+	vkSubmitInfo_transition_image_layout.pCommandBuffers = &vkCommandBuffer_transition_image_layout;
+	//Only 1 buffer, so no synchronization required
+	//vkSubmitInfo_transition_image_layout.signalSemaphoreCount = 1;
+	//vkSubmitInfo_transition_image_layout.pSignalSemaphores = &vkSemaphore_RenderComplete;
+	
+	//Now submit above work to the queque
+	vkResult = vkQueueSubmit(vkQueue, 1, &vkSubmitInfo_transition_image_layout, VK_NULL_HANDLE); //https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueSubmit.html
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueSubmit()  for vkSubmitInfo_transition_image_layout failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueSubmit()  for vkSubmitInfo_transition_image_layout suceeded\n");
+	}
+	
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkQueueWaitIdle.html
+	/*
+	// Provided by VK_VERSION_1_0
+	VkResult vkQueueWaitIdle(VkQueue queue);
+	*/
+	vkResult = vkQueueWaitIdle(vkQueue);
+	if(vkResult != VK_SUCCESS)
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueWaitIdle()  for vkSubmitInfo_transition_image_layout failed\n");
+		return vkResult;
+	}
+	else
+	{
+		fprintf(gFILE, "CreateTexture(): vkQueueWaitIdle()  for vkSubmitInfo_transition_image_layout suceeded\n");
+	}
+	
+	/*
+	After done free the command buffer.
+	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkFreeCommandBuffers.html
+	// Provided by VK_VERSION_1_0
+	void vkFreeCommandBuffers(
+    VkDevice                                    device,
+    VkCommandPool                               commandPool,
+    uint32_t                                    commandBufferCount,
+    const VkCommandBuffer*                      pCommandBuffers);
+	*/
+	if(vkCommandBuffer_transition_image_layout)
+	{
+		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_transition_image_layout);
+		vkCommandBuffer = VK_NULL_HANDLE;
+		fprintf(gFILE, "CreateTexture(): vkCommandBuffer for vkCommandBuffer_transition_image_layout is freed\n");
+	}
+	
 	return vkResult;
 }
 
