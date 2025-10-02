@@ -36,8 +36,6 @@ FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_NV_ngfx_captur
 FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_NV_shader_debugger_release_public_2025_3_0
 FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_RENDERDOC_Capture
 FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_OBS_HOOK
-FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_EOS_Overlay
-FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_EOS_Overlay
 FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_LUNARG_api_dump
 FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_LUNARG_gfxreconstruct
 FillValidationLayerNames(): Vulkan Instance Layer Name = VK_LAYER_KHRONOS_synchronization2
@@ -332,8 +330,8 @@ FillDeviceExtensionNames(): Enabled Vulkan Device Extension Name = VK_KHR_swapch
 CreateVulKanDevice(): FillDeviceExtensionNames() succedded
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_KHRONOS_validation" (C:\VulkanSDK\Anjaneya\Bin\.\VkLayer_khronos_validation.dll)
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_OBS_HOOK" (C:\ProgramData\obs-studio-hook\.\graphics-hook64.dll)
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_NV_present" (C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_3496fbfac7a2d1ba\.\nvoglv64.dll)
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_NV_optimus" (C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_3496fbfac7a2d1ba\.\nvoglv64.dll)
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_NV_present" (C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_6cdc9372d41a2731\.\nvoglv64.dll)
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = Inserted device layer "VK_LAYER_NV_optimus" (C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_6cdc9372d41a2731\.\nvoglv64.dll)
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) = vkCreateDevice layer callstack setup to:
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    <Application>
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
@@ -343,15 +341,15 @@ Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    VK_LAYER_NV_opt
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Type: Implicit
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Enabled By: Implicit Layer
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =                Disable Env Var:  DISABLE_LAYER_NV_OPTIMUS_1
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Manifest: C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_3496fbfac7a2d1ba\nv-vk64.json
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library:  C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_3496fbfac7a2d1ba\.\nvoglv64.dll
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Manifest: C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_6cdc9372d41a2731\nv-vk64.json
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library:  C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_6cdc9372d41a2731\.\nvoglv64.dll
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    VK_LAYER_NV_present
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Type: Implicit
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Enabled By: Implicit Layer
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =                Disable Env Var:  DISABLE_LAYER_NV_GR2608_1
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Manifest: C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_3496fbfac7a2d1ba\nv-vk64.json
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library:  C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_3496fbfac7a2d1ba\.\nvoglv64.dll
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Manifest: C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_6cdc9372d41a2731\nv-vk64.json
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library:  C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_6cdc9372d41a2731\.\nvoglv64.dll
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    VK_LAYER_OBS_HOOK
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Type: Implicit
@@ -367,7 +365,7 @@ Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Manifes
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =            Library:  C:\VulkanSDK\Anjaneya\Bin\.\VkLayer_khronos_validation.dll
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =      ||
 Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =    <Device>
-Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =        Using "NVIDIA GeForce RTX 4090" with driver: "C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_3496fbfac7a2d1ba\.\nvoglv64.dll"
+Anjaneya_VALIDATION:debugReportCallback():Loader Message(0) =        Using "NVIDIA GeForce RTX 4090" with driver: "C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_6cdc9372d41a2731\.\nvoglv64.dll"
 CreateVulKanDevice(): vkCreateDevice() succedded
 initialize(): CreateVulKanDevice() succedded
 GetDeviceQueque(): vkGetDeviceQueue() succedded
@@ -403,11 +401,41 @@ CreateVertexBuffer(): vkCreateBuffer() succedded for vertexdata_position.vkBuffe
 CreateVertexBuffer(): vkAllocateMemory() succedded for vertexdata_position.vkBuffer
 CreateVertexBuffer(): vkBindBufferMemory() succedded for vertexdata_position.vkBuffer
 CreateVertexBuffer(): vkMapMemory() succedded for vertexdata_position.vkBuffer
-CreateVertexBuffer(): vkCreateBuffer() succedded for vertexdata_color.vkBuffer
-CreateVertexBuffer(): vkAllocateMemory() succedded for vertexdata_color.vkBuffer
-CreateVertexBuffer(): vkBindBufferMemory() succedded for vertexdata_color.vkBuffer
-CreateVertexBuffer(): vkMapMemory() succedded for vertexdata_color.vkBuffer
+CreateVertexBuffer(): vkCreateBuffer() succedded for vertexdata_texcoord.vkBuffer
+CreateVertexBuffer(): vkAllocateMemory() succedded for vertexdata_texcoord.vkBuffer
+CreateVertexBuffer(): vkBindBufferMemory() succedded for vertexdata_texcoord.vkBuffer
+CreateVertexBuffer(): vkMapMemory() succedded for vertexdata_texcoord.vkBuffer
 initialize(): CreateVertexBuffer() succedded
+CreateTexture(): vkCreateBuffer() for creating staging Buffer succedded
+CreateTexture(): vkAllocateMemory() for allocating staging Buffer device memory succedded
+CreateTexture(): vkBindBufferMemory() for staging buffer succedded
+CreateTexture(): vkMapMemory() for staging buffer succedded
+CreateTexture(): stbi_image_free freed imageData
+CreateTexture(): vkCreateImage() succedded
+CreateTexture(): vkAllocateMemory() succedded for vkDeviceMemory_texture
+CreateTexture(): vkBindImageMemory() succedded for vkImage_texture
+CreateTexture(): vkAllocateCommandBuffers() succedded
+CreateTexture(): vkBeginCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout copy succedded
+CreateTexture(): vkEndCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout succedded
+CreateTexture(): vkQueueSubmit()  for vkSubmitInfo_transition_image_layout suceeded
+CreateTexture(): vkQueueWaitIdle()  for vkSubmitInfo_transition_image_layout suceeded
+CreateTexture(): vkCommandBuffer for vkCommandBuffer_transition_image_layout is freed
+CreateTexture(): vkAllocateCommandBuffers() succedded for vkCommandBuffer_buffer_to_image_copynCreateTexture(): vkBeginCommandBuffer() for vkCommandBufferBeginInfo_buffer_to_image_copy copy succedded
+CreateTexture(): vkEndCommandBuffer() for vkCommandBufferBeginInfo_buffer_to_image_copy copy succedded
+CreateTexture(): vkQueueSubmit()  for vkSubmitInfo_buffer_to_image_copy suceeded
+CreateTexture(): vkQueueWaitIdle()  for vkSubmitInfo_buffer_to_image_copy suceeded
+CreateTexture(): vkCommandBuffer for vkCommandBuffer_buffer_to_image_copy is freed
+CreateTexture(): T6 vkAllocateCommandBuffers() succedded
+CreateTexture(): T6 vkBeginCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout copy succedded
+CreateTexture(): T6 vkEndCommandBuffer() for vkCommandBufferBeginInfo_transition_image_layout succedded
+CreateTexture(): T6 vkQueueSubmit()  for vkSubmitInfo_transition_image_layout suceeded
+CreateTexture(): T6 vkQueueWaitIdle()  for vkSubmitInfo_transition_image_layout suceeded
+CreateTexture(): T6 vkCommandBuffer for vkCommandBuffer_transition_image_layout is freed
+CreateTexture(): vkDeviceMemory_staging_buffer is freed
+CreateTexture(): vkBuffer_staging_buffer is freed
+CreateTexture(): vkCreateImageView() for vkImageView_texture succedded
+CreateTexture(): vkCreateSampler() succedded
+initialize(): CreateTexture() succedded
 CreateUniformBuffer(): vkCreateBuffer() succedded
 CreateUniformBuffer(): vkAllocateMemory() succedded
 CreateUniformBuffer(): vkBindBufferMemory() succedded
@@ -474,8 +502,12 @@ uninitialize(): VkShaderMoudule for fragment shader is done
 uninitialize(): VkShaderMoudule for vertex shader is done
 uninitialize(): uniformData.vkBuffer is freed
 uninitialize(): uniformData.vkDeviceMemory is freed
-uninitialize(): vertexdata_color.vkDeviceMemory is freed
-uninitialize(): vertexdata_color.vkBuffer is freed
+uninitialize(): vkSampler_texture is freed
+uninitialize(): vkImageView_texture is freed
+uninitialize(): vkDeviceMemory_texture is freed
+uninitialize(): vkImage_texture is freed
+uninitialize(): vertexdata_texcoord.vkDeviceMemory is freed
+uninitialize(): vertexdata_texcoord.vkBuffer is freed
 uninitialize(): vertexdata_position.vkDeviceMemory is freed
 uninitialize(): vertexdata_position.vkBuffer is freed
 uninitialize(): vkFreeCommandBuffers() is done

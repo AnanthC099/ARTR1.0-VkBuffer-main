@@ -1454,7 +1454,7 @@ VkResult display(void)
 void update(void)
 {
 	// Code
-	angle = angle + 0.3f;
+	angle = angle + 0.001f;
 	if(angle > 360.0f)
 	{
 		angle =  angle - 360.0f;
@@ -4253,7 +4253,7 @@ VkResult CreateVertexBuffer(void)
 	vkBufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	vkBufferCreateInfo.pNext = NULL;
 	vkBufferCreateInfo.flags = 0; //Valid flags are used in scattered(sparse) buffer
-	vkBufferCreateInfo.size = sizeof(pyramidColors);
+	vkBufferCreateInfo.size = sizeof(pyramidTexcoords);
 	vkBufferCreateInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkBufferUsageFlagBits.html;
 	/* //when one buffer shared in multiple queque's
 	vkBufferCreateInfo.sharingMode =;
@@ -4431,7 +4431,7 @@ VkResult CreateVertexBuffer(void)
 	/*
 	22.12. Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, pyramidColors, sizeof(pyramidColors));
+	memcpy(data, pyramidTexcoords, sizeof(pyramidTexcoords));
 	
 	/*
 	22.13. To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -4810,7 +4810,7 @@ VkResult CreateTexture(const char* textureFileName)
 				break;
 			}			
 		}
-		vkMemoryAllocateInfo_image.memoryTypeBits >>= 1;
+		vkMemoryRequirements_image.memoryTypeBits >>= 1;
 	}
 	
 	/*
@@ -4896,7 +4896,7 @@ VkResult CreateTexture(const char* textureFileName)
 	}
 	else
 	{
-		fprintf(gFILE, "CreateTexture(): vkAllocateCommandBuffers() succedded for iteration %d\n", i);
+		fprintf(gFILE, "CreateTexture(): vkAllocateCommandBuffers() succedded\n");
 	}
 	
 	/*
@@ -5123,7 +5123,7 @@ VkResult CreateTexture(const char* textureFileName)
 	if(vkCommandBuffer_transition_image_layout)
 	{
 		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_transition_image_layout);
-		vkCommandBuffer = VK_NULL_HANDLE;
+		vkCommandBuffer_transition_image_layout = VK_NULL_HANDLE;
 		fprintf(gFILE, "CreateTexture(): vkCommandBuffer for vkCommandBuffer_transition_image_layout is freed\n");
 	}
 	
@@ -5367,7 +5367,7 @@ VkResult CreateTexture(const char* textureFileName)
 	if(vkCommandBuffer_buffer_to_image_copy)
 	{
 		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_buffer_to_image_copy);
-		vkCommandBuffer = VK_NULL_HANDLE;
+		vkCommandBuffer_buffer_to_image_copy = VK_NULL_HANDLE;
 		fprintf(gFILE, "CreateTexture(): vkCommandBuffer for vkCommandBuffer_buffer_to_image_copy is freed\n");
 	}
 	
@@ -5412,7 +5412,7 @@ VkResult CreateTexture(const char* textureFileName)
 	}
 	else
 	{
-		fprintf(gFILE, "CreateTexture(): T6 vkAllocateCommandBuffers() succedded for iteration %d\n", i);
+		fprintf(gFILE, "CreateTexture(): T6 vkAllocateCommandBuffers() succedded\n");
 	}
 	
 	/*
@@ -5636,7 +5636,7 @@ VkResult CreateTexture(const char* textureFileName)
 	if(vkCommandBuffer_transition_image_layout)
 	{
 		vkFreeCommandBuffers(vkDevice, vkCommandPool, 1, &vkCommandBuffer_transition_image_layout);
-		vkCommandBuffer = VK_NULL_HANDLE;
+		vkCommandBuffer_transition_image_layout = VK_NULL_HANDLE;
 		fprintf(gFILE, "CreateTexture(): T6 vkCommandBuffer for vkCommandBuffer_transition_image_layout is freed\n");
 	}
 	
@@ -5717,7 +5717,7 @@ VkResult CreateTexture(const char* textureFileName)
 	vkImageViewCreateInfo.image = vkImage_texture;
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/vkCreateImageView.html
-	vkResult = vkCreateImageView(vkDevice, &vkImageViewCreateInfo, NULL, vkImageView_texture);
+	vkResult = vkCreateImageView(vkDevice, &vkImageViewCreateInfo, NULL, &vkImageView_texture);
 	if (vkResult != VK_SUCCESS)
 	{
 		fprintf(gFILE, "CreateTexture(): vkCreateImageView() function failed for vkImageView_texture with error code %d\n", vkResult);
