@@ -6226,8 +6226,8 @@ VkResult CreateDescriptorSetLayout()
 	*/
 	
 	//Initialize descriptor set binding : //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorSetLayoutBinding.html
-	VkDescriptorSetLayoutBinding vkDescriptorSetLayoutBinding; 
-	memset((void*)&vkDescriptorSetLayoutBinding, 0, sizeof(VkDescriptorSetLayoutBinding));
+	VkDescriptorSetLayoutBinding vkDescriptorSetLayoutBinding_array[2]; //0 index -> uniform 1 index -> texture image
+	memset((void*)vkDescriptorSetLayoutBinding_array, 0, sizeof(VkDescriptorSetLayoutBinding) * _ARRAYSIZE(vkDescriptorSetLayoutBinding_array));
 	/*
 	// Provided by VK_VERSION_1_0
 	typedef struct VkDescriptorSetLayoutBinding {
@@ -6238,11 +6238,19 @@ VkResult CreateDescriptorSetLayout()
 		const VkSampler*      pImmutableSamplers;
 	} VkDescriptorSetLayoutBinding;
 	*/
-	vkDescriptorSetLayoutBinding.binding = 0; //binding point kay aahe shader madhe. This 0 is related to binding =0 in vertex shader
-	vkDescriptorSetLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
-	vkDescriptorSetLayoutBinding.descriptorCount = 1;
-	vkDescriptorSetLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderStageFlagBits.html
-	vkDescriptorSetLayoutBinding.pImmutableSamplers = NULL;
+	//For MVP Uniform
+	vkDescriptorSetLayoutBinding[0].binding = 0; //binding point kay aahe shader madhe. This 0 is related to binding =0 in vertex shader
+	vkDescriptorSetLayoutBinding[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
+	vkDescriptorSetLayoutBinding[0].descriptorCount = 1;
+	vkDescriptorSetLayoutBinding[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderStageFlagBits.html
+	vkDescriptorSetLayoutBinding[0].pImmutableSamplers = NULL;
+	
+	//For Texture image and Samplers
+	vkDescriptorSetLayoutBinding[1].binding = 1; //binding point kay aahe shader madhe. This 0 is related to binding =0 in vertex shader
+	vkDescriptorSetLayoutBinding[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkDescriptorType.html
+	vkDescriptorSetLayoutBinding[1].descriptorCount = 1; //Not 2 as sampler cha pahila aahe ha
+	vkDescriptorSetLayoutBinding[1].stageFlags =  VK_SHADER_STAGE_FRAGMENT_BIT; //https://registry.khronos.org/vulkan/specs/latest/man/html/VkShaderStageFlagBits.html
+	vkDescriptorSetLayoutBinding[1].pImmutableSamplers = NULL;
 	
 	/*
 	24.3. While writing this UDF, declare, memset and initialize struct VkDescriptorSetLayoutCreateInfo, particularly its two members 
@@ -6277,8 +6285,8 @@ VkResult CreateDescriptorSetLayout()
 	} VkDescriptorSetLayoutBinding;
 	*/
 	
-	vkDescriptorSetLayoutCreateInfo.bindingCount = 1; //binding aahe ka
-	vkDescriptorSetLayoutCreateInfo.pBindings = &vkDescriptorSetLayoutBinding;
+	vkDescriptorSetLayoutCreateInfo.bindingCount = _ARRAYSIZE(vkDescriptorSetLayoutBinding_array); //binding aahe ka
+	vkDescriptorSetLayoutCreateInfo.pBindings = vkDescriptorSetLayoutBinding;
 	
 	/*
 	24.4. Then call vkCreateDescriptorSetLayout() Vulkan API with adress of above initialized structure and get the required global Vulkan object vkDescriptorSetLayout in its last parameter.
