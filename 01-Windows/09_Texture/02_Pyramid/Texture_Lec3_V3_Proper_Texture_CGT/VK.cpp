@@ -1454,7 +1454,7 @@ VkResult display(void)
 void update(void)
 {
 	// Code
-	angle = angle + 0.1f;
+	angle = angle + 0.01f;
 	if(angle > 360.0f)
 	{
 		angle =  angle - 360.0f;
@@ -3530,7 +3530,7 @@ VkResult CreateImagesAndImageViews(void)
 	
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlags.html
 	//https://registry.khronos.org/vulkan/specs/latest/man/html/VkImageAspectFlagBits.html
-	vkImageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	vkImageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;	
 	vkImageViewCreateInfo.subresourceRange.baseMipLevel = 0;
 	vkImageViewCreateInfo.subresourceRange.levelCount = 1;
 	vkImageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
@@ -4658,7 +4658,7 @@ VkResult CreateTexture(const char* textureFileName)
 	/*
 	Now to do actual memory mapped IO, call memcpy.
 	*/
-	memcpy(data, imageData, sizeof(Image_Size));
+	memcpy(data, imageData, (size_t)Image_Size);
 	
 	/*
 	To complete this memory mapped IO. finally call vkUmmapMemory() API.
@@ -6919,7 +6919,7 @@ VkResult CreatePipeline(void)
 	vkVertexInputBindingDescription_array[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX; //vertices maan, indices nako
 	
 	vkVertexInputBindingDescription_array[1].binding = 1;
-	vkVertexInputBindingDescription_array[1].stride = sizeof(float) * 3;
+	vkVertexInputBindingDescription_array[1].stride = sizeof(float) * 2;
 	vkVertexInputBindingDescription_array[1].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 	
 	/*
@@ -6942,7 +6942,7 @@ VkResult CreatePipeline(void)
 	
 	vkVertexInputAttributeDescription_array[1].location = 1;
 	vkVertexInputAttributeDescription_array[1].binding = 1;
-	vkVertexInputAttributeDescription_array[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+	vkVertexInputAttributeDescription_array[1].format = VK_FORMAT_R32G32_SFLOAT;
 	vkVertexInputAttributeDescription_array[1].offset = 0;
 	
 	/*
